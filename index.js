@@ -4,6 +4,7 @@ const cors = require('cors')
 const config = require('./config')
 const helmet = require("helmet");
 const testRouter = require('./routes/test-router')
+const quizRouter = require('./routes/quiz-router')
 const firebase_admin = require('firebase-admin/app')
 
 const PORT = 3000;
@@ -18,6 +19,7 @@ app.use(helmet());
 
 //Routes Configuration
 app.use('/api/test', testRouter)
+app.use('/api/quiz', quizRouter)
 
 //Firebase Admin Initialization
 firebase_admin.initializeApp({
