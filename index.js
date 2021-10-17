@@ -4,6 +4,7 @@ const cors = require('cors')
 const config = require('./config')
 const helmet = require("helmet");
 const testRouter = require('./routes/test-router')
+const firebase_admin = require('firebase-admin/app')
 
 const PORT = 3000;
 
@@ -18,5 +19,9 @@ app.use(helmet());
 //Routes Configuration
 app.use('/api/test', testRouter)
 
+//Firebase Admin Initialization
+firebase_admin.initializeApp({
+    credential: firebase_admin.applicationDefault(),
+});
 
 app.listen(config.port, () => console.log(`App is listening at ${config.port}`))
