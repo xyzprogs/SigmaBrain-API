@@ -12,6 +12,30 @@ getQuiz = (id) => {
     })
 }
 
+getQuestion = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query('SELECT * FROM Question WHERE quizId = ' + mysql.escape(quizId), (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getQuestionChoice = (questionId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query('SELECT * FROM QuestionChoice WHERE questionId = ' + mysql.escape(questionId), (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
-    getQuiz
+    getQuiz,
+    getQuestion,
+    getQuestionChoice
 }
