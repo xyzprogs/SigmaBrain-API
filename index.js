@@ -7,7 +7,7 @@ const testRouter = require('./routes/test-router')
 const quizRouter = require('./routes/quiz-router')
 const userRouter = require('./routes/user-router')
 const firebase_admin = require('firebase-admin/app')
-
+const firebase_client = require('./firebase/firebase_init')
 const PORT = 3000;
 
 const app = express()
@@ -27,5 +27,8 @@ app.use('/api/user', userRouter)
 firebase_admin.initializeApp({
     credential: firebase_admin.applicationDefault(),
 });
+
+
+
 
 app.listen(config.port, () => console.log(`App is listening at ${config.port}`))
