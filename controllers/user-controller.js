@@ -4,7 +4,6 @@ var userMysql = require('../db/user-mysql');
 const HEADER_CONSTANT = require('../constant/header')
 const BODY_CONSTANT = require("../constant/body");
 const { default: axios } = require('axios');
-const { async } = require('@firebase/util');
 
 /*************FOR TESTING PURPOSE/*************/
 registerUser = async (req, res) => {
@@ -116,7 +115,6 @@ testVerify = async (req, res) => {
 /*************FOR TESTING PURPOSE/*************/
 
 verifyUser = async (req, res) => {
-    console.log(req.headers)
     token = req.headers[HEADER_CONSTANT.TOKEN]
     if(!token){
         return res.status(401).json({
@@ -128,8 +126,7 @@ verifyUser = async (req, res) => {
         .auth()
         .verifyIdToken(token)
         .then((decodedToken) => {
-            console.log("decoded token: " + decodedToken)
-            res.json(decodedToken).sendStatus(200);
+            res.sendStatus(200);
         }).catch((error)=>{
             console.log("error " + error)
             res.sendStatus(400);
@@ -143,15 +140,16 @@ verifyUser = async (req, res) => {
 
 createUser = async (req, res) => {
     const user = {
-        userId: req.body[BODY_CONSTANT.USERID],
+        userId: res.locals.decodedToken[BODY_CONSTANT.UID],
         email: req.body[BODY_CONSTANT.EMAIL],
         displayName: req.body[BODY_CONSTANT.DISPLAYNAME]
     }
     userMysql.createUser(user).then(
         (data) => {
-            res.json({msg: data}).sendStatus(200)
+            console.log("insert id is " +  data["insertId"])
+            res.status(200).json({msg: data})
         }).catch((error)=>{
-            res.json({msg: error}).sendStatus(400)
+            res.status(400).json({msg: error})
         })
 }
 
