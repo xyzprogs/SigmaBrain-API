@@ -47,12 +47,12 @@ getQuestion = (quizId) => {
 
 createQuestion = (quizId, questionType, numberOfChoice, question) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`INSERT INTO QuestionChoice(quizId, questionType, numberOfChoice, question)
+        db_pool.query(`INSERT INTO Question(quizId, questionType, numberOfChoice, question)
                         VALUES(` 
                         + mysql.escape(quizId) + "," 
                         + mysql.escape(questionType) + ","
                         + mysql.escape(numberOfChoice) + ','
-                        + '"' + mysql.escape(question) + '")', 
+                        + mysql.escape(question) + ')', 
                         (err, result)=>{
             if(err){
                 return reject(err)
@@ -75,12 +75,12 @@ getQuestionChoice = (questionId) => {
 
 createQuestionChoice = (questionId, quizId, is_right_choice, choice) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`INSERT INTO Question(quizId, questionType, numberOfChoice, question)
+        db_pool.query(`INSERT INTO QuestionChoice(questionId, quizId, is_right_choice, choice)
                         VALUES(` 
                         + mysql.escape(questionId) + "," 
                         + mysql.escape(quizId) + ","
                         + mysql.escape(is_right_choice) + ','
-                        + '"' + mysql.escape(choice) + '")', 
+                        + mysql.escape(choice) + ')', 
                         (err, result)=>{
             if(err){
                 return reject(err)

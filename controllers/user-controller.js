@@ -2,14 +2,14 @@ var admin = require('firebase-admin');
 var client = require('firebase/auth')
 var userMysql = require('../db/user-mysql');
 const HEADER_CONSTANT = require('../constant/header')
-const BODY_CONSTANT = require("../constant/body");
+const BODY = require("../constant/body");
 const { default: axios } = require('axios');
 
 /*************FOR TESTING PURPOSE/*************/
 registerUser = async (req, res) => {
     const auth = client.getAuth();
-    const email = req.body[BODY_CONSTANT.EMAIL]
-    const password = req.body[BODY_CONSTANT.PASSWORD]
+    const email = req.body[BODY.EMAIL]
+    const password = req.body[BODY.PASSWORD]
     if(!email || !password){
         return res.status(200).json({msg: "email or password can't be empty"})
     }
@@ -19,7 +19,7 @@ registerUser = async (req, res) => {
                 // Signed in 
                 const user = userCredential.user;
                 // ...
-                const uid = user[BODY_CONSTANT.UID]
+                const uid = user[BODY.UID]
                 const payload = {
                     uid: uid,
                     email: email,
@@ -53,8 +53,8 @@ registerUser = async (req, res) => {
 
 loginUser = async (req, res) => {
     const auth = client.getAuth();
-    const email = req.body[BODY_CONSTANT.EMAIL]
-    const password = req.body[BODY_CONSTANT.PASSWORD]
+    const email = req.body[BODY.EMAIL]
+    const password = req.body[BODY.PASSWORD]
     if(!email || !password){
         return res.status(400).json({msg: "email or password can't be empty"})
     }
@@ -142,9 +142,9 @@ verifyUser = async (req, res) => {
 
 createUser = async (req, res) => {
     const user = {
-        userId: res.locals.decodedToken[BODY_CONSTANT.UID],
-        email: req.body[BODY_CONSTANT.EMAIL],
-        displayName: req.body[BODY_CONSTANT.DISPLAYNAME]
+        userId: res.locals.decodedToken[BODY.UID],
+        email: req.body[BODY.EMAIL],
+        displayName: req.body[BODY.DISPLAYNAME]
     }
     userMysql.createUser(user).then(
         (data) => {
