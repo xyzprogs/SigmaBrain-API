@@ -31,7 +31,15 @@ createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
 }
 
 deleteQuiz = (id) => {
-    
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Quiz WHERE quizId = ` + mysql.escape(id), 
+        (err, result) => {
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
 }
 
 getQuestion = (quizId) => {
@@ -62,6 +70,31 @@ createQuestion = (quizId, questionType, numberOfChoice, question) => {
     })
 }
 
+deleteQuestion = (questionId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Question WHERE questionId = ` + mysql.escape(questionId),
+        (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+deleteAllQuestionInQuiz = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Question WHERE quizId = ` + mysql.escape(quizId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+
 getQuestionChoice = (questionId) => {
     return new Promise((resolve, reject) => {
         db_pool.query('SELECT * FROM QuestionChoice WHERE questionId = ' + mysql.escape(questionId), (err, result)=>{
@@ -90,6 +123,29 @@ createQuestionChoice = (questionId, quizId, is_right_choice, choice) => {
     })
 }
 
+deleteQuestionChoice = (choiceId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM QuestionChoice WHERE choiceId = ` + mysql.escape(choiceId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+deleteAllQuestionChoiceInQuiz = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM QuestionChoice WHERE quizId = ` + mysql.escape(quizId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
 
 
 module.exports = {
@@ -98,5 +154,10 @@ module.exports = {
     getQuestionChoice,
     createQuiz,
     createQuestion,
-    createQuestionChoice
+    createQuestionChoice,
+    deleteQuiz,
+    deleteQuestion,
+    deleteAllQuestionInQuiz,
+    deleteQuestionChoice,
+    deleteAllQuestionChoiceInQuiz
 }

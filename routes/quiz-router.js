@@ -14,6 +14,6 @@ router.get('/:quizId/quizQuestion', QuizController.getQuestion)
 router.post('/:quizId/quizQuestion', firebase_auth, QuizController.createQuestion)
 
 /*quiz question choice route */
-// router.get('/quizQuestionChoice/:questionChoiceId', QuizController.getQuestionChoice)
+router.get('/quizQuestionChoice/:choiceId', QuizController.getQuestionChoice)
 router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)
 module.exports = router;

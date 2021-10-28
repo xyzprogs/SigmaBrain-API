@@ -53,6 +53,18 @@ createQuiz = async (req, res) => {
     }
 }
 
+
+deleteQuiz = async (req, res) => {
+    try{
+        let id = req.params.quizId;
+        let result = await quizMysql.deleteQuiz(id)
+        res.status(200).json(result);
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 getQuestion = async (req,res)=>{
     try{
         let id = req.params.quizId;
@@ -88,9 +100,31 @@ createQuestion = async (req, res)=>{
     }
 }
 
+deleteQuestion = async (req, res) => {
+    try{
+        let id = req.params.questionId;
+        let result = await quizMysql.deleteQuestion(id)
+        res.status(200).json(result);
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+deleteAllQuestionInQuiz = async (req, res) => {
+    try{
+        let id = req.params.quizId
+        let result = await quizMysql.deleteAllQuestionInQuiz(id)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 getQuestionChoice = async (req,res)=>{
     try{
-        let id = req.params.id;
+        let id = req.params.choiceId;
         let questionResult = await quizMysql.getQuestionChoice(id);
         res.status(200).json(questionResult)
     }catch(e){
@@ -116,6 +150,29 @@ createQuestionChoice = async (req, res)=>{
     }
 }
 
+deleteQuestionChoice = async (req, res)=>{
+    try{
+        let id = req.params.choiceId;
+        let questionResult = await quizMysql.deleteQuestionChoice(id);
+        res.status(200).json(questionResult)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
+deleteAllQuestionChoiceInQuiz = async (req, res)=>{
+    try{
+        let id = req.params.quizId;
+        let questionResult = await quizMysql.deleteAllQuestionChoiceInQuiz(id);
+        res.status(200).json(questionResult)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 
 module.exports = {
     getQuiz,
@@ -123,5 +180,10 @@ module.exports = {
     getQuestionChoice,
     createQuiz,
     createQuestion,
-    createQuestionChoice
+    createQuestionChoice,
+    deleteQuiz,
+    deleteQuestion,
+    deleteAllQuestionInQuiz,
+    deleteQuestionChoice,
+    deleteAllQuestionChoiceInQuiz
 }
