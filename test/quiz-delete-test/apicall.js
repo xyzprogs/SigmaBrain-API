@@ -1,29 +1,11 @@
-const userRouter = require('../routes/user-router')
 const axios = require('axios').default
-const client = require('../firebase/firebase_init')
 const auth = require('firebase/auth')
-const HEADER = require('../constant/header')
-const BODY = require('../constant/body')
-const testApi = {
-    testVerifyApiCall: async ()=>{
-        const loginInfo = {
-            "email": "test@mail.com",
-            "password":"test123"
-        }
-        await auth.signInWithEmailAndPassword(auth.getAuth(), loginInfo.email, loginInfo.password)
-            .then(data=>{
-                // console.log(data)
-            })
-        const token = await auth.getAuth().currentUser.getIdToken()
-        
-        console.log("after get id token " + token)
-        const headers = {
-            [HEADER.TOKEN]: token
-        }
-        return axios.get("http://localhost:3000/api/user/verify", {headers: headers})
-    },
+const HEADER = require('../../constant/header')
+const BODY = require('../../constant/body')
+require('../../firebase/firebase_init')
 
-    testCreateQuizApi: async ()=>{
+const testApi = {
+    testDeleteQuizApi: async () => {
         const loginInfo = {
             "email": "test@mail.com",
             "password":"test123"
@@ -45,10 +27,12 @@ const testApi = {
             [BODY.QUIZDESCRIPTION]: "This is the test quiz",
             [BODY.ISPUBLISHED]: 0
         }
-        return axios.post("http://localhost:3000/api/quiz/", quiz, {headers: headers})
+        let response = await axios.post("http://localhost:3000/api/quiz/", quiz, {headers: headers})
+        let last_insert = response.data.insertId
+        return axios.delete("http://localhost:3000/api/quiz/"+last_insert, {headers: headers})
     },
 
-    testCreateQuizQuestionApi: async ()=>{
+    testDeleteQuizQuestionApi: async () => {
         const loginInfo = {
             "email": "test@mail.com",
             "password":"test123"
@@ -70,10 +54,13 @@ const testApi = {
             [BODY.NUMBEROFCHOICE]: 4,
             [BODY.QUESTION]: "what is the best team?"
         }
-        return axios.post("http://localhost:3000/api/quiz/"+quizQuestion.quizId+"/quizQuestion", quizQuestion, {headers: headers})
+        const response = await axios.post("http://localhost:3000/api/quiz/"+quizQuestion.quizId+"/quizQuestion", quizQuestion, {headers: headers})
+        let last_insert = response.data.insertId
+        console.log(last_insert)
+        return axios.delete("http://localhost:3000/api/quiz/quizQuestion/"+last_insert, {headers: headers})
     },
 
-    testCreateQuizQuestionChoiceApi: async ()=>{
+    testDeleteQuestionChoiceApi: async () => {
         const loginInfo = {
             "email": "test@mail.com",
             "password":"test123"
@@ -95,25 +82,12 @@ const testApi = {
             [BODY.ISRIGHTCHOICE]: 4,
             [BODY.CHOICE]: "kai?"
         }
-        return axios.post("http://localhost:3000/api/quiz/"+quizQuestionChoice.quizId+"/question/"+quizQuestionChoice.questionId+"/quizQuestionChoice", quizQuestionChoice, {headers: headers})
-    },
-
-    testGetQuizApi: async ()=>{
-        const quizId = 1
-        return axios.get("http://localhost:3000/api/quiz/"+quizId)
-    },
-
-    testGetQuizQuestionApi: async ()=>{
-        const quizId = 1
-        return axios.get("http://localhost:3000/api/quiz/"+quizId+"/quizQuestion")
-    },
-
-    testGetQuestionChoiceApi: async ()=>{
-        const choiceId = 1
-        return axios.get("http://localhost:3000/api/quiz/quizQuestionChoice/"+choiceId)
+        const response =  await axios.post("http://localhost:3000/api/quiz/"+quizQuestionChoice.quizId+"/question/"+quizQuestionChoice.questionId+"/quizQuestionChoice", quizQuestionChoice, {headers: headers})
+        let last_insert = response.data.insertId
+        console.log(last_insert)
+        return axios.delete('http://localhost:3000/api/quiz/quizQuestion/'+last_insert, {headers: headers})
     }
 }
 
 
 module.exports = testApi
-

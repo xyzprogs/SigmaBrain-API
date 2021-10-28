@@ -1,6 +1,4 @@
-var admin = require('firebase-admin');
 var quizMysql = require('../db/quiz-mysql');
-const HEADER_CONSTANT = require('../constant/header');
 const BODY = require('../constant/body');
 // let id = req.params.id;
 // let result = await quizMysql.getQuiz(id);
@@ -139,7 +137,7 @@ createQuestionChoice = async (req, res)=>{
         const questionId = req.params.questionId
         const is_right_choice = req.body[BODY.ISRIGHTCHOICE]
         const choice = req.body[BODY.CHOICE]
-
+        //TODO: CHECK
         let result = await quizMysql.createQuestionChoice(questionId, quizId, is_right_choice, choice)
 
         res.status(201).json(result)

@@ -33,4 +33,54 @@ Windows With PowerShell
 $env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account-file.json"
 
 
+## Current Database Schema
+
+```javascript
+
+CREATE TABLE Users(
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    userId VARCHAR(32) NOT NULL UNIQUE,
+    email VARCHAR(254) NOT NULL UNIQUE,
+    displayName VARCHAR(50) NOT NULL,
+    experience INT DEFAULT 0,
+    creationTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(userId),
+    KEY(id)
+);
+
+CREATE TABLE Quiz(
+	quizId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userId VARCHAR(32) NOT NULL,
+    quizName varchar(50) DEFAULT "Untitled",
+    quizCatgeory INT UNSIGNED NOT NULL,
+    quizDescription varchar(200) DEFAULT "",
+    isPublished smallint,
+    takeCounts INT DEFAULT 0,
+    likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0,
+    timeLimit DOUBLE DEFAULT 0,
+    thumbnail VARCHAR(1000),
+    creationTime DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Question(
+	questionId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    quizId INT NOT NULL,
+    questionType INT,
+    numberOfChoice INT NOT NULL CHECK(numberOfChoice BETWEEN 2 AND 10),
+    image VARCHAR(1000),
+    question VARCHAR(500) NOT NULL
+);
+
+
+CREATE TABLE QuestionChoice(
+	choiceId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    questionId INT NOT NULL,
+    quizId INT NOT NULL,
+    is_right_choice tinyint,
+    choice varchar(200)
+);
+
+```
+
 
