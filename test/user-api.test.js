@@ -8,11 +8,3 @@ test('Verify verify user api', ()=>{
         })
 })
 
-test('Verify quiz create api', ()=>{
-    //expect.assertion(1);
-    return testApi.testCreateQuizApi()
-        .then(data=>{
-            console.log(data)
-            expect(data.status).toEqual(201)
-        })
-})

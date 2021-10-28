@@ -31,7 +31,15 @@ createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
 }
 
 deleteQuiz = (id) => {
-    
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Quiz WHERE quizId = ` + mysql.escape(id), 
+        (err, result) => {
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
 }
 
 getQuestion = (quizId) => {
@@ -47,12 +55,12 @@ getQuestion = (quizId) => {
 
 createQuestion = (quizId, questionType, numberOfChoice, question) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`INSERT INTO QuestionChoice(quizId, questionType, numberOfChoice, question)
+        db_pool.query(`INSERT INTO Question(quizId, questionType, numberOfChoice, question)
                         VALUES(` 
                         + mysql.escape(quizId) + "," 
                         + mysql.escape(questionType) + ","
                         + mysql.escape(numberOfChoice) + ','
-                        + '"' + mysql.escape(question) + '")', 
+                        + mysql.escape(question) + ')', 
                         (err, result)=>{
             if(err){
                 return reject(err)
@@ -61,6 +69,31 @@ createQuestion = (quizId, questionType, numberOfChoice, question) => {
         })
     })
 }
+
+deleteQuestion = (questionId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Question WHERE questionId = ` + mysql.escape(questionId),
+        (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+deleteAllQuestionInQuiz = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Question WHERE quizId = ` + mysql.escape(quizId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
 
 getQuestionChoice = (questionId) => {
     return new Promise((resolve, reject) => {
@@ -75,12 +108,12 @@ getQuestionChoice = (questionId) => {
 
 createQuestionChoice = (questionId, quizId, is_right_choice, choice) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`INSERT INTO Question(quizId, questionType, numberOfChoice, question)
+        db_pool.query(`INSERT INTO QuestionChoice(questionId, quizId, is_right_choice, choice)
                         VALUES(` 
                         + mysql.escape(questionId) + "," 
                         + mysql.escape(quizId) + ","
                         + mysql.escape(is_right_choice) + ','
-                        + '"' + mysql.escape(choice) + '")', 
+                        + mysql.escape(choice) + ')', 
                         (err, result)=>{
             if(err){
                 return reject(err)
@@ -90,6 +123,29 @@ createQuestionChoice = (questionId, quizId, is_right_choice, choice) => {
     })
 }
 
+deleteQuestionChoice = (choiceId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM QuestionChoice WHERE choiceId = ` + mysql.escape(choiceId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+deleteAllQuestionChoiceInQuiz = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM QuestionChoice WHERE quizId = ` + mysql.escape(quizId),
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
 
 
 module.exports = {
@@ -98,5 +154,10 @@ module.exports = {
     getQuestionChoice,
     createQuiz,
     createQuestion,
-    createQuestionChoice
+    createQuestionChoice,
+    deleteQuiz,
+    deleteQuestion,
+    deleteAllQuestionInQuiz,
+    deleteQuestionChoice,
+    deleteAllQuestionChoiceInQuiz
 }
