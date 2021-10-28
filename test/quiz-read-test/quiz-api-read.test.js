@@ -10,6 +10,7 @@ test("verify get test api", ()=>{
 test("verify get quiz api", ()=>{
     return testApi.testGetQuizApi()
         .then(data=>{
+            console.log(data)
             expect(data.status).toEqual(200)
         })
 })
