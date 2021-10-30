@@ -10,7 +10,8 @@ const {
     DB_USER,
     DATABASE,
     DB_HOST,
-    DB_PORT
+    DB_PORT,
+    IMAGE_STORAGE
 } = process.env;
 
 
@@ -22,5 +23,6 @@ module.exports = {
     db_user: DB_USER,
     database: DATABASE,
     db_host: DB_HOST,
-    db_port: DB_PORT
+    db_port: DB_PORT,
+    image_storage: IMAGE_STORAGE
 }

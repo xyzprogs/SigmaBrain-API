@@ -17,7 +17,7 @@ const TAKECOUNTS = "takeCounts"
 const LIKES  = "likes"
 const DISLIKES = "dislikes"
 const TIMELIMIT = "timeLimit"
-const THUMBNAIL = "thumbnail"
+const QUIZTHUMBNAIL = "thumbnail"
 
 //Question Body
 const QUESTIONID = "questionId"
@@ -51,7 +51,7 @@ module.exports = {
     LIKES,
     DISLIKES,
     TIMELIMIT,
-    THUMBNAIL,
+    QUIZTHUMBNAIL,
 
     //QUESTION
     QUESTION,

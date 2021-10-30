@@ -17,6 +17,7 @@ module.exports = (req, res, next) => {
         .verifyIdToken(token)
         .then((decodedToken) => {
             res.locals.decodedToken = decodedToken; //pass the decoded token to next middleware
+            req.decodedToken = decodedToken
             next();
         }).catch((error)=>{
             console.log(error)

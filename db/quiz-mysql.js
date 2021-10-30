@@ -13,6 +13,7 @@ getQuiz = (id) => {
 }
 
 createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
+
     return new Promise((resolve, reject) => {
         db_pool.query(`INSERT INTO Quiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
                         VALUES(` 
@@ -27,6 +28,20 @@ createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
             }
             return resolve(result)
         })
+    })
+}
+
+setQuizThumbnail = (quizId, thumbnail) => {
+    return new Promise((resolve, reject) => {
+        const str = "UPDATE Quiz SET thumbnail = " + mysql.escape(thumbnail) + " WHERE quizId = " + mysql.escape(quizId)
+        console.log(str)
+        db_pool.query("UPDATE Quiz SET thumbnail = " + mysql.escape(thumbnail) + " WHERE quizId = " + mysql.escape(quizId),
+                (err, result) => {
+                    if(err){
+                        return reject(err)
+                    }
+                    return resolve(result)
+                })
     })
 }
 
@@ -159,5 +174,6 @@ module.exports = {
     deleteQuestion,
     deleteAllQuestionInQuiz,
     deleteQuestionChoice,
-    deleteAllQuestionChoiceInQuiz
+    deleteAllQuestionChoiceInQuiz,
+    setQuizThumbnail
 }
