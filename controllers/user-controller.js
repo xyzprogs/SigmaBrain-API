@@ -10,6 +10,8 @@ registerUser = async (req, res) => {
     const auth = client.getAuth();
     const email = req.body[BODY.EMAIL]
     const password = req.body[BODY.PASSWORD]
+
+    //Move this to the front end?
     if(!email || !password){
         return res.status(200).json({msg: "email or password can't be empty"})
     }

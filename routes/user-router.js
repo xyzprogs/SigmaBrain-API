@@ -8,5 +8,8 @@ router.post('/register', UserController.registerUser)
 router.get('/testverify', UserController.testVerify)
 router.get('/verify', firebase_auth, UserController.verifyUser)
 router.post('/create', firebase_auth, UserController.createUser)
+//router.put('/forgetpassword', )
+//router.put('/changepassword', )
+//router.put('/changedisplayname')
 
 module.exports = router
