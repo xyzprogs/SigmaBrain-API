@@ -1,5 +1,7 @@
 var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
+
+
 // let id = req.params.id;
 // let result = await quizMysql.getQuiz(id);
 // let questionResult = await quizMysql.getQuestion(id);
@@ -51,6 +53,26 @@ createQuiz = async (req, res) => {
     }
 }
 
+setQuizWithThumbnail = async (req, res) => {
+    try{
+        console.log("from setQuizWithThumbnail ", req.body)
+        const quizId = req.body.quizId
+        const thumbnail = req.file.path
+        /* if any of the required paramters is empty, return error */
+        if(quizId==null || thumbnail==null){
+            return res.status(400).json({msg: "some field is empty"})
+        }
+    
+        let result = await quizMysql.setQuizThumbnail(quizId, thumbnail)
+
+        res.status(201).json(result)
+
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 
 deleteQuiz = async (req, res) => {
     try{
@@ -62,6 +84,25 @@ deleteQuiz = async (req, res) => {
         res.sendStatus(500)
     }
 }
+
+
+//quiz image route
+// file is  {
+//     fieldname: 'quizImage',
+//     originalname: 'spirit.jpeg',
+//     encoding: '7bit',
+//     mimetype: 'image/jpeg',
+//     destination: '/Users/kaichen/Desktop/Fall2021/CSE416/image-storage/d3pyNcmIwPPTVFnAEowHIWagfgX2/quizes/1',
+//     filename: 'quizImage',
+//     path: '/Users/kaichen/Desktop/Fall2021/CSE416/image-storage/d3pyNcmIwPPTVFnAEowHIWagfgX2/quizes/1/quizImage',
+//     size: 25057
+// }
+quizImage = async (req, res) => {
+    console.log("file is ", req.file.path)
+    console.log("res from quizImage ", req.body.id)
+    res.sendStatus(200)
+}
+
 
 getQuestion = async (req,res)=>{
     try{
@@ -183,5 +224,6 @@ module.exports = {
     deleteQuestion,
     deleteAllQuestionInQuiz,
     deleteQuestionChoice,
-    deleteAllQuestionChoiceInQuiz
+    deleteAllQuestionChoiceInQuiz,
+    setQuizWithThumbnail
 }
