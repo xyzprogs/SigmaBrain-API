@@ -1,8 +1,7 @@
 var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
-const { json } = require('express');
 const fs = require('fs')
-
+const path = require('path')
 // let id = req.params.id;
 // let result = await quizMysql.getQuiz(id);
 // let questionResult = await quizMysql.getQuestion(id);
@@ -59,7 +58,7 @@ setQuizWithThumbnail = async (req, res) => {
     try{
         console.log("from setQuizWithThumbnail ", req.body)
         const quizId = req.body.quizId
-        const thumbnail = req.file.path
+        const thumbnail = res.locals.file.path
         /* if any of the required paramters is empty, return error */
         if(quizId==null || thumbnail==null){
             return res.status(400).json({msg: "some field is empty"})
@@ -230,11 +229,16 @@ getQuizThumbnail = async (req, res)=>{
     try{
         let id = req.params.quizId;
         let result = await quizMysql.getQuizThumbnail(id)
+        //TODO: CHECK IF DIR IS EMPTY
+        let dir = result[0]['thumbnail']
+        //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
+        let extention = path.extname(dir).substring(1)
         console.log("calling thumbnail")
+        console.log("extention is", path.extname(dir).substring(1))
         fs.readFile(
-            result[0]['thumbnail'], 'base64',
+            dir, 'base64',
             (err, base64image)=>{
-                const dataUrl = `data:image/jpeg;base64,${base64image}`
+                const dataUrl = `data:image/${extention};base64,${base64image}`
                 return res.send(dataUrl)
             }
         )

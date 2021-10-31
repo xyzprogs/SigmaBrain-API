@@ -22,9 +22,21 @@ const storage = multer.diskStorage({
     }
 })
 
+const upload = multer({storage: storage}).single(BODY.QUIZTHUMBNAIL);
+
+const uploadFile = async (req, res, next) => {
+    upload(req, res, function(err){
+        res.locals.file = req.file
+        if(err){
+            console.log("error here")
+            return res.sendStatus(500);
+        }
+        next()
+    })
+}
 
 const image_storage_api = {
-    upload: multer({ storage: storage }) 
+    uploadFile: uploadFile
 }
 
 module.exports = image_storage_api
