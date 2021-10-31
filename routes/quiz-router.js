@@ -2,8 +2,7 @@ const express = require('express')
 const QuizController = require('../controllers/quiz-controller')
 const router = express.Router()
 const firebase_auth = require("../firebase/firebase_auth")
-const image_path = require("../middleware/image-storage-middleware")
-const BODY = require("../constant/body")
+const image_storage = require("../middleware/image-storage-middleware")
 
  /*quiz route */
 router.get('/:quizId', QuizController.getQuiz)
@@ -14,7 +13,7 @@ router.delete('/:quizId', firebase_auth, QuizController.deleteQuiz)
 router.get('/thumbnail/:quizId', QuizController.getQuizThumbnail)
 
 //TODO: ERROR HANDLING
-router.post('/quizThumbnail/:quizId', firebase_auth, image_path.upload.single(BODY.QUIZTHUMBNAIL), QuizController.setQuizWithThumbnail)
+router.post('/quizThumbnail/:quizId', firebase_auth, image_storage.uploadFile, QuizController.setQuizWithThumbnail)
 router.get('/popular/topquiz', QuizController.getTheMostPopularQuiz)
 
 /*quiz question route*/
