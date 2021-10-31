@@ -11,7 +11,11 @@ router.post('/', firebase_auth, QuizController.createQuiz) //create quiz
 router.delete('/:quizId', firebase_auth, QuizController.deleteQuiz)
 // router.put('/:quizId', ) //update quiz
 // router.delete('/:quizId', ) //deletequiz
+router.get('/thumbnail/:quizId', QuizController.getQuizThumbnail)
+
+//TODO: ERROR HANDLING
 router.post('/quizThumbnail/:quizId', firebase_auth, image_path.upload.single(BODY.QUIZTHUMBNAIL), QuizController.setQuizWithThumbnail)
+router.get('/popular/topquiz', QuizController.getTheMostPopularQuiz)
 
 /*quiz question route*/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)

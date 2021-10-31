@@ -8,6 +8,7 @@ const quizRouter = require('./routes/quiz-router')
 const userRouter = require('./routes/user-router')
 const firebase_admin = require('firebase-admin/app')
 const firebase_client = require('./firebase/firebase_init')
+const cookieParser = require('cookie-parser')
 const PORT = 3000;
 
 const app = express()
@@ -17,6 +18,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
 app.use(helmet());
+app.use(cookieParser())
+app.use(cookieParser())
 
 //Routes Configuration
 app.use('/api/test', testRouter)

@@ -7,6 +7,7 @@ change the value for your setting
 #express
 PORT=3000
 HOST=localhost
+IMAGE_STORAGE=/
 
 #database
 CONNECTION_LIMIT=10
