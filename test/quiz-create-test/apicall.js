@@ -19,7 +19,7 @@ const testApi = {
         const token = await auth.getAuth().currentUser.getIdToken()
         
         // console.log("after get id token " + token)
-        token_name = HEADER.TOKEN;
+        // token_name = HEADER.TOKEN;
         const headers = {
             [HEADER.TOKEN] : token
         }

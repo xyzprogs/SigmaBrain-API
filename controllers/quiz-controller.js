@@ -1,6 +1,7 @@
 var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
-
+const { json } = require('express');
+const fs = require('fs')
 
 // let id = req.params.id;
 // let result = await quizMysql.getQuiz(id);
@@ -33,6 +34,7 @@ getQuiz = async (req, res)=>{
 
 createQuiz = async (req, res) => {
     try{
+
         const userId = res.locals.decodedToken[BODY.UID]
         const quizName = req.body[BODY.QUIZNAME]
         const quizCatgeory = req.body[BODY.QUIZCATEGORY]
@@ -213,6 +215,36 @@ deleteAllQuestionChoiceInQuiz = async (req, res)=>{
 }
 
 
+getTheMostPopularQuiz = async (req, res)=>{
+    console.log("calling popular quiz")
+    try{
+        let result = await quizMysql.getTheMostPopularQuiz(1)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getQuizThumbnail = async (req, res)=>{
+    try{
+        let id = req.params.quizId;
+        let result = await quizMysql.getQuizThumbnail(id)
+        console.log("calling thumbnail")
+        fs.readFile(
+            result[0]['thumbnail'], 'base64',
+            (err, base64image)=>{
+                const dataUrl = `data:image/jpeg;base64,${base64image}`
+                return res.send(dataUrl)
+            }
+        )
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -225,5 +257,7 @@ module.exports = {
     deleteAllQuestionInQuiz,
     deleteQuestionChoice,
     deleteAllQuestionChoiceInQuiz,
-    setQuizWithThumbnail
+    setQuizWithThumbnail,
+    getTheMostPopularQuiz,
+    getQuizThumbnail
 }

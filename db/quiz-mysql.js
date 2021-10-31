@@ -162,6 +162,29 @@ deleteAllQuestionChoiceInQuiz = (quizId) => {
     })
 }
 
+getTheMostPopularQuiz = (limit) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE takeCounts = (SELECT Max(takeCounts) From Quiz) LIMIT ` + limit, 
+            (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+
+getQuizThumbnail = (quizId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT thumbnail FROM Quiz WHERE quizId = ` + mysql.escape(quizId), (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
 
 module.exports = {
     getQuiz,
@@ -175,5 +198,7 @@ module.exports = {
     deleteAllQuestionInQuiz,
     deleteQuestionChoice,
     deleteAllQuestionChoiceInQuiz,
-    setQuizThumbnail
+    setQuizThumbnail,
+    getTheMostPopularQuiz,
+    getQuizThumbnail
 }
