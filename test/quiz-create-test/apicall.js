@@ -114,7 +114,7 @@ const testApi = {
     //     return axios.post("http://localhost:3000/api/quiz/quizImage/1", formdata, {headers: headers})
     // },
 
-    testCreateQuizWithThumbnailApi: async ()=> {
+    testCreateQuizWithThumbnailApi: async (quizName, quizCatgeory, img)=> {
         const loginInfo = {
             "email": "test@mail.com",
             "password":"test123"
@@ -127,28 +127,47 @@ const testApi = {
         
         // console.log("after get id token " + token)
         const quiz = {
-            [BODY.QUIZNAME]: "testQuiz",
-            [BODY.QUIZCATEGORY]: 1,
-            [BODY.QUIZDESCRIPTION]: "This is the test quiz",
+            [BODY.QUIZNAME]: quizName,
+            [BODY.QUIZCATEGORY]: quizCatgeory,
+            [BODY.QUIZDESCRIPTION]: "This is the biology test",
             [BODY.ISPUBLISHED]: 0
         }
         const headers = {
             [HEADER.TOKEN] : token
         }
         let response = await axios.post("http://localhost:3000/api/quiz/", quiz, {headers: headers})
-        let last_insert = response.data.insertId
-        console.log("new test created " + last_insert)
+        let quizId = response.data.insertId
+        console.log("new test created " + quizId)
         const formdata = new FormData()
-        formdata.append(BODY.QUIZID, last_insert)
-        formdata.append(BODY.QUIZTHUMBNAIL, fs.createReadStream('/Users/kaichen/Desktop/Fall2021/CSE416/imagedemo/spirit.jpeg'))
+        formdata.append(BODY.QUIZID, quizId)
+        formdata.append(BODY.QUIZTHUMBNAIL, fs.createReadStream(`/Users/kaichen/Desktop/Fall2021/CSE416/imagedemo/${img}`))
         
         const headers2 = {
             [HEADER.TOKEN] : token,
             [HEADER.CONTENTTYPE] : `${HEADER.MULT_FORMDATA}; boundary=${formdata.getBoundary()}`,
             [HEADER.ACCEPT] : HEADER.APPLICATION_JSON
         }
-        return axios.post("http://localhost:3000/api/quiz/quizThumbnail/"+{last_insert}, formdata, {headers: headers2})
-    }
+        return axios.post("http://localhost:3000/api/quiz/quizThumbnail/"+{quizId}, formdata, {headers: headers2})
+    },
+
+
+    // testCreateMultipleQuestionChoicesApi: async (choices)=>{
+    //     const loginInfo = {
+    //         "email": "test@mail.com",
+    //         "password":"test123"
+    //     }
+    //     await auth.signInWithEmailAndPassword(auth.getAuth(), loginInfo.email, loginInfo.password)
+    //         .then(data=>{
+    //             // console.log(data)
+    //         })
+    //     const token = await auth.getAuth().currentUser.getIdToken()
+        
+    //     // console.log("after get id token " + token)
+    //     const headers = {
+    //         [HEADER.TOKEN] : token
+    //     }
+    //     return axios.post("http://localhost:3000/api/quiz/1/multipleQuizQuestionChoice", choices, {headers: headers})
+    // }
 }
 
 

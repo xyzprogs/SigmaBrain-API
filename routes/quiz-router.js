@@ -11,6 +11,7 @@ router.delete('/:quizId', firebase_auth, QuizController.deleteQuiz)
 // router.put('/:quizId', ) //update quiz
 // router.delete('/:quizId', ) //deletequiz
 router.get('/thumbnail/:quizId', QuizController.getQuizThumbnail)
+router.get('/category/:category', QuizController.getCategoryQuiz)
 
 //TODO: ERROR HANDLING
 router.post('/quizThumbnail/:quizId', firebase_auth, image_storage.uploadFile, QuizController.setQuizWithThumbnail)
@@ -24,6 +25,7 @@ router.delete('/quizQuestion/:questionId', firebase_auth, QuizController.deleteQ
 /*quiz question choice route */
 router.get('/quizQuestionChoice/:choiceId', QuizController.getQuestionChoice)
 router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)
+router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)
 router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.deleteQuestionChoice)
 
 
