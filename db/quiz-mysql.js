@@ -1,9 +1,25 @@
 const db_pool = require('./mysql-init');
 const mysql  = require('mysql2');
+const BODY = require('../constant/body')
 
 getQuiz = (id) => {
     return new Promise((resolve, reject) => {
         db_pool.query('SELECT * FROM Quiz WHERE quizId = ' + mysql.escape(id), (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getCategoryQuiz = (category) => {
+    return new Promise((resolve, reject) => {
+        query = "SELECT * FROM Quiz LIMIT 10"
+        if(category!=0){
+            query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} LIMIT 10`
+        }
+        db_pool.query(query, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -138,6 +154,29 @@ createQuestionChoice = (questionId, quizId, is_right_choice, choice) => {
     })
 }
 
+createMutipleQuestionChoice = (questionSet) => {
+    return new Promise((resolve, reject)=>{
+        myquery = "INSERT INTO QuestionChoice(questionId, quizId, is_right_choice, choice) VALUES"
+        questionSet.forEach(question => {
+            myquery += (
+                "(" + 
+                + mysql.escape(question[BODY.QUESTIONID]) + ","
+                + mysql.escape(question[BODY.QUIZID]) + ","
+                + mysql.escape(question[BODY.ISRIGHTCHOICE]) + ","
+                + mysql.escape(question[BODY.CHOICE])
+                + "),"
+            )
+        })
+        myquery = myquery.slice(0, -1)
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 deleteQuestionChoice = (choiceId) => {
     return new Promise((resolve, reject) => {
         db_pool.query(`DELETE FROM QuestionChoice WHERE choiceId = ` + mysql.escape(choiceId),
@@ -190,9 +229,11 @@ module.exports = {
     getQuiz,
     getQuestion,
     getQuestionChoice,
+    getCategoryQuiz,
     createQuiz,
     createQuestion,
     createQuestionChoice,
+    createMutipleQuestionChoice,
     deleteQuiz,
     deleteQuestion,
     deleteAllQuestionInQuiz,

@@ -2,23 +2,6 @@ var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
 const fs = require('fs')
 const path = require('path')
-// let id = req.params.id;
-// let result = await quizMysql.getQuiz(id);
-// let questionResult = await quizMysql.getQuestion(id);
-// let questionChoices = []
-// for(var i = 0; i < questionResult.length; i++){
-//     let questionId = questionResult[i]["questionId"]
-//     let questionChoice = await quizMysql.getQuestionChoice(questionId)
-//     questionChoices.push(questionChoice)
-// }
-// questionSet = {
-//     "quiz": result,
-//     "quizQuestion": questionResult,
-//     "quizQuestionChoice": questionChoices
-// }
-// questionSet["quizQuestionChoice"][0][1]["is_right_choice"]
-// console.log(questionSet["quizQuestionChoice"][0][1]["is_right_choice"])
-// res.sendStatus(200);
 
 getQuiz = async (req, res)=>{
     try{
@@ -98,11 +81,7 @@ deleteQuiz = async (req, res) => {
 //     path: '/Users/kaichen/Desktop/Fall2021/CSE416/image-storage/d3pyNcmIwPPTVFnAEowHIWagfgX2/quizes/1/quizImage',
 //     size: 25057
 // }
-quizImage = async (req, res) => {
-    console.log("file is ", req.file.path)
-    console.log("res from quizImage ", req.body.id)
-    res.sendStatus(200)
-}
+
 
 
 getQuestion = async (req,res)=>{
@@ -134,6 +113,18 @@ createQuestion = async (req, res)=>{
         res.status(201).json(result)
 
 
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+createMutipleQuestionChoice = async(req, res)=>{
+    try{
+        console.log(req.body)
+        let choices = req.body
+        let result = await quizMysql.createMutipleQuestionChoice(choices)
+        res.status(201).json(result)
     }catch(e){
         console.log(e)
         res.sendStatus(500)
@@ -231,7 +222,9 @@ getQuizThumbnail = async (req, res)=>{
         let result = await quizMysql.getQuizThumbnail(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0]['thumbnail']
+        console.log(result)
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
+        console.log(dir)
         let extention = path.extname(dir).substring(1)
         console.log("calling thumbnail")
         console.log("extention is", path.extname(dir).substring(1))
@@ -248,14 +241,26 @@ getQuizThumbnail = async (req, res)=>{
     }
 }
 
+getCategoryQuiz = async (req, res)=>{
+    try{
+        let category = req.params.category
+        let result = await quizMysql.getCategoryQuiz(category)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 module.exports = {
     getQuiz,
     getQuestion,
     getQuestionChoice,
+    getCategoryQuiz,
     createQuiz,
     createQuestion,
     createQuestionChoice,
+    createMutipleQuestionChoice,
     deleteQuiz,
     deleteQuestion,
     deleteAllQuestionInQuiz,
