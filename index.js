@@ -6,8 +6,9 @@ const helmet = require("helmet");
 const testRouter = require('./routes/test-router')
 const quizRouter = require('./routes/quiz-router')
 const userRouter = require('./routes/user-router')
-const firebase_admin = require('firebase-admin/app')
+const firebase_admin_app = require('firebase-admin/app')
 const firebase_client = require('./firebase/firebase_init')
+const firebase_admin = require("firebase-admin");
 const cookieParser = require('cookie-parser')
 const PORT = 3000;
 
@@ -19,7 +20,6 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors())
 app.use(helmet());
 app.use(cookieParser())
-app.use(cookieParser())
 
 //Routes Configuration
 app.use('/api/test', testRouter)
@@ -27,8 +27,8 @@ app.use('/api/quiz', quizRouter)
 app.use('/api/user', userRouter)
 
 //Firebase Admin Initialization
-firebase_admin.initializeApp({
-    credential: firebase_admin.applicationDefault(),
+firebase_admin_app.initializeApp({
+    credential: firebase_admin.credential.cert(config.firebase_admin_credentials)
 });
 
 
