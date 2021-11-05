@@ -13,6 +13,18 @@ getQuiz = (id) => {
     })
 }
 
+
+getUserQuiz = (userId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT * FROM Quiz WHERE userId=${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 getCategoryQuiz = (category) => {
     return new Promise((resolve, reject) => {
         query = "SELECT * FROM Quiz LIMIT 10"
@@ -227,6 +239,7 @@ getQuizThumbnail = (quizId) => {
 
 module.exports = {
     getQuiz,
+    getUserQuiz,
     getQuestion,
     getQuestionChoice,
     getCategoryQuiz,

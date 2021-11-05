@@ -5,9 +5,10 @@ const firebase_auth = require("../firebase/firebase_auth")
 const image_storage = require("../middleware/image-storage-middleware")
 
  /*quiz route */
-router.get('/:quizId', QuizController.getQuiz)
+router.get('/:quizId', QuizController.getQuiz) //get quiz by quizid
+router.get('/user/:userId', QuizController.getUserQuiz) //get user quizzes
 router.post('/', firebase_auth, QuizController.createQuiz) //create quiz
-router.delete('/:quizId', firebase_auth, QuizController.deleteQuiz)
+router.delete('/:quizId', firebase_auth, QuizController.deleteQuiz) //delete quiz by quizId
 // router.put('/:quizId', ) //update quiz
 // router.delete('/:quizId', ) //deletequiz
 router.get('/thumbnail/:quizId', QuizController.getQuizThumbnail)

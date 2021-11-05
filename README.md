@@ -16,6 +16,11 @@ DB_USER=root
 DATABASE=CSE416
 DB_HOST=localhost
 DB_PORT=3306
+
+
+#firebase
+FIREBASE_ADMIN_CREDENTIALS=
+
 ```
 
 ## SETUP FIREBASE AUTHENTICATION
@@ -45,6 +50,7 @@ CREATE TABLE Users(
     displayName VARCHAR(50) NOT NULL,
     experience INT DEFAULT 0,
     creationTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    isAdmin smallint DEFAULT 0,
     PRIMARY KEY(userId),
     KEY(id)
 );
@@ -55,7 +61,7 @@ CREATE TABLE Quiz(
     quizName varchar(50) DEFAULT "Untitled",
     quizCatgeory INT UNSIGNED NOT NULL,
     quizDescription varchar(200) DEFAULT "",
-    isPublished smallint,
+    isPublished smallint DEFAULT 0,
     takeCounts INT DEFAULT 0,
     likes INT DEFAULT 0,
     dislikes INT DEFAULT 0,

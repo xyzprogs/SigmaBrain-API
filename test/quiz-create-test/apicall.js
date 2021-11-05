@@ -116,8 +116,8 @@ const testApi = {
 
     testCreateQuizWithThumbnailApi: async (quizName, quizCatgeory, img)=> {
         const loginInfo = {
-            "email": "test@mail.com",
-            "password":"test123"
+            "email": "test@gmail.com",
+            "password":"test1234"
         }
         await auth.signInWithEmailAndPassword(auth.getAuth(), loginInfo.email, loginInfo.password)
             .then(data=>{
