@@ -40,7 +40,9 @@ test('test image api', async ()=>{
     // await testApi.testCreateQuizWithThumbnailApi("philosophy", 2, "philosophy.jpeg")
     // await testApi.testCreateQuizWithThumbnailApi("physics", 2, "physics.jpeg")
     // await testApi.testCreateQuizWithThumbnailApi("security", 2, "security.jpeg")
-    return testApi.testCreateQuizWithThumbnailApi("system", 1, "cs416.jpg")
+
+    return testApi.testCreateQuizWithThumbnailApi("system", 1, "system.jpeg")
+
         .then(data=>{
             console.log(data)
         })
