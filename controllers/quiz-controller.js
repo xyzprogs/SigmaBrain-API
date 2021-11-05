@@ -14,6 +14,17 @@ getQuiz = async (req, res)=>{
     }
 }
 
+getUserQuiz = async (req, res)=>{
+    try{
+        let userId = req.params.userId
+        let result = await quizMysql.getUserQuiz(userId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 createQuiz = async (req, res) => {
     try{
 
@@ -28,7 +39,7 @@ createQuiz = async (req, res) => {
         }
     
         let result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
-
+        console.log("quiz created")
         res.status(201).json(result)
 
     }catch(e){
@@ -48,7 +59,7 @@ setQuizWithThumbnail = async (req, res) => {
         }
     
         let result = await quizMysql.setQuizThumbnail(quizId, thumbnail)
-
+        console.log("quiz thumbnial is set")
         res.status(201).json(result)
 
     }catch(e){
@@ -257,6 +268,7 @@ module.exports = {
     getQuestion,
     getQuestionChoice,
     getCategoryQuiz,
+    getUserQuiz,
     createQuiz,
     createQuestion,
     createQuestionChoice,
