@@ -137,10 +137,21 @@ createUser = async (req, res) => {
         })
 }
 
+getMainLeaderboard = async (req,res) =>{
+    try{
+        let mainLeaderBoard = await userMysql.getTopUsers();
+        res.status(200).json(mainLeaderBoard)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
     loginUser,
     registerUser,
-    testVerify
+    testVerify,
+    getMainLeaderboard
 }

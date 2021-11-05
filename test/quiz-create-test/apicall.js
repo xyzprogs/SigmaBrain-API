@@ -140,7 +140,7 @@ const testApi = {
         console.log("new test created " + quizId)
         const formdata = new FormData()
         formdata.append(BODY.QUIZID, quizId)
-        formdata.append(BODY.QUIZTHUMBNAIL, fs.createReadStream(`/Users/kaichen/Desktop/Fall2021/CSE416/imagedemo/${img}`))
+        formdata.append(BODY.QUIZTHUMBNAIL, fs.createReadStream(`C:/Users/AndyZ/Downloads/${img}`))
         
         const headers2 = {
             [HEADER.TOKEN] : token,
