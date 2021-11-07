@@ -42,7 +42,7 @@ $env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account
 ## Current Database Schema
 
 ```javascript
-
+/*User Schema*/
 CREATE TABLE Users(
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     userId VARCHAR(32) NOT NULL UNIQUE,
@@ -51,10 +51,15 @@ CREATE TABLE Users(
     experience INT DEFAULT 0,
     creationTime DATETIME DEFAULT CURRENT_TIMESTAMP,
     isAdmin smallint DEFAULT 0,
+    backgroundImage VARCHAR(1000),
+    profileImage VARCHAR(1000),
+    userDescription VARCHAR(500),
+    topFeatureQuiz INT,
     PRIMARY KEY(userId),
     KEY(id)
 );
 
+/*Quiz Schema*/
 CREATE TABLE Quiz(
 	quizId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     userId VARCHAR(32) NOT NULL,
@@ -86,6 +91,106 @@ CREATE TABLE QuestionChoice(
     quizId INT NOT NULL,
     is_right_choice tinyint,
     choice varchar(200)
+);
+
+CREATE TABLE QuizComment(
+	quizCommentId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    quizId INT NOT NULL,
+    quizComment VARCHAR(1000) NOT NULL,
+	likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0
+);
+
+CREATE TABLE QuizCommentReply(
+	quizCommentReplyId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    quizCommentId INT NOT NULL,
+    quizId INT NOT NULL,
+	reply VARCHAR(1000) NOT NULL,
+	likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0
+);
+
+/*Leaderboard Schema*/
+CREATE TABLE Leaderboard(
+	leaderboardId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userId VARCHAR(32) NOT NULL 
+);
+
+CREATE TABLE UserChannelScore(
+	userChannelScoreId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    leaderboardId INT NOT NULL,
+    score INT DEFAULT 0
+);
+
+/*Forum Schema*/
+CREATE TABLE Forum(
+	forumId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    forumName VARCHAR(100) NOT NULL,
+    userId VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE ForumPost(
+	forumPostId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    forumId INT NOT NULL,
+	postTitle VARCHAR(100) NOT NULL,
+    postDescription VARCHAR(500),
+    lkes INT DEFAULT 0,
+    dislikes INT DEFAULT 0
+); 
+
+CREATE TABLE ForumPostComment(
+	forumPostCommentId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    forumId INT NOT NULL,
+    postComment VARCHAR(500) NOT NULL,
+    likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0
+);
+
+CREATE TABLE ForumPostCommentReply(
+	forumPostCommentReplyId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    forumPostCommentId INT NOT NULL,
+    forumId INT NOT NULL,
+	reply VARCHAR(500) NOT NULL,
+    likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0
+);
+
+CREATE TABLE ForumAdmin(
+	forumAdminId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    forumId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL 
+);
+
+/*Achievement Schema*/
+CREATE TABLE Achievement(
+	achievementId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    achievementName VARCHAR(100) NOT NULL,
+    achievementDescription VARCHAR(200) NOT NULL,
+    category INT NOT NULL,
+    achievementLevel INT NOT NULL,
+    completionAmount INT NOT NULL
+);
+
+CREATE TABLE UserAchievementProgress(
+	userAchievementProgressId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    achievementId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL,
+	category INT NOT NULL,
+    achievementLevel INT NOT NULL,
+    progress INT NOT NULL
+);
+
+CREATE TABLE UserAchievementCompletion(
+	userAchievementCompletionId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    achievementId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL
+);
+
+/*Subscribe Schema*/
+CREATE TABLE Subscribe(
+	subscribeId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userId VARCHAR(32) NOT NULL,
+    subscribeTo VARCHAR(32) NOT NULL
 );
 
 ```
