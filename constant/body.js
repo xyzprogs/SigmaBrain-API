@@ -6,6 +6,12 @@ const EXPERIENCE = "experience"
 const CREATIONTIME = "creationTime"
 const PASSWORD = "password"
 const UID = "uid"
+const PROFILEIMAGE = "profileImage"
+const BACKGROUNDIMAGE = "backgroundImage"
+const USERDESCRIPTION = "userDescription"
+const TOPFEATUREQUIZ = "topFeatureQuiz"
+const USERPROFILE = "userProfile"
+const USERPROFILE_IMAGE_TYPE = "imageType"
 
 //Quiz Body
 const QUIZID = "quizId"
@@ -40,6 +46,11 @@ module.exports = {
     CREATIONTIME,
     PASSWORD,
     UID,
+    PROFILEIMAGE,
+    BACKGROUNDIMAGE,
+    USERDESCRIPTION,
+    TOPFEATUREQUIZ,
+    USERPROFILE_IMAGE_TYPE,
 
     //Quiz
     QUIZID,
@@ -52,6 +63,7 @@ module.exports = {
     DISLIKES,
     TIMELIMIT,
     QUIZTHUMBNAIL,
+    USERPROFILE,
 
     //QUESTION
     QUESTION,
@@ -64,6 +76,4 @@ module.exports = {
     CHOICEID,
     ISRIGHTCHOICE,
     CHOICE
-
-
 }

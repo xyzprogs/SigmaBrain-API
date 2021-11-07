@@ -4,6 +4,8 @@ var userMysql = require('../db/user-mysql');
 const HEADER_CONSTANT = require('../constant/header')
 const BODY = require("../constant/body");
 const { default: axios } = require('axios');
+const fs = require('fs')
+const path = require('path')
 
 /*************FOR TESTING PURPOSE/*************/
 registerUser = async (req, res) => {
@@ -147,11 +149,121 @@ getMainLeaderboard = async (req,res) =>{
     }
 }
 
+getUserProfileImage = async (req, res)=>{
+    try{
+        let id = req.params.userId;
+        let result = await userMysql.getUserProfileImage(id)
+        //TODO: CHECK IF DIR IS EMPTY
+        let dir = result[0][BODY.PROFILEIMAGE]
+        //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
+        let extention = path.extname(dir).substring(1)
+        fs.readFile(
+            dir, 'base64',
+            (err, base64image)=>{
+                const dataUrl = `data:image/${extention};base64,${base64image}`
+                return res.send(dataUrl)
+            }
+        )
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getUserBackgroundImage = async (req, res)=>{
+    try{
+        let id = req.params.userId;
+        let result = await userMysql.getUserBackgroundImage(id)
+        //TODO: CHECK IF DIR IS EMPTY
+        let dir = result[0][BODY.BACKGROUNDIMAGE]
+        console.log("background", result)
+        console.log("background dir",dir)
+        //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
+        let extention = path.extname(dir).substring(1)
+        fs.readFile(
+            dir, 'base64',
+            (err, base64image)=>{
+                const dataUrl = `data:image/${extention};base64,${base64image}`
+                return res.send(dataUrl)
+            }
+        )
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getUserDescription = async (req, res) => {
+    try{
+        let id = req.params.userId
+        let result = await userMysql.getUserDescription(id)
+        res.status(200).json(result[0]);
+    }catch(e){
+
+    }
+}
+
+setUserProfileImage = async (req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const profileImage = res.locals.file.path
+        let response = await userMysql.setUserProfileImage(userId, profileImage)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
+setUserBackgroundImage = async (req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID]
+        const backgroundImage = res.locals.file.path
+        let response = await userMysql.setUserBackgroundImage(userId, backgroundImage)
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+setUserDescription = async (req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID]
+        const description = req.body[BODY.USERDESCRIPTION]
+        let response = await userMysql.setUserDescription(userId, description)
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+
+}
+
+setUserTopFeatureQuiz = async (req, res) => {
+    try {
+        const userId = res.locals.decodedToken[BODY.UID]
+        const topFeatureQuiz = req.body[BODY.TOPFEATUREQUIZ]
+        let response = await userMysql.setUserTopFeatureQuiz(userId, topFeatureQuiz)
+        res.sendStatus(200)
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
     loginUser,
     registerUser,
     testVerify,
-    getMainLeaderboard
+    getMainLeaderboard,
+    getUserProfileImage,
+    getUserBackgroundImage,
+    getUserDescription,
+    setUserProfileImage,
+    setUserBackgroundImage,
+    setUserDescription,
+    setUserTopFeatureQuiz
 }

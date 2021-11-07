@@ -61,8 +61,6 @@ createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
 
 setQuizThumbnail = (quizId, thumbnail) => {
     return new Promise((resolve, reject) => {
-        const str = "UPDATE Quiz SET thumbnail = " + mysql.escape(thumbnail) + " WHERE quizId = " + mysql.escape(quizId)
-        console.log(str)
         db_pool.query("UPDATE Quiz SET thumbnail = " + mysql.escape(thumbnail) + " WHERE quizId = " + mysql.escape(quizId),
                 (err, result) => {
                     if(err){

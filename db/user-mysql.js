@@ -17,7 +17,85 @@ createUser = (user) => {
 
 getTopUsers = () =>{
     return new Promise((resolve, reject) => {
-        db_pool.query('SELECT * FROM Users ORDER BY experience DESC LIMIT 3; ' , (err, result)=>{
+        db_pool.query('SELECT * FROM Users ORDER BY experience DESC LIMIT 10; ' , (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+setUserProfileImage = (userId, url) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET profileImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+setUserBackgroundImage = (userId, url) =>  {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET backgroundImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+
+}
+
+setUserDescription = (userId, description) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET userDescription = ${mysql.escape(description)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+setUserTopFeatureQuiz = (userId, quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET topFeatureQuiz = ${mysql.escape(quizId)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getUserProfileImage = (userId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT profileImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getUserBackgroundImage = (userId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT backgroundImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getUserDescription = (userId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT userDescription FROM Users WHERE userid = ${mysql.escape(userId)}`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -28,5 +106,12 @@ getTopUsers = () =>{
 
 module.exports = {
     createUser,
-    getTopUsers
+    getTopUsers,
+    setUserProfileImage,
+    setUserBackgroundImage,
+    setUserDescription,
+    setUserTopFeatureQuiz,
+    getUserProfileImage,
+    getUserBackgroundImage,
+    getUserDescription
 }
