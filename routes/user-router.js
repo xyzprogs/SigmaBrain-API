@@ -23,4 +23,9 @@ router.post('/profile/setUserBackgroundImage', firebase_auth, image_store.upload
 router.post('/profile/setUserDescription', firebase_auth, UserController.setUserDescription) //set user description
 router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserTopFeatureQuiz) //set user top feature quiz
 
+
+//Subscribe
+router.post('/subscribe', firebase_auth, UserController.createSubscribe)
+router.post('/unsubscribe', firebase_auth, UserController.cancelSubscribe)
+
 module.exports = router
