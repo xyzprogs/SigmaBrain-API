@@ -1,3 +1,9 @@
+//COMMON
+const LIKES  = "likes"
+const DISLIKES = "dislikes"
+const REPLY = "reply"
+const CATEGORY = "category"
+
 //User Body
 const USERID = "uid"
 const DISPLAYNAME = "displayName"
@@ -20,10 +26,9 @@ const QUIZCATEGORY = "quizCatgeory"
 const QUIZDESCRIPTION = "quizDescription"
 const ISPUBLISHED = "isPublished"
 const TAKECOUNTS = "takeCounts"
-const LIKES  = "likes"
-const DISLIKES = "dislikes"
 const TIMELIMIT = "timeLimit"
 const QUIZTHUMBNAIL = "thumbnail"
+
 
 //Question Body
 const QUESTIONID = "questionId"
@@ -37,8 +42,60 @@ const CHOICEID = "choiceId"
 const ISRIGHTCHOICE = "is_right_choice"
 const CHOICE = "choice"
 
+//Quiz Comment
+const QUIZCOMMENTID = "quizCommentId"
+const QUIZCOMMENT = "quizComment"
+const QUIZCOMMENTREPLYID  = "quizCommentReplyId"
+
+//Quiz Grade
+const QUIZGRADEID = "quizGradeId"
+const GRADE = "grade"
+
+//Leaderboard
+const LEADERBOARDID = "leaderboardId"
+const USERCHANNELSCOREID = "userChannelScoreId"
+const SCORE = "score"
+
+//Forum
+const FORUMID = "forumId"
+const FORUMNAME = "forumName"
+const FORUMPOSTID = "forumPostId"
+const POSTTITLE = "postTitle"
+const POSTDESCRIPTION = "postDescription"
+
+//Forum Post Comment
+const FORUMPOSTCOMMENTID = "forumPostCommentId"
+const POSTCOMMENT = "postComment"
+
+//Forum Post Comment Reply
+const FORUMPOSTCOMMENTREPLYID = "forumPostCommentReplyId"
+
+//Forum Admin
+const FORUMADMINID = "forumAdminId"
+
+//Achievement
+const ACHIEVEMENT = "achievementId"
+const ACHIEVEMENTNAME = "achievementName"
+const ACHIEVEMENTDESCRIPTION = "achievementDescription"
+const COMPLETIONAMOUNT = "completionAmount"
+const ACHIEVEMENTLEVEL = "achievementLevel"
+
+//User Achievement Progress
+const USERACHIEVEMENTPROGRESSID = "userAchievementProgressId"
+const PROGRESS = "progress"
+
+//User Achievement Completion
+const USERACHIEVEMENTCOMPLETIONID = "userAchievementCompletionId"
+
+//Subscribe
+const SUBSCRIBETO = "subscribeTo"
 
 module.exports = {
+    //Common
+    REPLY,
+    CATEGORY,
+
+    //Users
     USERID,
     DISPLAYNAME,
     EMAIL,
@@ -75,5 +132,53 @@ module.exports = {
     //QUESTION CHOICE
     CHOICEID,
     ISRIGHTCHOICE,
-    CHOICE
+    CHOICE,
+
+    //QUIZ COMMENT
+    QUIZCOMMENTID,
+    QUIZCOMMENT,
+    QUIZCOMMENTREPLYID,
+
+    //QUIZ GRADE
+    QUIZGRADEID,
+    GRADE,
+
+    //LEADERBOARD
+    LEADERBOARDID,
+    USERCHANNELSCOREID,
+    SCORE,
+
+    //FORUM
+    FORUMID,
+    FORUMNAME,
+    FORUMPOSTID,
+    POSTTITLE,
+    POSTDESCRIPTION,
+
+    //FORUM POST COMMENT
+    FORUMPOSTCOMMENTID,
+    POSTCOMMENT,
+
+    //FORUM POST COMMENT REPLY
+    FORUMPOSTCOMMENTREPLYID,
+
+    //FORUM ADMIN
+    FORUMADMINID,
+
+    //ACHIEVEMENT
+    ACHIEVEMENT,
+    ACHIEVEMENTNAME,
+    ACHIEVEMENTDESCRIPTION,
+    COMPLETIONAMOUNT,
+    ACHIEVEMENTLEVEL,
+
+    //USER ACHIEVEMENT PROGRESS
+    USERACHIEVEMENTPROGRESSID,
+    PROGRESS,
+
+    //USER ACHIEVEMENT COMPLETION
+    USERACHIEVEMENTCOMPLETIONID,
+
+    //SUBSCRIBE
+    SUBSCRIBETO
 }

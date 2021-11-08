@@ -104,6 +104,41 @@ getUserDescription = (userId) => {
     })
 }
 
+
+createSubscribe = (userId, subscribeTo) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`INSERT INTO Subscribe (userId, subscribeTo)
+        SELECT * FROM (SELECT ${mysql.escape(userId)}, ${mysql.escape(subscribeTo)}) AS tmp
+        WHERE 
+        NOT EXISTS ((
+            SELECT * FROM Subscribe WHERE userId=${mysql.escape(userId)} AND subscribeTo=${mysql.escape(subscribeTo)}
+        ) LIMIT 1)
+        AND
+        EXISTS (
+            SELECT * FROM Users WHERE userId = ${mysql.escape(subscribeTo)}
+        )`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+
+cancelSubscribe = (userId, subscribeTo) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`DELETE FROM Subscribe WHERE userId=${mysql.escape(userId)} AND subscribeTo=${mysql.escape(subscribeTo)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -113,5 +148,7 @@ module.exports = {
     setUserTopFeatureQuiz,
     getUserProfileImage,
     getUserBackgroundImage,
-    getUserDescription
+    getUserDescription,
+    createSubscribe,
+    cancelSubscribe
 }

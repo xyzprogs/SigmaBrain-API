@@ -247,8 +247,33 @@ setUserTopFeatureQuiz = async (req, res) => {
         const topFeatureQuiz = req.body[BODY.TOPFEATUREQUIZ]
         let response = await userMysql.setUserTopFeatureQuiz(userId, topFeatureQuiz)
         res.sendStatus(200)
-    } catch (error) {
-        
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+createSubscribe = async (req, res) => {
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const subscribeTo = req.body[BODY.SUBSCRIBETO]
+        let response = await userMysql.createSubscribe(userId, subscribeTo)
+        res.sendStatus(201)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+cancelSubscribe = async (req, res) => {
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const subscribeTo = req.body[BODY.SUBSCRIBETO]
+        let response = await userMysql.cancelSubscribe(userId, subscribeTo)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
     }
 }
 
@@ -265,5 +290,7 @@ module.exports = {
     setUserProfileImage,
     setUserBackgroundImage,
     setUserDescription,
-    setUserTopFeatureQuiz
+    setUserTopFeatureQuiz,
+    createSubscribe,
+    cancelSubscribe
 }
