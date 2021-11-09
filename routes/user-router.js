@@ -12,6 +12,7 @@ router.get('/verify', firebase_auth, UserController.verifyUser)
 
 router.post('/create', firebase_auth, UserController.createUser) //create new user
 router.get('/leaderboard', UserController.getMainLeaderboard ) //get leaderboard information
+
 //router.put('/forgetpassword', )
 //router.put('/changepassword', )
 //router.put('/changedisplayname')
