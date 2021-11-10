@@ -1,5 +1,6 @@
 var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
+const MYSQL_CONSTANT = require('../constant/mysql')
 const fs = require('fs')
 const path = require('path')
 
@@ -27,7 +28,6 @@ getUserQuiz = async (req, res)=>{
 
 createQuiz = async (req, res) => {
     try{
-
         const userId = res.locals.decodedToken[BODY.UID]
         const quizName = req.body[BODY.QUIZNAME]
         const quizCatgeory = req.body[BODY.QUIZCATEGORY]
@@ -37,11 +37,47 @@ createQuiz = async (req, res) => {
         if(userId==null || quizName==null || quizCatgeory==null || quizDescription==null || isPublished==null){
             return res.status(400).json({msg: "required field can't be empty"})
         }
-    
         let result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
-        console.log("quiz created")
         res.status(201).json(result)
 
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
+createQuizWithQuestions = async (req, res) => {
+    try{
+        console.log("createQuizWithQuestions")
+        const userId = res.locals.decodedToken[BODY.UID]
+        const quizName = req.body[BODY.QUIZNAME]
+        const quizCatgeory = req.body[BODY.QUIZCATEGORY]
+        const quizDescription = req.body[BODY.QUIZDESCRIPTION]
+        const isPublished = req.body[BODY.ISPUBLISHED]
+        if(userId==null || quizName==null || quizCatgeory==null || quizDescription==null || isPublished==null){
+            return res.status(400).json({msg: "required field can't be empty"})
+        }
+        console.log("quiz", quizName, quizCatgeory,quizDescription, isPublished)
+        let quiz_result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
+        const quizId = quiz_result[MYSQL_CONSTANT.INSERTID]
+        const questions = req.body[BODY.QUESTIONS]
+        for(var i = 0; i < questions.length; i++){
+            const questionType = questions[i][BODY.QUESTIONTYPE]
+            const numberOfChoice = questions[i][BODY.NUMBEROFCHOICE]
+            const question = questions[i][BODY.QUESTION]
+            console.log("question", questionType, numberOfChoice, question)
+            let result = await quizMysql.createQuestion(quizId, questionType, numberOfChoice, question)
+            const choices = questions[i][BODY.CHOICES]
+            const questionId = result[MYSQL_CONSTANT.INSERTID]
+            for(var j = 0; j < choices.length; j++){
+                const is_right_choice = choices[j][BODY.ISRIGHTCHOICE]
+                const choice = choices[j][BODY.CHOICE]
+                console.log("choice", choice, is_right_choice)
+                await quizMysql.createQuestionChoice(questionId, quizId, is_right_choice, choice)
+            }
+        }
+        res.status(201).json(quiz_result)
     }catch(e){
         console.log(e)
         res.sendStatus(500)
@@ -263,6 +299,24 @@ getCategoryQuiz = async (req, res)=>{
     }
 }
 
+deleteQuizWithQuestions = async (req, res)=>{
+    try{
+        let results = []
+        const userId = res.locals.decodedToken[BODY.UID]
+        let id = req.params.quizId;
+        let result = await quizMysql.deleteQuiz(id)
+        results.push(result)
+        result = await quizMysql.deleteAllQuestionInQuiz(id)
+        results.push(result)
+        result = await quizMysql.deleteAllQuestionChoiceInQuiz(id)
+        results.push(result)
+        res.status(200).json(results)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -280,5 +334,7 @@ module.exports = {
     deleteAllQuestionChoiceInQuiz,
     setQuizWithThumbnail,
     getTheMostPopularQuiz,
-    getQuizThumbnail
+    getQuizThumbnail,
+    createQuizWithQuestions,
+    deleteQuizWithQuestions
 }
