@@ -36,11 +36,13 @@ const QUESTIONTYPE = "questionType"
 const NUMBEROFCHOICE = "numberOfChoice"
 const IMAGE = "image"
 const QUESTION = "question" 
+const QUESTIONS = "questions"
 
 //QuestionChoice Body
 const CHOICEID = "choiceId"
 const ISRIGHTCHOICE = "is_right_choice"
 const CHOICE = "choice"
+const CHOICES = "choices"
 
 //Quiz Comment
 const QUIZCOMMENTID = "quizCommentId"
@@ -128,11 +130,13 @@ module.exports = {
     NUMBEROFCHOICE,
     IMAGE,
     QUESTIONID,
+    QUESTIONS,
 
     //QUESTION CHOICE
     CHOICEID,
     ISRIGHTCHOICE,
     CHOICE,
+    CHOICES,
 
     //QUIZ COMMENT
     QUIZCOMMENTID,
