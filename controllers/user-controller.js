@@ -149,6 +149,18 @@ getMainLeaderboard = async (req,res) =>{
     }
 }
 
+getChannelLeaderboard = async (req,res) =>{
+    try{
+       let leaderboardId = req.params.leaderboardId
+       let channelLeaderboard = await userMysql.getChannelLeaderboard(leaderboardId);
+       res.status(200).json(channelLeaderboard);
+    
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 getUserProfileImage = async (req, res)=>{
     try{
         let id = req.params.userId;
@@ -295,6 +307,7 @@ module.exports = {
     registerUser,
     testVerify,
     getMainLeaderboard,
+    getChannelLeaderboard,
     getUserProfileImage,
     getUserBackgroundImage,
     getUserDescription,

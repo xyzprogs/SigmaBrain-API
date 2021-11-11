@@ -1,13 +1,24 @@
 const db_pool = require('./mysql-init');
-const mysql  = require('mysql2');
+const mysql = require('mysql2');
 
 createUser = (user) => {
     return new Promise((resolve, reject) => {
         db_pool.query('INSERT INTO Users(userId, email, displayName) VALUES('
-                        + mysql.escape(user.userId) + ','
-                        + mysql.escape(user.email) + ','
-                        + mysql.escape(user.displayName) + ')' ,(err, result)=>{
-            if (err){
+            + mysql.escape(user.userId) + ','
+            + mysql.escape(user.email) + ','
+            + mysql.escape(user.displayName) + ')', (err, result) => {
+                if (err) {
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+getTopUsers = () => {
+    return new Promise((resolve, reject) => {
+        db_pool.query('SELECT * FROM Users ORDER BY experience DESC LIMIT 10; ', (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -15,10 +26,14 @@ createUser = (user) => {
     })
 }
 
-getTopUsers = () =>{
+
+getChannelLeaderboard = (leaderboardId) => {
+    //leaderboardId is the channel ID
+    //Gets the top 10 users and scores based on the leaderboardID
     return new Promise((resolve, reject) => {
-        db_pool.query('SELECT * FROM Users ORDER BY experience DESC LIMIT 10; ' , (err, result)=>{
-            if(err){
+        db_pool.query(`SELECT * FROM cse416.userchannelscore where 
+                    leaderboardId = ${mysql.escape(leaderboardId)} ORDER BY score desc LIMIT 10`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -27,9 +42,9 @@ getTopUsers = () =>{
 }
 
 setUserProfileImage = (userId, url) => {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`UPDATE Users SET profileImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE Users SET profileImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -37,10 +52,10 @@ setUserProfileImage = (userId, url) => {
     })
 }
 
-setUserBackgroundImage = (userId, url) =>  {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`UPDATE Users SET backgroundImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+setUserBackgroundImage = (userId, url) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE Users SET backgroundImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -50,9 +65,9 @@ setUserBackgroundImage = (userId, url) =>  {
 }
 
 setUserDescription = (userId, description) => {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`UPDATE Users SET userDescription = ${mysql.escape(description)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE Users SET userDescription = ${mysql.escape(description)} WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -60,10 +75,10 @@ setUserDescription = (userId, description) => {
     })
 }
 
-setUserTopFeatureQuiz = (userId, quizId)=>{
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`UPDATE Users SET topFeatureQuiz = ${mysql.escape(quizId)} WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+setUserTopFeatureQuiz = (userId, quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE Users SET topFeatureQuiz = ${mysql.escape(quizId)} WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -72,9 +87,9 @@ setUserTopFeatureQuiz = (userId, quizId)=>{
 }
 
 getUserProfileImage = (userId) => {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT profileImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT profileImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -83,9 +98,9 @@ getUserProfileImage = (userId) => {
 }
 
 getUserBackgroundImage = (userId) => {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT backgroundImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT backgroundImage FROM Users WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -95,8 +110,8 @@ getUserBackgroundImage = (userId) => {
 
 getUserDescription = (userId) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT userDescription FROM Users WHERE userid = ${mysql.escape(userId)}`, (err, result)=>{
-            if(err){
+        db_pool.query(`SELECT userDescription FROM Users WHERE userid = ${mysql.escape(userId)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -106,7 +121,7 @@ getUserDescription = (userId) => {
 
 
 createSubscribe = (userId, subscribeTo) => {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         db_pool.query(`INSERT INTO Subscribe (userId, subscribeTo)
         SELECT * FROM (SELECT ${mysql.escape(userId)}, ${mysql.escape(subscribeTo)}) AS tmp
         WHERE 
@@ -116,8 +131,8 @@ createSubscribe = (userId, subscribeTo) => {
         AND
         EXISTS (
             SELECT * FROM Users WHERE userId = ${mysql.escape(subscribeTo)}
-        )`, (err, result)=>{
-            if(err){
+        )`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -127,9 +142,9 @@ createSubscribe = (userId, subscribeTo) => {
 
 
 cancelSubscribe = (userId, subscribeTo) => {
-    return new Promise((resolve, reject)=>{
-        db_pool.query(`DELETE FROM Subscribe WHERE userId=${mysql.escape(userId)} AND subscribeTo=${mysql.escape(subscribeTo)}`, (err, result)=>{
-            if(err){
+    return new Promise((resolve, reject) => {
+        db_pool.query(`DELETE FROM Subscribe WHERE userId=${mysql.escape(userId)} AND subscribeTo=${mysql.escape(subscribeTo)}`, (err, result) => {
+            if (err) {
                 return reject(err)
             }
             return resolve(result)
@@ -153,6 +168,7 @@ getSubscriptions = (userId)=>{
 module.exports = {
     createUser,
     getTopUsers,
+    getChannelLeaderboard,
     setUserProfileImage,
     setUserBackgroundImage,
     setUserDescription,
