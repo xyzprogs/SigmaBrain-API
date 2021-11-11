@@ -4,8 +4,6 @@ const HEADER_CONSTANT = require('../constant/header');
 
 module.exports = (req, res, next) => {
     let token = req.headers[HEADER_CONSTANT.TOKEN]
-    // console.log(token)
-    // console.log(req.headers)
     if(!token){
         return res.status(401).json({
             error: "Unauthorized Request"

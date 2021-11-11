@@ -27,5 +27,5 @@ router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserT
 //Subscribe
 router.post('/subscribe', firebase_auth, UserController.createSubscribe)
 router.post('/unsubscribe', firebase_auth, UserController.cancelSubscribe)
-
+router.get('/subscriptions', firebase_auth, UserController.getSubscriptions)
 module.exports = router
