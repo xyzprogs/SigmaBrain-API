@@ -277,6 +277,17 @@ cancelSubscribe = async (req, res) => {
     }
 }
 
+getSubscriptions = async (req, res) => {
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let response = await userMysql.getSubscriptions(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -292,5 +303,6 @@ module.exports = {
     setUserDescription,
     setUserTopFeatureQuiz,
     createSubscribe,
-    cancelSubscribe
+    cancelSubscribe,
+    getSubscriptions
 }

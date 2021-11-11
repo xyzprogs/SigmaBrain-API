@@ -317,6 +317,29 @@ deleteQuizWithQuestions = async (req, res)=>{
     }
 }
 
+getUserTopFeatureQuiz = async (req, res)=>{
+    try{
+        let userId = req.params.userId
+        let result = await quizMysql.getUserTopFeatureQuiz(userId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+setUserTopFeatureQuiz = async (req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const quizId = req.body[BODY.QUIZID]
+        let result = await quizMysql.setUserTopFeatureQuiz(userId, quizId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -336,5 +359,7 @@ module.exports = {
     getTheMostPopularQuiz,
     getQuizThumbnail,
     createQuizWithQuestions,
-    deleteQuizWithQuestions
+    deleteQuizWithQuestions,
+    getUserTopFeatureQuiz,
+    setUserTopFeatureQuiz,
 }

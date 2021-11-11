@@ -4,7 +4,7 @@ const BODY = require('../constant/body')
 
 getQuiz = (id) => {
     return new Promise((resolve, reject) => {
-        db_pool.query('SELECT * FROM Quiz WHERE quizId = ' + mysql.escape(id), (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -235,6 +235,28 @@ getQuizThumbnail = (quizId) => {
     })
 }
 
+getUserTopFeatureQuiz = (userId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizId = (SELECT topFeatureQuiz FROM Users WHERE userId=${mysql.escape(userId)})`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+setUserTopFeatureQuiz = (userId, quizId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET topFeatureQuiz = ${mysql.escape(quizId)} WHERE userId = ${mysql.escape(userId)};`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -252,5 +274,7 @@ module.exports = {
     deleteAllQuestionChoiceInQuiz,
     setQuizThumbnail,
     getTheMostPopularQuiz,
-    getQuizThumbnail
+    getQuizThumbnail,
+    getUserTopFeatureQuiz,
+    setUserTopFeatureQuiz
 }

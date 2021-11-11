@@ -138,6 +138,17 @@ cancelSubscribe = (userId, subscribeTo) => {
 }
 
 
+getSubscriptions = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT subscribeTo FROM Subscribe WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 module.exports = {
     createUser,
@@ -150,5 +161,6 @@ module.exports = {
     getUserBackgroundImage,
     getUserDescription,
     createSubscribe,
-    cancelSubscribe
+    cancelSubscribe,
+    getSubscriptions
 }

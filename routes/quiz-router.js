@@ -16,8 +16,9 @@ router.get('/category/:category', QuizController.getCategoryQuiz)//get quiz of s
 router.post('/quizThumbnail/:quizId', firebase_auth, image_storage.uploadFile, QuizController.setQuizWithThumbnail)//upload quiz thumbnail
 router.get('/popular/topquiz', QuizController.getTheMostPopularQuiz)//get the most popular quiz of the site
 router.post('/quizWithQuestions', firebase_auth, QuizController.createQuizWithQuestions)//create quiz with questions
-router.delete('/quizWithQuestions/:quizId', firebase_auth, QuizController.deleteQuizWithQuestions)
-
+router.delete('/quizWithQuestions/:quizId', firebase_auth, QuizController.deleteQuizWithQuestions)//delete quiz with its questions
+router.get('/userTopFeatureQuiz/:userId', QuizController.getUserTopFeatureQuiz)//get the user top feature quiz
+router.post('/userTopFeatureQuiz', firebase_auth, QuizController.setUserTopFeatureQuiz)//set the user top feature quiz
 /*quiz question route*/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get specific quiz question
 router.post('/:quizId/quizQuestion', firebase_auth, QuizController.createQuestion)//create quiz question
