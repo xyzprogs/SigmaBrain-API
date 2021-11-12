@@ -271,6 +271,83 @@ updateQuiz = (userId, quizId, quizName, quizDescription, timeLimit, quizCategory
     })
 }
 
+getChoicesInAQuestion = (questionId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT q3.choiceId, q3.questionId, q3.quizId, q3.choice 
+        FROM Quiz as q1
+            INNER JOIN Question as q2
+                on q1.quizId = q2.quizId
+            INNER JOIN QuestionChoice as q3
+                on q3.questionId = q2.questionId
+            WHERE q2.questionId = ${questionId}`, (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+getChoicesInAQuestionWithAnswer = (questionId, userId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT q3.* 
+        FROM Quiz as q1
+            INNER JOIN Question as q2
+                on q1.quizId = q2.quizId
+            INNER JOIN QuestionChoice as q3
+                on q3.questionId = q2.questionId
+            WHERE q2.questionId=${mysql.escape(questionId)} AND q1.userId=${mysql.escape(userId)}`, (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+removeChoicesInAQuestion = (userId, questionId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`DELETE q3
+        FROM Quiz as q1
+            INNER JOIN Question as q2
+                on q1.quizId = q2.quizId
+            INNER JOIN QuestionChoice as q3
+                on q3.questionId = q2.questionId
+            WHERE q2.questionId=${mysql.escape(questionId)} AND q1.userId=${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+updateQuestionChoices = (questionSet, userId, quizId, questionId) => {
+    return new Promise((resolve, reject)=>{
+        myquery = "INSERT INTO QuestionChoice(questionId, quizId, is_right_choice, choice)"
+        for(var i = 0; i < questionSet.length; i++){
+            let question = questionSet[i]
+            if(i==0){
+                myquery += `SELECT ${mysql.escape(questionId)}, ${mysql.escape(quizId)}, ${mysql.escape(question[BODY.ISRIGHTCHOICE])}, ${mysql.escape(question[BODY.CHOICE])}
+                WHERE (SELECT userId FROM Quiz WHERE quizId=${mysql.escape(quizId)}) = ${mysql.escape(userId)}`
+            }
+            else{
+                myquery += ` UNION ALL
+                SELECT ${mysql.escape(questionId)}, ${mysql.escape(quizId)}, ${mysql.escape(question[BODY.ISRIGHTCHOICE])}, ${mysql.escape(question[BODY.CHOICE])}
+                WHERE (SELECT userId FROM Quiz WHERE quizId=${mysql.escape(quizId)}) = ${mysql.escape(userId)}`
+            }
+        }
+        console.log(myquery)
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -291,5 +368,9 @@ module.exports = {
     getQuizThumbnail,
     getUserTopFeatureQuiz,
     setUserTopFeatureQuiz,
-    updateQuiz
+    updateQuiz,
+    getChoicesInAQuestion,
+    getChoicesInAQuestionWithAnswer,
+    removeChoicesInAQuestion,
+    updateQuestionChoices,
 }
