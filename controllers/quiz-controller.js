@@ -340,6 +340,22 @@ setUserTopFeatureQuiz = async (req, res)=>{
     }
 }
 
+updateQuiz = async (req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID]
+        const quizId = req.body[BODY.QUIZID]
+        const quizName = req.body[BODY.QUIZNAME]
+        const quizDescription = req.body[BODY.QUIZDESCRIPTION]
+        const timelimit = req.body[BODY.TIMELIMIT]
+        const quizCategory = req.body[BODY.QUIZCATEGORY]
+        let result = await quizMysql.updateQuiz(userId, quizId, quizName, quizDescription, timelimit, quizCategory)
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -362,4 +378,5 @@ module.exports = {
     deleteQuizWithQuestions,
     getUserTopFeatureQuiz,
     setUserTopFeatureQuiz,
+    updateQuiz
 }

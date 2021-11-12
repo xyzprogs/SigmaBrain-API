@@ -257,6 +257,20 @@ setUserTopFeatureQuiz = (userId, quizId) => {
     })
 }
 
+
+updateQuiz = (userId, quizId, quizName, quizDescription, timeLimit, quizCategory) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Quiz 
+        SET quizName=${mysql.escape(quizName)}, quizDescription=${mysql.escape(quizDescription)}, timeLimit=${mysql.escape(timeLimit)}, quizCatgeory=${mysql.escape(quizCategory)} 
+        WHERE quizId=${mysql.escape(quizId)} AND userId=${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -276,5 +290,6 @@ module.exports = {
     getTheMostPopularQuiz,
     getQuizThumbnail,
     getUserTopFeatureQuiz,
-    setUserTopFeatureQuiz
+    setUserTopFeatureQuiz,
+    updateQuiz
 }
