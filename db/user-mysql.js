@@ -149,6 +149,17 @@ getSubscriptions = (userId)=>{
     })
 }
 
+getUserInfo = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM Users WHERE userId = ${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 module.exports = {
     createUser,
@@ -162,5 +173,6 @@ module.exports = {
     getUserDescription,
     createSubscribe,
     cancelSubscribe,
-    getSubscriptions
+    getSubscriptions,
+    getUserInfo
 }
