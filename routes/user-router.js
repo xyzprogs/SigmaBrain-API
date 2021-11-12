@@ -23,7 +23,7 @@ router.post('/profile/setUserProfileImage', firebase_auth, image_store.uploadUse
 router.post('/profile/setUserBackgroundImage', firebase_auth, image_store.uploadUserProfileFile, UserController.setUserBackgroundImage)//set user background image
 router.post('/profile/setUserDescription', firebase_auth, UserController.setUserDescription) //set user description
 router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserTopFeatureQuiz) //set user top feature quiz
-
+router.get('/info/:userId', UserController.getUserInfo)
 
 //Subscribe
 router.post('/subscribe', firebase_auth, UserController.createSubscribe)

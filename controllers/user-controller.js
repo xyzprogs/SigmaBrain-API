@@ -125,19 +125,36 @@ verifyUser = async (req, res) => {
 }
 
 createUser = async (req, res) => {
-    const user = {
-        userId: res.locals.decodedToken[BODY.UID],
-        email: req.body[BODY.EMAIL],
-        displayName: req.body[BODY.DISPLAYNAME]
+    try{
+        const user = {
+            userId: res.locals.decodedToken[BODY.UID],
+            email: req.body[BODY.EMAIL],
+            displayName: req.body[BODY.DISPLAYNAME]
+        }
+        userMysql.createUser(user).then(
+            (data) => {
+                console.log("insert id is " +  data["insertId"])
+                res.status(200).json({msg: data})
+            }).catch((error)=>{
+                res.status(400).json({msg: error})
+            })
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
     }
-    userMysql.createUser(user).then(
-        (data) => {
-            console.log("insert id is " +  data["insertId"])
-            res.status(200).json({msg: data})
-        }).catch((error)=>{
-            res.status(400).json({msg: error})
-        })
 }
+
+getUserInfo = async (req, res)=>{
+    try{
+        let id = req.params.userId
+        let result = await userMysql.getUserInfo(id)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 
 getMainLeaderboard = async (req,res) =>{
     try{
@@ -317,5 +334,6 @@ module.exports = {
     setUserTopFeatureQuiz,
     createSubscribe,
     cancelSubscribe,
-    getSubscriptions
+    getSubscriptions,
+    getUserInfo
 }
