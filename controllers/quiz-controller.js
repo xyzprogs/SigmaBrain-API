@@ -356,6 +356,46 @@ updateQuiz = async (req, res)=>{
     }
 }
 
+getChoicesInAQuestion = async (req, res)=>{
+    try{
+        let questionId = req.params.questionId
+        let result = await quizMysql.getChoicesInAQuestion(questionId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getChoicesInAQuestionWithAnswer = async (req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let questionId = req.params.questionId
+        let result = await quizMysql.getChoicesInAQuestionWithAnswer(questionId, userId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+updateQuestionChoices = async(req, res)=>{
+    try{
+        console.log(req.body)
+        const userId = res.locals.decodedToken[BODY.UID]
+        let choices = req.body[BODY.CHOICES]
+        let quizId = req.body[BODY.QUIZID]
+        let questionId = req.body[BODY.QUESTIONID]
+        await quizMysql.removeChoicesInAQuestion(userId, questionId)
+        let result = await quizMysql.updateQuestionChoices(choices, userId, quizId, questionId)
+        res.status(200).json(result)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -378,5 +418,8 @@ module.exports = {
     deleteQuizWithQuestions,
     getUserTopFeatureQuiz,
     setUserTopFeatureQuiz,
-    updateQuiz
+    updateQuiz,
+    getChoicesInAQuestion,
+    getChoicesInAQuestionWithAnswer,
+    updateQuestionChoices
 }
