@@ -347,6 +347,21 @@ updateQuestionChoices = (questionSet, userId, quizId, questionId) => {
     })
 }
 
+getTopQuizByCategory = (category) => {
+    return new Promise((resolve, reject)=>{
+        myquery = `SELECT * FROM Quiz ORDER BY takeCounts DESC LIMIT 10`
+        if (category != 0){
+            myquery = `SELECT * FROM Quiz WHERE quizCatgeory = ${mysql.escape(category)} ORDER BY takeCounts DESC LIMIT 10;`
+        }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 module.exports = {
     getQuiz,
@@ -373,4 +388,5 @@ module.exports = {
     getChoicesInAQuestionWithAnswer,
     removeChoicesInAQuestion,
     updateQuestionChoices,
+    getTopQuizByCategory
 }
