@@ -31,7 +31,7 @@ getChannelLeaderboard = (leaderboardId) => {
     //leaderboardId is the channel ID
     //Gets the top 10 users and scores based on the leaderboardID
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM cse416.userchannelscore where 
+        db_pool.query(`SELECT * FROM UserChannelScore where 
                     leaderboardId = ${mysql.escape(leaderboardId)} ORDER BY score desc LIMIT 10`, (err, result) => {
             if (err) {
                 return reject(err)
