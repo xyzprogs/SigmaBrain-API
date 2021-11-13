@@ -12,6 +12,7 @@ router.get('/verify', firebase_auth, UserController.verifyUser)
 
 router.post('/create', firebase_auth, UserController.createUser) //create new user
 router.get('/leaderboard', UserController.getMainLeaderboard ) //get leaderboard information
+router.get('/leaderboard/:leaderboardId', UserController.getChannelLeaderboard)// Get leaderboard based on the leaderboard id
 //router.put('/forgetpassword', )
 //router.put('/changepassword', )
 //router.put('/changedisplayname')
@@ -22,10 +23,10 @@ router.post('/profile/setUserProfileImage', firebase_auth, image_store.uploadUse
 router.post('/profile/setUserBackgroundImage', firebase_auth, image_store.uploadUserProfileFile, UserController.setUserBackgroundImage)//set user background image
 router.post('/profile/setUserDescription', firebase_auth, UserController.setUserDescription) //set user description
 router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserTopFeatureQuiz) //set user top feature quiz
-
+router.get('/info/:userId', UserController.getUserInfo)
 
 //Subscribe
 router.post('/subscribe', firebase_auth, UserController.createSubscribe)
 router.post('/unsubscribe', firebase_auth, UserController.cancelSubscribe)
-
+router.get('/subscriptions', firebase_auth, UserController.getSubscriptions)
 module.exports = router
