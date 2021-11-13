@@ -381,7 +381,6 @@ getChoicesInAQuestionWithAnswer = async (req, res)=>{
 
 updateQuestionChoices = async(req, res)=>{
     try{
-        console.log(req.body)
         const userId = res.locals.decodedToken[BODY.UID]
         let choices = req.body[BODY.CHOICES]
         let quizId = req.body[BODY.QUIZID]
@@ -395,6 +394,17 @@ updateQuestionChoices = async(req, res)=>{
     }
 }
 
+
+getTopQuizByCategory = async(req, res)=>{
+    try{
+        let category = req.params.category
+        let response = await quizMysql.getTopQuizByCategory(category)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 module.exports = {
     getQuiz,
@@ -421,5 +431,6 @@ module.exports = {
     updateQuiz,
     getChoicesInAQuestion,
     getChoicesInAQuestionWithAnswer,
-    updateQuestionChoices
+    updateQuestionChoices,
+    getTopQuizByCategory
 }
