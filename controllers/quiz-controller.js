@@ -166,7 +166,7 @@ deleteAllQuestionInQuiz = async (req, res) => {
 
 getQuestionChoice = async (req,res)=>{
     try{
-        let id = req.params.choiceId;
+        let id = req.params.questionId;
         let questionResult = await quizMysql.getQuestionChoice(id);
         res.status(200).json(questionResult)
     }catch(e){
