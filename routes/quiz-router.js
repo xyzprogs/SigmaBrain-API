@@ -78,7 +78,7 @@ router.post('/:quizId/quizQuestion', firebase_auth, QuizController.createQuestio
 router.delete('/quizQuestion/:questionId', firebase_auth, QuizController.deleteQuestion)//delete quiz question
 
 /********************* quiz question choice route *********************/
-router.get('/quizQuestionChoice/:choiceId', QuizController.getQuestionChoice)//get specific quiz question choice
+//router.get('/quizQuestionChoice/:choiceId', QuizController.getQuestionChoice)//get specific quiz question choice
 
 /*planning to remove*/router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)//create specific quiz question choice
 
