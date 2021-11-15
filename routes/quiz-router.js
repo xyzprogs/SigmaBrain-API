@@ -113,4 +113,8 @@ array of {
 }
  */
 router.post('/updateQuestionChoices', firebase_auth, QuizController.updateQuestionChoices)
+
+router.post('/quizComment', firebase_auth, QuizController.createQuizComment)
+
+router.get('/quizComment/:quizId', QuizController.getQuizComment)
 module.exports = router;

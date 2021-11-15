@@ -363,6 +363,29 @@ getTopQuizByCategory = (category) => {
 }
 
 
+createQuizComment = (quizId, quizComment, userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`INSERT INTO QuizComment(quizId, quizComment, userId) VALUES (${mysql.escape(quizId)}, ${mysql.escape(quizComment)}, ${mysql.escape(userId)})`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getQuizComment = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM QuizComment WHERE quizId = ${mysql.escape(quizId)} LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -388,5 +411,7 @@ module.exports = {
     getChoicesInAQuestionWithAnswer,
     removeChoicesInAQuestion,
     updateQuestionChoices,
-    getTopQuizByCategory
+    getTopQuizByCategory,
+    createQuizComment,
+    getQuizComment
 }
