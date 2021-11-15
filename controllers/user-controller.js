@@ -5,7 +5,7 @@ const HEADER_CONSTANT = require('../constant/header')
 const BODY = require("../constant/body");
 const { default: axios } = require('axios');
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
 
 /*************FOR TESTING PURPOSE/*************/
 registerUser = async (req, res) => {
@@ -317,6 +317,17 @@ getSubscriptions = async (req, res) => {
     }
 }
 
+getUserDisplayName = async (req,res)=>{
+    try{
+        const userId = req.params.userId
+        let response = await userMysql.getUserDisplayName(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -335,5 +346,6 @@ module.exports = {
     createSubscribe,
     cancelSubscribe,
     getSubscriptions,
-    getUserInfo
+    getUserInfo,
+    getUserDisplayName
 }

@@ -175,6 +175,16 @@ getUserInfo = (userId)=>{
     })
 }
 
+getUserDisplayName = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT displayName FROM Users WHERE userId=${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
 
 module.exports = {
     createUser,
@@ -190,5 +200,6 @@ module.exports = {
     createSubscribe,
     cancelSubscribe,
     getSubscriptions,
-    getUserInfo
+    getUserInfo,
+    getUserDisplayName
 }

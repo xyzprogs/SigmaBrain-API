@@ -406,6 +406,33 @@ getTopQuizByCategory = async(req, res)=>{
     }
 }
 
+createQuizComment = async(req, res)=>{
+    console.log("createing quiz comment")
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let quizId = req.body[BODY.QUIZID]
+        let quizComment = req.body[BODY.QUIZCOMMENT]
+        let response = await quizMysql.createQuizComment(quizId, quizComment, userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+} 
+
+getQuizComment =  async(req, res)=>{
+    try{
+        let quizId = req.params.quizId
+        console.log("getting comment from quiz",quizId)
+        let response = await quizMysql.getQuizComment(quizId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -432,5 +459,7 @@ module.exports = {
     getChoicesInAQuestion,
     getChoicesInAQuestionWithAnswer,
     updateQuestionChoices,
-    getTopQuizByCategory
+    getTopQuizByCategory,
+    createQuizComment,
+    getQuizComment
 }
