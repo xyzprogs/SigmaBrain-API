@@ -328,6 +328,17 @@ getUserDisplayName = async (req,res)=>{
     }
 }
 
+getFollowers = async (req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let resposne = await userMysql.getFollowers(userId)
+        res.status(200).json(resposne)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -347,5 +358,6 @@ module.exports = {
     cancelSubscribe,
     getSubscriptions,
     getUserInfo,
-    getUserDisplayName
+    getUserDisplayName,
+    getFollowers
 }

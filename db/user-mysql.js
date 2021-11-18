@@ -186,6 +186,17 @@ getUserDisplayName = (userId)=>{
     })
 }
 
+getFollowers = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -201,5 +212,6 @@ module.exports = {
     cancelSubscribe,
     getSubscriptions,
     getUserInfo,
-    getUserDisplayName
+    getUserDisplayName,
+    getFollowers
 }
