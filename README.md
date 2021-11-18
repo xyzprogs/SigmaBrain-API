@@ -123,36 +123,35 @@ CREATE TABLE UserChannelScore(
 );
 
 /*Forum Schema*/
-CREATE TABLE Forum(
-	forumId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    forumName VARCHAR(100) NOT NULL,
-    userId VARCHAR(32) NOT NULL
-);
-
 CREATE TABLE ForumPost(
 	forumPostId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    forumId INT NOT NULL,
+    ownerId VARCHAR(32) NOT NULL,
+    userId VARCHAR(32) NOT NULL,
 	postTitle VARCHAR(100) NOT NULL,
     postDescription VARCHAR(500),
     lkes INT DEFAULT 0,
-    dislikes INT DEFAULT 0
+    dislikes INT DEFAULT 0,
+    creationTime DATETIME DEFAULT CURRENT_TIMESTAMP
 ); 
 
 CREATE TABLE ForumPostComment(
 	forumPostCommentId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    forumId INT NOT NULL,
+    forumPostId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL,
     postComment VARCHAR(500) NOT NULL,
     likes INT DEFAULT 0,
-    dislikes INT DEFAULT 0
+    dislikes INT DEFAULT 0,
+    creationTime DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ForumPostCommentReply(
 	forumPostCommentReplyId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     forumPostCommentId INT NOT NULL,
-    forumId INT NOT NULL,
+    userId VARCHAR(32) NOT NULL,
 	reply VARCHAR(500) NOT NULL,
     likes INT DEFAULT 0,
-    dislikes INT DEFAULT 0
+    dislikes INT DEFAULT 0,
+    creationTime DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ForumAdmin(
