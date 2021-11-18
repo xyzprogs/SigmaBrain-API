@@ -11,7 +11,7 @@ const firebase_client = require('./firebase/firebase_init')
 const firebase_admin = require("firebase-admin");
 const cookieParser = require('cookie-parser')
 const PORT = 3000;
-
+const forumRouter = require('./routes/forumn-router')
 const app = express()
 
 //Express Configuration
@@ -25,6 +25,8 @@ app.use(cookieParser())
 app.use('/api/test', testRouter)
 app.use('/api/quiz', quizRouter)
 app.use('/api/user', userRouter)
+app.use('/api/forumn', forumRouter)
+
 
 //Firebase Admin Initialization
 firebase_admin_app.initializeApp({

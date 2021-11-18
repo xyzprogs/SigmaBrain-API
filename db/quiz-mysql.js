@@ -1,6 +1,6 @@
 const db_pool = require('./mysql-init');
 const mysql  = require('mysql2');
-const BODY = require('../constant/body')
+const BODY = require('../constant/body');
 
 getQuiz = (id) => {
     return new Promise((resolve, reject) => {
