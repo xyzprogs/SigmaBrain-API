@@ -27,6 +27,9 @@ router.post('/quizThumbnail/:quizId', firebase_auth, image_storage.uploadFile, Q
 
 router.get('/popular/topquiz', QuizController.getTheMostPopularQuiz)//get the most popular quiz of the site
 
+router.get('/search/:search', QuizController.getQuizSearchName) // get quiz name base on seaches
+
+router.get('/searchQuiz/:search', QuizController.getSearchQuiz) // get quiz base on searches
 /*
 payload:{
     quizName,
