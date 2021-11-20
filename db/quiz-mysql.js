@@ -385,6 +385,30 @@ getQuizComment = (quizId)=>{
     })
 }
 
+getQuizSearchName = (search) => {
+    return new Promise((resolve, reject)=>{
+        updateSearch = '%' + search + '%'
+        db_pool.query(`SELECT quizName FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getSearchQuiz = (search) => {
+    return new Promise((resolve, reject)=>{
+        updateSearch = '%' + search + '%'
+        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 module.exports = {
     getQuiz,
@@ -413,5 +437,7 @@ module.exports = {
     updateQuestionChoices,
     getTopQuizByCategory,
     createQuizComment,
-    getQuizComment
+    getQuizComment,
+    getQuizSearchName,
+    getSearchQuiz
 }

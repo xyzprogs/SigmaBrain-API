@@ -432,6 +432,31 @@ getQuizComment =  async(req, res)=>{
     }
 }
 
+getQuizSearchName = async(req, res)=>{
+    try{
+        let search = req.params.search
+        let response= await quizMysql.getQuizSearchName(search)
+        let search_arr = []
+        for(var i=0; i < response.length; i++){
+            search_arr.push(response[i][BODY.QUIZNAME])
+        }
+        res.status(200).json(search_arr)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getSearchQuiz = async(req, res)=>{
+    try{
+        let search = req.params.search
+        let response = await quizMysql.getSearchQuiz(search)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 module.exports = {
     getQuiz,
@@ -461,5 +486,7 @@ module.exports = {
     updateQuestionChoices,
     getTopQuizByCategory,
     createQuizComment,
-    getQuizComment
+    getQuizComment,
+    getQuizSearchName,
+    getSearchQuiz
 }
