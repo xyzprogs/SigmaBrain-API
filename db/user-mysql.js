@@ -198,6 +198,17 @@ getFollowers = (userId)=>{
     })
 }
 
+updateUserExperience = (userId, experience) =>{
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE users SET experience = ${mysql.escape(experience)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
+            if(err){
+                return reject(err);
+            }
+            return resolve(result);
+        })
+    })
+}
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -214,5 +225,6 @@ module.exports = {
     getSubscriptions,
     getUserInfo,
     getUserDisplayName,
-    getFollowers
+    getFollowers,
+    updateUserExperience
 }

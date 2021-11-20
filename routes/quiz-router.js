@@ -112,6 +112,9 @@ array of {
     choice
 }
  */
+
+router.post('/createQuizGrade', firebase_auth, QuizController.createQuizGrade);
+
 router.post('/updateQuestionChoices', firebase_auth, QuizController.updateQuestionChoices)
 
 router.post('/quizComment', firebase_auth, QuizController.createQuizComment)

@@ -59,6 +59,22 @@ createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
     })
 }
 
+createQuizGrade = (quizId, userId, grade) => {
+    return new Promise((resolve, reject) => {
+    db_pool.query(`INSERT INTO QuizGrade(quizId, userId, grade)
+                    VALUES (`
+                    + mysql.escape(quizId) + ','
+                    + mysql.escape(userId) + ','
+                    + mysql.escape(grade) + ')',
+                    (err, result) => {
+                        if(err){
+                            return reject(err);
+                        }
+                        return resolve(result);
+                    })
+    })
+}
+
 setQuizThumbnail = (quizId, thumbnail) => {
     return new Promise((resolve, reject) => {
         db_pool.query("UPDATE Quiz SET thumbnail = " + mysql.escape(thumbnail) + " WHERE quizId = " + mysql.escape(quizId),
@@ -393,6 +409,7 @@ module.exports = {
     getQuestionChoice,
     getCategoryQuiz,
     createQuiz,
+    createQuizGrade,
     createQuestion,
     createQuestionChoice,
     createMutipleQuestionChoice,

@@ -146,6 +146,7 @@ createUser = async (req, res) => {
 
 getUserInfo = async (req, res)=>{
     try{
+        console.log(req.params.userId);
         let id = req.params.userId
         let result = await userMysql.getUserInfo(id)
         res.status(200).json(result)
@@ -339,6 +340,18 @@ getFollowers = async (req, res)=>{
     }
 }
 
+updateUserExperience = async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const experience = req.body.experience;
+        let response = await userMysql.updateUserExperience(userId, experience);
+        res.status(200).json(response);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -359,5 +372,6 @@ module.exports = {
     getSubscriptions,
     getUserInfo,
     getUserDisplayName,
-    getFollowers
+    getFollowers,
+    updateUserExperience
 }

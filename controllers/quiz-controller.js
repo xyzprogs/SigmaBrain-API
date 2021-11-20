@@ -84,6 +84,19 @@ createQuizWithQuestions = async (req, res) => {
     }
 }
 
+createQuizGrade = async (req, res) =>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID];
+        const quizId = req.body.quizId;
+        const quizGrade = req.body.quizGrade;
+        let result = await quizMysql.createQuizGrade(quizId, userId, quizGrade);
+        res.status(201).json(result)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 setQuizWithThumbnail = async (req, res) => {
     try{
         console.log("from setQuizWithThumbnail ", req.body)
@@ -443,6 +456,7 @@ module.exports = {
     createQuestion,
     createQuestionChoice,
     createMutipleQuestionChoice,
+    createQuizGrade,
     deleteQuiz,
     deleteQuestion,
     deleteAllQuestionInQuiz,
