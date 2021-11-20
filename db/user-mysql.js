@@ -200,7 +200,7 @@ getFollowers = (userId)=>{
 
 updateUserExperience = (userId, experience) =>{
     return new Promise((resolve, reject) => {
-        db_pool.query(`UPDATE users SET experience = ${mysql.escape(experience)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
+        db_pool.query(`UPDATE Users SET experience = ${mysql.escape(experience)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
             if(err){
                 return reject(err);
             }
