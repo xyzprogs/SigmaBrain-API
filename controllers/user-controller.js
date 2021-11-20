@@ -169,8 +169,8 @@ getMainLeaderboard = async (req,res) =>{
 
 getChannelLeaderboard = async (req,res) =>{
     try{
-       let leaderboardId = req.params.leaderboardId
-       let channelLeaderboard = await userMysql.getChannelLeaderboard(leaderboardId);
+       let ownerId = req.params.ownerId
+       let channelLeaderboard = await userMysql.getChannelLeaderboard(ownerId);
        res.status(200).json(channelLeaderboard);
     
     }catch(e){
