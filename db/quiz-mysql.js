@@ -426,6 +426,74 @@ getSearchQuiz = (search) => {
 }
 
 
+getTakeLater = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT Quiz.* FROM TakeLater 
+        INNER JOIN Quiz ON TakeLater.quizId = Quiz.quizId
+        WHERE TakeLater.userId = ${mysql.escape(userId)};`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getLikedQuiz = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM LikedQuiz WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+createTakeLater = (userId, quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`INSERT IGNORE INTO TakeLater(userId, quizId) VALUES (${mysql.escape(userId)}, ${mysql.escape(quizId)})`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+createLikedQuiz = (userId, quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`INSERT IGNORE INTO LikedQuiz(userId, quizId) VALUES (${mysql.escape(userId)}, ${mysql.escape(quizId)})`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+deleteTakeLater = (userId, quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`DELETE FROM TakeLater WHERE quizId = ${mysql.escape(quizId)} AND userId=${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+deleteLikedQuiz = (userId, quizId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`DELETE FROM LikedQuiz WHERE quizId = ${mysql.escape(quizId)} AND userId= ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -456,5 +524,11 @@ module.exports = {
     createQuizComment,
     getQuizComment,
     getQuizSearchName,
-    getSearchQuiz
+    getSearchQuiz,
+    getTakeLater,
+    getLikedQuiz,
+    createTakeLater,
+    createLikedQuiz,
+    deleteTakeLater,
+    deleteLikedQuiz
 }

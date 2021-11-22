@@ -2,7 +2,7 @@ var quizMysql = require('../db/quiz-mysql');
 const BODY = require('../constant/body');
 const MYSQL_CONSTANT = require('../constant/mysql')
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
 
 getQuiz = async (req, res)=>{
     try{
@@ -471,6 +471,78 @@ getSearchQuiz = async(req, res)=>{
     }
 }
 
+
+getTakeLater = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let response = await quizMysql.getTakeLater(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getLikedQuiz = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        console.log(`get take later from ${userId}`)
+        let response = await quizMysql.getLikedQuiz(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+createTakeLater = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let quizId = req.body[BODY.QUIZID]
+        let response = await quizMysql.createTakeLater(userId, quizId)
+        res.status(201).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+createLikedQuiz = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let quizId = req.body[BODY.QUIZID]
+        let response = await quizMysql.createLikedQuiz(userId, quizId)
+        res.status(201).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+deleteTakeLater = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let quizId = req.params.quizId
+        let response = await quizMysql.deleteTakeLater(userId, quizId)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+deleteLikedQuiz = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let quizId = req.params.quizId
+        let response = await quizMysql.deleteLikedQuiz(userId, quizId)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -502,5 +574,11 @@ module.exports = {
     createQuizComment,
     getQuizComment,
     getQuizSearchName,
-    getSearchQuiz
+    getSearchQuiz,
+    getTakeLater,
+    getLikedQuiz,
+    createTakeLater,
+    createLikedQuiz,
+    deleteTakeLater,
+    deleteLikedQuiz
 }

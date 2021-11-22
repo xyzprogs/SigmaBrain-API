@@ -92,6 +92,12 @@ const USERACHIEVEMENTCOMPLETIONID = "userAchievementCompletionId"
 //Subscribe
 const SUBSCRIBETO = "subscribeTo"
 
+//TakeLater
+const TAKELATERID = "takeLaterId"
+
+//LikedQuiz
+const LIKEDQUIZID = "likedQuizId"
+
 module.exports = {
     //Common
     REPLY,
@@ -185,5 +191,9 @@ module.exports = {
     USERACHIEVEMENTCOMPLETIONID,
 
     //SUBSCRIBE
-    SUBSCRIBETO
+    SUBSCRIBETO,
+
+    TAKELATERID,
+
+    LIKEDQUIZID
 }
