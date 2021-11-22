@@ -30,6 +30,18 @@ router.get('/popular/topquiz', QuizController.getTheMostPopularQuiz)//get the mo
 router.get('/search/:search', QuizController.getQuizSearchName) // get quiz name base on seaches
 
 router.get('/searchQuiz/:search', QuizController.getSearchQuiz) // get quiz base on searches
+
+router.get('/main/takelater', firebase_auth, QuizController.getTakeLater) // get take later
+
+router.get('/main/likedquiz', firebase_auth, QuizController.getLikedQuiz) // get liked quiz
+
+router.post('/takelater', firebase_auth, QuizController.createTakeLater) // create take quiz
+
+router.post('/likedquiz', firebase_auth, QuizController.createLikedQuiz) // create liked quiz
+
+router.delete('/takelater/:quizId', firebase_auth, QuizController.deleteTakeLater) // delete take later
+
+router.delete('/likedquiz/:quizId', firebase_auth, QuizController.deleteLikedQuiz) // delete liked quiz
 /*
 payload:{
     quizName,
