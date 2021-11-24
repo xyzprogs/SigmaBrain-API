@@ -26,6 +26,7 @@ router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserT
 router.get('/info/:userId', UserController.getUserInfo)
 router.get('/displayname/:userId', UserController.getUserDisplayName)
 router.put('/updateUserExperience', UserController.updateUserExperience)
+router.put('/updateUserDisplayName', firebase_auth, UserController.updateUserDisplayName)
 //Subscribe
 router.post('/subscribe', firebase_auth, UserController.createSubscribe)
 router.post('/unsubscribe', firebase_auth, UserController.cancelSubscribe)

@@ -35,6 +35,8 @@ router.get('/main/takelater', firebase_auth, QuizController.getTakeLater) // get
 
 router.get('/main/likedquiz', firebase_auth, QuizController.getLikedQuiz) // get liked quiz
 
+router.get('/main/subscriptionquiz', firebase_auth, QuizController.getSubscriptionQuiz) // get quiz from user's subscriptions.
+
 router.post('/takelater', firebase_auth, QuizController.createTakeLater) // create take quiz
 
 router.post('/likedquiz', firebase_auth, QuizController.createLikedQuiz) // create liked quiz

@@ -543,6 +543,17 @@ deleteLikedQuiz = async(req, res)=>{
     }
 }
 
+getSubscriptionQuiz = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        let response = await quizMysql.getSubscriptionQuiz(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -580,5 +591,6 @@ module.exports = {
     createTakeLater,
     createLikedQuiz,
     deleteTakeLater,
-    deleteLikedQuiz
+    deleteLikedQuiz,
+    getSubscriptionQuiz
 }

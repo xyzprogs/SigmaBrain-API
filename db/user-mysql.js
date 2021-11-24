@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 
 createUser = (user) => {
     return new Promise((resolve, reject) => {
-        db_pool.query('INSERT INTO Users(userId, email, displayName) VALUES('
+        db_pool.query('INSERT IGNORE INTO Users(userId, email, displayName) VALUES('
             + mysql.escape(user.userId) + ','
             + mysql.escape(user.email) + ','
             + mysql.escape(user.displayName) + ')', (err, result) => {
@@ -219,6 +219,17 @@ updateUserExperience = (userId, experience) =>{
     })
 }
 
+updateUserDisplayName = (userId, displayName)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET displayName = ${mysql.escape(displayName)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
+            if(err){
+                return reject(err);
+            }
+            return resolve(result);
+        })
+    })
+}
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -236,5 +247,6 @@ module.exports = {
     getUserInfo,
     getUserDisplayName,
     getFollowers,
-    updateUserExperience
+    updateUserExperience,
+    updateUserDisplayName
 }
