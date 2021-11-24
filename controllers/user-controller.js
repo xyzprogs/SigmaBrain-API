@@ -352,6 +352,18 @@ updateUserExperience = async (req, res) => {
     }
 }
 
+updateUserDisplayName = async(req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID];
+        const displayName = req.body[BODY.DISPLAYNAME];
+        await userMysql.updateUserDisplayName(userId, displayName)
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -373,5 +385,6 @@ module.exports = {
     getUserInfo,
     getUserDisplayName,
     getFollowers,
-    updateUserExperience
+    updateUserExperience,
+    updateUserDisplayName
 }

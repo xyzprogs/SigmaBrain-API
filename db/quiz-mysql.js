@@ -430,7 +430,7 @@ getTakeLater = (userId)=>{
     return new Promise((resolve, reject)=>{
         db_pool.query(`SELECT Quiz.* FROM TakeLater 
         INNER JOIN Quiz ON TakeLater.quizId = Quiz.quizId
-        WHERE TakeLater.userId = ${mysql.escape(userId)};`, (err, result)=>{
+        WHERE TakeLater.userId = ${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -441,7 +441,9 @@ getTakeLater = (userId)=>{
 
 getLikedQuiz = (userId)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM LikedQuiz WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+        db_pool.query(`SELECT Quiz.* FROM LikedQuiz 
+        INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
+        WHERE LikedQuiz.userId = ${mysql.escape(userId)}`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -494,6 +496,21 @@ deleteLikedQuiz = (userId, quizId)=>{
     })
 }
 
+getSubscriptionQuiz = (userId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT Quiz.* FROM Users 
+        INNER JOIN Subscribe ON Users.userId = Subscribe.userId
+        INNER JOIN Quiz ON  Subscribe.subscribeTo = Quiz.userId
+        WHERE Users.userId = ${mysql.escape(userId)}
+        ORDER BY creationTime DESC LIMIT 10`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -530,5 +547,6 @@ module.exports = {
     createTakeLater,
     createLikedQuiz,
     deleteTakeLater,
-    deleteLikedQuiz
+    deleteLikedQuiz,
+    getSubscriptionQuiz
 }
