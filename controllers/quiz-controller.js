@@ -554,6 +554,17 @@ getSubscriptionQuiz = async(req, res)=>{
     }
 }
 
+getMoreQuizByCategoryById = async(req, res)=>{
+    try{
+        const category = req.body[BODY.QUIZCATEGORY]
+        const quizId = req.body[BODY.QUIZID]
+        let response = await quizMysql.getMoreQuizByCategoryById(category, quizId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500) 
+    }
+}
 module.exports = {
     getQuiz,
     getQuestion,
@@ -592,5 +603,6 @@ module.exports = {
     createLikedQuiz,
     deleteTakeLater,
     deleteLikedQuiz,
-    getSubscriptionQuiz
+    getSubscriptionQuiz,
+    getMoreQuizByCategoryById
 }

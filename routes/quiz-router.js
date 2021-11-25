@@ -82,6 +82,8 @@ router.post('/userTopFeatureQuiz', firebase_auth, QuizController.setUserTopFeatu
 router.post('/updateQuiz', firebase_auth, QuizController.updateQuiz)
 
 router.get('/getTopQuizByCategory/:category', QuizController.getTopQuizByCategory)
+
+router.post('/getMoreQuizByCategoryById', QuizController.getMoreQuizByCategoryById)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 

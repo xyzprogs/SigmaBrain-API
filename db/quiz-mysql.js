@@ -511,6 +511,21 @@ getSubscriptionQuiz = (userId) => {
     })
 }
 
+getMoreQuizByCategoryById = (category ,quizId) =>{
+    return new Promise((resolve, reject)=>{
+        myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} LIMIT 10`
+        if (category != 0){
+            myquery = myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} AND quizCatgeory = ${mysql.escape(category)} LIMIT 10`
+        }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -548,5 +563,6 @@ module.exports = {
     createLikedQuiz,
     deleteTakeLater,
     deleteLikedQuiz,
-    getSubscriptionQuiz
+    getSubscriptionQuiz,
+    getMoreQuizByCategoryById
 }
