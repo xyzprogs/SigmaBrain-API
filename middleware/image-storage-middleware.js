@@ -5,10 +5,8 @@ const BODY = require('../constant/body')
 //quiz thumbnail
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        console.log(req)
         const userId =  req.decodedToken[BODY.UID]
         const path = config.image_storage + userId + "/quizes/"
-        console.log(path)
         if(!fs.existsSync(path)){
             fs.mkdirSync(path, {recursive:true})
         }
@@ -26,7 +24,6 @@ const uploadFile = async (req, res, next) => {
     upload(req, res, function(err){
         res.locals.file = req.file
         if(err){
-            console.log("error here")
             return res.sendStatus(500);
         }
         next()
@@ -36,7 +33,6 @@ const uploadFile = async (req, res, next) => {
 //user profile image store
 const background_img_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        console.log(req)
         const userId =  req.decodedToken[BODY.UID]
         const path = config.image_storage + userId + "/profile/"
         if(!fs.existsSync(path)){
@@ -56,7 +52,6 @@ const uploadUserProfileFile = async (req, res, next) => {
     upload_profile_image(req, res, function(err){
         res.locals.file = req.file
         if(err){
-            console.log(err)
             return res.sendStatus(500);
         }
         next()

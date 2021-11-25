@@ -206,8 +206,6 @@ getUserBackgroundImage = async (req, res)=>{
         let result = await userMysql.getUserBackgroundImage(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0][BODY.BACKGROUNDIMAGE]
-        console.log("background", result)
-        console.log("background dir",dir)
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
         let extention = path.extname(dir).substring(1)
         fs.readFile(
@@ -364,6 +362,17 @@ updateUserDisplayName = async(req, res)=>{
     }
 }
 
+getMoreSubscriptionsById = async(req,res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const last_subscription_id = req.body[BODY.SUBSCRIBEID]
+        let response = await userMysql.getMoreSubscriptionsById(userId, last_subscription_id)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 module.exports = {
     verifyUser,
     createUser,
@@ -386,5 +395,6 @@ module.exports = {
     getUserDisplayName,
     getFollowers,
     updateUserExperience,
-    updateUserDisplayName
+    updateUserDisplayName,
+    getMoreSubscriptionsById
 }
