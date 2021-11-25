@@ -353,7 +353,7 @@ updateQuestionChoices = (questionSet, userId, quizId, questionId) => {
                 WHERE (SELECT userId FROM Quiz WHERE quizId=${mysql.escape(quizId)}) = ${mysql.escape(userId)}`
             }
         }
-        console.log(myquery)
+     
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -416,7 +416,7 @@ getQuizSearchName = (search) => {
 getSearchQuiz = (search) => {
     return new Promise((resolve, reject)=>{
         updateSearch = '%' + search + '%'
-        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 10`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 5`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -526,6 +526,18 @@ getMoreQuizByCategoryById = (category ,quizId) =>{
     })
 }
 
+getMoreSearchQuiz = (search, row) => {
+    return new Promise((resolve, reject)=>{
+        updateSearch = '%' + search + '%'
+        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT ${row}, 5`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -564,5 +576,6 @@ module.exports = {
     deleteTakeLater,
     deleteLikedQuiz,
     getSubscriptionQuiz,
-    getMoreQuizByCategoryById
+    getMoreQuizByCategoryById,
+    getMoreSearchQuiz
 }
