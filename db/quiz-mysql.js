@@ -27,9 +27,9 @@ getUserQuiz = (userId) => {
 
 getCategoryQuiz = (category) => {
     return new Promise((resolve, reject) => {
-        query = "SELECT * FROM Quiz LIMIT 10"
+        query = "SELECT * FROM Quiz LIMIT 11"
         if(category!=0){
-            query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} LIMIT 10`
+            query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} LIMIT 11`
         }
         db_pool.query(query, (err, result)=>{
             if(err){

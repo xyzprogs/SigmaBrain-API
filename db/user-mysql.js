@@ -166,7 +166,7 @@ cancelSubscribe = (userId, subscribeTo) => {
 
 getSubscriptions = (userId)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT subscribeTo FROM Subscribe WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Subscribe WHERE userId = ${mysql.escape(userId)} ORDER BY subscribeId ASC LIMIT 11`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -230,6 +230,17 @@ updateUserDisplayName = (userId, displayName)=>{
     })
 }
 
+getMoreSubscriptionsById = (userId, subscribeId) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM Subscribe WHERE userId = ${mysql.escape(userId)} AND subscribeId >= ${mysql.escape(subscribeId)} ORDER BY subscribeId ASC LIMIT 11;`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -248,5 +259,6 @@ module.exports = {
     getUserDisplayName,
     getFollowers,
     updateUserExperience,
-    updateUserDisplayName
+    updateUserDisplayName,
+    getMoreSubscriptionsById
 }

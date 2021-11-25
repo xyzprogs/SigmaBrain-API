@@ -91,6 +91,7 @@ const USERACHIEVEMENTCOMPLETIONID = "userAchievementCompletionId"
 
 //Subscribe
 const SUBSCRIBETO = "subscribeTo"
+const SUBSCRIBEID = "subscribeId"
 
 //TakeLater
 const TAKELATERID = "takeLaterId"
@@ -192,6 +193,7 @@ module.exports = {
 
     //SUBSCRIBE
     SUBSCRIBETO,
+    SUBSCRIBEID,
 
     TAKELATERID,
 
