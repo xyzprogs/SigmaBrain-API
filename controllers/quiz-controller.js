@@ -565,6 +565,25 @@ getMoreQuizByCategoryById = async(req, res)=>{
         res.sendStatus(500) 
     }
 }
+
+getMoreSearchQuiz = async(req, res)=>{
+    try{
+        let search = req.query.search
+        let row = req.query.row
+        if(search!==undefined && row!==undefined){
+            let response = await quizMysql.getMoreSearchQuiz(search, row)
+            res.status(200).json(response)
+        }else{
+            res.sendStatus(400)
+        }
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -604,5 +623,6 @@ module.exports = {
     deleteTakeLater,
     deleteLikedQuiz,
     getSubscriptionQuiz,
-    getMoreQuizByCategoryById
+    getMoreQuizByCategoryById,
+    getMoreSearchQuiz
 }
