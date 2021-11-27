@@ -4,6 +4,7 @@ const DISLIKES = "dislikes"
 const REPLY = "reply"
 const CATEGORY = "category"
 const OWNERID = "ownerId"
+const CATEGORYLIST = "categoryList"
 //User Body
 const USERID = "uid"
 const DISPLAYNAME = "displayName"
@@ -108,6 +109,7 @@ module.exports = {
     REPLY,
     CATEGORY,
     OWNERID,
+    CATEGORYLIST,
 
     //Users
     USERID,
