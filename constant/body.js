@@ -99,6 +99,10 @@ const TAKELATERID = "takeLaterId"
 //LikedQuiz
 const LIKEDQUIZID = "likedQuizId"
 
+//QuizHistory
+const HISTORYTIME = "historyTime"
+
+const ROW = "row"
 module.exports = {
     //Common
     REPLY,
@@ -197,5 +201,8 @@ module.exports = {
 
     TAKELATERID,
 
-    LIKEDQUIZID
+    LIKEDQUIZID,
+
+    HISTORYTIME,
+    ROW
 }

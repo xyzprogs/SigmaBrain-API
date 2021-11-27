@@ -582,6 +582,35 @@ getMoreSearchQuiz = async(req, res)=>{
     }
 }
 
+createQuizHistory = async(req, res)=>{
+    try {
+        console.log(res.locals.decodedToken[BODY.UID])
+        let payload = {
+            [BODY.QUIZID]: req.body[BODY.QUIZID],
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.HISTORYTIME]: req.body[BODY.HISTORYTIME]
+        }
+        let response = await quizMysql.createQuizHistory(payload)
+        res.sendStatus(201)
+    } catch(e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getQuizHistory = async(req, res)=>{
+    try {
+        let payload = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.ROW]: req.body[BODY.ROW]
+        }
+        let response = await quizMysql.getQuizHistory(payload)
+        res.status(200).json(response)
+    } catch(e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 
 module.exports = {
@@ -624,5 +653,7 @@ module.exports = {
     deleteLikedQuiz,
     getSubscriptionQuiz,
     getMoreQuizByCategoryById,
-    getMoreSearchQuiz
+    createQuizHistory,
+    getMoreSearchQuiz,
+    getQuizHistory
 }
