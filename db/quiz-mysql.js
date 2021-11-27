@@ -538,6 +538,39 @@ getMoreSearchQuiz = (search, row) => {
     })
 }
 
+createQuizHistory = ({quizId, uid, historyTime}) => {
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`INSERT INTO QuizHistory(quizId, userId, historyTime) 
+        VALUES (${mysql.escape(quizId)}, ${mysql.escape(uid)}, ${mysql.escape(historyTime)}) AS new_history
+        ON DUPLICATE KEY UPDATE
+            historyTime = new_history.historyTime`, (err, result)=>{
+                if(err){
+                    return reject(err)
+                }
+                return resolve(result)
+            })
+    })
+}
+
+getQuizHistory = ({uid, row}) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
+        ON QuizHistory.quizId = Quiz.quizId
+        WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT 10`
+        if(row){
+            myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
+            ON QuizHistory.quizId = Quiz.quizId
+            WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -577,5 +610,7 @@ module.exports = {
     deleteLikedQuiz,
     getSubscriptionQuiz,
     getMoreQuizByCategoryById,
-    getMoreSearchQuiz
+    getMoreSearchQuiz,
+    createQuizHistory,
+    getQuizHistory
 }
