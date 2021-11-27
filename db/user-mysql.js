@@ -232,7 +232,45 @@ updateUserDisplayName = (userId, displayName)=>{
 
 getMoreSubscriptionsById = (userId, subscribeId) => {
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM Subscribe WHERE userId = ${mysql.escape(userId)} AND subscribeId >= ${mysql.escape(subscribeId)} ORDER BY subscribeId ASC LIMIT 11;`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Subscribe WHERE userId = ${mysql.escape(userId)} AND subscribeId >= ${mysql.escape(subscribeId)} ORDER BY subscribeId ASC LIMIT 11`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+createUserCategoryPreference = (userId, categoryList)=>{
+    let myquery = "INSERT IGNORE INTO CatgeoryCustomize(userId, categoryId) VALUES"
+    for(var i = 0; i < categoryList.length; i++){
+        myquery += `(${mysql.escape(userId)}, ${mysql.escape(categoryList[i])}),`
+    }
+    myquery = myquery.slice(0, -1)
+    return new Promise((resolve, reject)=>{
+        db_pool.query(myquery, (err,result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+removeUserCategoryPreference = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`DELETE FROM CatgeoryCustomize WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+obtainUserCategoryPreference = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`SELECT * FROM CatgeoryCustomize WHERE userId = ${mysql.escape(userId)}`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -260,5 +298,8 @@ module.exports = {
     getFollowers,
     updateUserExperience,
     updateUserDisplayName,
-    getMoreSubscriptionsById
+    getMoreSubscriptionsById,
+    obtainUserCategoryPreference,
+    createUserCategoryPreference,
+    removeUserCategoryPreference
 }

@@ -373,6 +373,33 @@ getMoreSubscriptionsById = async(req,res)=>{
         res.sendStatus(500)
     }
 }
+
+createUserCategoryPreference = async(req, res)=>{
+    try{
+        const userId = res.locals.decodedToken[BODY.UID]
+        const categoryList = req.body[BODY.CATEGORYLIST]
+        if(categoryList.length>10){
+            res.sendStatus(400)
+        }
+        await userMysql.removeUserCategoryPreference(userId)
+        await userMysql.createUserCategoryPreference(userId, categoryList)
+        res.sendStatus(201)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+obtainUserCategoryPreference = async(req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID]
+        let response = await userMysql.obtainUserCategoryPreference(userId)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 module.exports = {
     verifyUser,
     createUser,
@@ -396,5 +423,7 @@ module.exports = {
     getFollowers,
     updateUserExperience,
     updateUserDisplayName,
-    getMoreSubscriptionsById
+    getMoreSubscriptionsById,
+    createUserCategoryPreference,
+    obtainUserCategoryPreference
 }
