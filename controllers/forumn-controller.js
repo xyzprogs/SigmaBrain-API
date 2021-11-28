@@ -45,7 +45,13 @@ createCommentReply = async (req, res)=>{
 selectForumnPost = async (req, res)=>{
     try{
         let userId = req.params.userId
-        let response = await forumnMysql.selectForumnPost(userId)
+        let row = req.query.row
+        console.log("row is", row)
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        let response = await forumnMysql.selectForumnPost(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)

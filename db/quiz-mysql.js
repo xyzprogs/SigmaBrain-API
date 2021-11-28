@@ -557,7 +557,7 @@ getQuizHistory = ({uid, row}) => {
         let myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
         ON QuizHistory.quizId = Quiz.quizId
         WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT 10`
-        if(row){
+        if(row!=null && row!==undefined){
             myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
             ON QuizHistory.quizId = Quiz.quizId
             WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT ${row},10`

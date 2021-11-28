@@ -35,9 +35,13 @@ createCommentReply = (forumPostCommentId, userId, reply) => {
     })
 }
 
-selectForumnPost = (userId) => {
+selectForumnPost = ({uid, row}) => {
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM ForumPost WHERE userId=${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
+        let myquery = `SELECT * FROM ForumPost WHERE ownerId=${mysql.escape(uid)} ORDER BY creationTime DESC LIMIT 10`;
+        if(row!=null && row!==undefined && row!=='undefined'){
+            myquery = `SELECT * FROM ForumPost WHERE ownerId=${mysql.escape(uid)} ORDER BY creationTime DESC LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
             }
