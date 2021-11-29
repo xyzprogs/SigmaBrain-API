@@ -13,10 +13,25 @@ getQuiz = (id) => {
     })
 }
 
-
-getUserQuiz = (userId) => {
+getQuizWithUser = (id)=>{
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM Quiz WHERE userId=${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz INNER JOIN Users ON Quiz.userId = Users.userId WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+
+getUserQuiz = ({uid, row}) => {
+    return new Promise((resolve, reject) => {
+        let myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT 10`
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -459,7 +474,6 @@ getLikedQuiz = ({uid, row})=>{
                 INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
                 WHERE LikedQuiz.userId = ${mysql.escape(uid)} LIMIT ${row},10`
         }
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -521,8 +535,8 @@ getSubscriptionQuiz = ({uid, row}) => {
         WHERE Users.userId = ${mysql.escape(uid)}
         ORDER BY creationTime DESC LIMIT 10`
 
-        if(row!==undefined && row!==null && row!=='undefined'){
-            `SELECT Quiz.* FROM Users 
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT Quiz.* FROM Users 
             INNER JOIN Subscribe ON Users.userId = Subscribe.userId
             INNER JOIN Quiz ON  Subscribe.subscribeTo = Quiz.userId
             WHERE Users.userId = ${mysql.escape(uid)}
@@ -640,5 +654,6 @@ module.exports = {
     getMoreQuizByCategoryById,
     getMoreSearchQuiz,
     createQuizHistory,
-    getQuizHistory
+    getQuizHistory,
+    getQuizWithUser
 }

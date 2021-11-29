@@ -330,7 +330,13 @@ getUserDisplayName = async (req,res)=>{
 getFollowers = async (req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
-        let resposne = await userMysql.getFollowers(userId)
+        let row = req.query.row
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        console.log(body)
+        let resposne = await userMysql.getFollowers(body)
         res.status(200).json(resposne)
     }catch(e){
         console.log(e)

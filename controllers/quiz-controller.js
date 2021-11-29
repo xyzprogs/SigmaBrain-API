@@ -18,7 +18,12 @@ getQuiz = async (req, res)=>{
 getUserQuiz = async (req, res)=>{
     try{
         let userId = req.params.userId
-        let result = await quizMysql.getUserQuiz(userId)
+        let row = req.query.row
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        let result = await quizMysql.getUserQuiz(body)
         res.status(200).json(result)
     }catch(e){
         console.log(e)
@@ -282,12 +287,12 @@ getQuizThumbnail = async (req, res)=>{
         let result = await quizMysql.getQuizThumbnail(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0]['thumbnail']
-        console.log(result)
+        // console.log(result)
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
-        console.log(dir)
+        // console.log(dir)
         let extention = path.extname(dir).substring(1)
-        console.log("calling thumbnail")
-        console.log("extention is", path.extname(dir).substring(1))
+        // console.log("calling thumbnail")
+        // console.log("extention is", path.extname(dir).substring(1))
         fs.readFile(
             dir, 'base64',
             (err, base64image)=>{
@@ -296,7 +301,7 @@ getQuizThumbnail = async (req, res)=>{
             }
         )
     }catch(e){
-        console.log(e)
+        // console.log(e)
         res.sendStatus(500)
     }
 }
@@ -564,6 +569,7 @@ getSubscriptionQuiz = async(req, res)=>{
             [BODY.UID]: userId,
             [BODY.ROW]: row
         }
+        console.log(body)
         let response = await quizMysql.getSubscriptionQuiz(body)
         res.status(200).json(response)
     }catch(e){
@@ -630,6 +636,17 @@ getQuizHistory = async(req, res)=>{
     }
 }
 
+getQuizWithUser = async(req, res)=>{
+    try{
+        let id = req.params.quizId;
+        let result = await quizMysql.getQuizWithUser(id);
+        res.status(200).json(result);
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 
 module.exports = {
     getQuiz,
@@ -673,5 +690,6 @@ module.exports = {
     getMoreQuizByCategoryById,
     createQuizHistory,
     getMoreSearchQuiz,
-    getQuizHistory
+    getQuizHistory,
+    getQuizWithUser
 }
