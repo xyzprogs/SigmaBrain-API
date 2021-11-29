@@ -13,6 +13,17 @@ getQuiz = (id) => {
     })
 }
 
+getQuizWithUser = (id)=>{
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT * FROM Quiz INNER JOIN Users ON Quiz.userId = Users.userId WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 getUserQuiz = (userId) => {
     return new Promise((resolve, reject) => {
@@ -459,7 +470,6 @@ getLikedQuiz = ({uid, row})=>{
                 INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
                 WHERE LikedQuiz.userId = ${mysql.escape(uid)} LIMIT ${row},10`
         }
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -640,5 +650,6 @@ module.exports = {
     getMoreQuizByCategoryById,
     getMoreSearchQuiz,
     createQuizHistory,
-    getQuizHistory
+    getQuizHistory,
+    getQuizWithUser
 }

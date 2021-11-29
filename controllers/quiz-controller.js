@@ -630,6 +630,17 @@ getQuizHistory = async(req, res)=>{
     }
 }
 
+getQuizWithUser = async(req, res)=>{
+    try{
+        let id = req.params.quizId;
+        let result = await quizMysql.getQuizWithUser(id);
+        res.status(200).json(result);
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 
 module.exports = {
     getQuiz,
@@ -673,5 +684,6 @@ module.exports = {
     getMoreQuizByCategoryById,
     createQuizHistory,
     getMoreSearchQuiz,
-    getQuizHistory
+    getQuizHistory,
+    getQuizWithUser
 }

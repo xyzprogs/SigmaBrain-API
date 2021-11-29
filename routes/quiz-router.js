@@ -9,6 +9,7 @@ router.get('/:quizId', QuizController.getQuiz) //get quiz by quizid
 
 router.get('/user/:userId', QuizController.getUserQuiz) //get user quizzes
 
+router.get('/quizWithUser/:quizId', QuizController.getQuizWithUser)
 /*payload:{
     quizName,
     quizCategory,
