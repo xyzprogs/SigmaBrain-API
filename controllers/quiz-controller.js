@@ -436,8 +436,12 @@ createQuizComment = async(req, res)=>{
 getQuizComment =  async(req, res)=>{
     try{
         let quizId = req.params.quizId
-        console.log("getting comment from quiz",quizId)
-        let response = await quizMysql.getQuizComment(quizId)
+        let row = req.query.row
+        let body = {
+            [BODY.QUIZID]: quizId,
+            [BODY.ROW]: row
+        }
+        let response = await quizMysql.getQuizComment(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)
@@ -475,7 +479,12 @@ getSearchQuiz = async(req, res)=>{
 getTakeLater = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
-        let response = await quizMysql.getTakeLater(userId)
+        let row = req.query.row
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        let response = await quizMysql.getTakeLater(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)
@@ -486,8 +495,12 @@ getTakeLater = async(req, res)=>{
 getLikedQuiz = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
-        console.log(`get take later from ${userId}`)
-        let response = await quizMysql.getLikedQuiz(userId)
+        let row = req.query.row
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        let response = await quizMysql.getLikedQuiz(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)
@@ -546,7 +559,12 @@ deleteLikedQuiz = async(req, res)=>{
 getSubscriptionQuiz = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
-        let response = await quizMysql.getSubscriptionQuiz(userId)
+        let row = req.query.row
+        let body = {
+            [BODY.UID]: userId,
+            [BODY.ROW]: row
+        }
+        let response = await quizMysql.getSubscriptionQuiz(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)
