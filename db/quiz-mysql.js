@@ -25,9 +25,13 @@ getQuizWithUser = (id)=>{
 }
 
 
-getUserQuiz = (userId) => {
+getUserQuiz = ({uid, row}) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM Quiz WHERE userId=${mysql.escape(userId)} LIMIT 10`, (err, result)=>{
+        let myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT 10`
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -531,8 +535,8 @@ getSubscriptionQuiz = ({uid, row}) => {
         WHERE Users.userId = ${mysql.escape(uid)}
         ORDER BY creationTime DESC LIMIT 10`
 
-        if(row!==undefined && row!==null && row!=='undefined'){
-            `SELECT Quiz.* FROM Users 
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT Quiz.* FROM Users 
             INNER JOIN Subscribe ON Users.userId = Subscribe.userId
             INNER JOIN Quiz ON  Subscribe.subscribeTo = Quiz.userId
             WHERE Users.userId = ${mysql.escape(uid)}

@@ -197,9 +197,14 @@ getUserDisplayName = (userId)=>{
     })
 }
 
-getFollowers = (userId)=>{
+getFollowers = ({uid, row})=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(userId)}`, (err, result)=>{
+        let myquery = `SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(uid)} LIMIT 10`
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(uid)} LIMIT ${row},10`
+        }
+        console.log(myquery)
+        db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
             }
