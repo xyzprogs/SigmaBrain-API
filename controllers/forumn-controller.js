@@ -46,7 +46,6 @@ selectForumnPost = async (req, res)=>{
     try{
         let userId = req.params.userId
         let row = req.query.row
-        console.log("row is", row)
         let body = {
             [BODY.UID]: userId,
             [BODY.ROW]: row
@@ -62,7 +61,12 @@ selectForumnPost = async (req, res)=>{
 selectPostComment = async (req, res)=>{
     try{
         let forumPostId = req.params.forumPostId
-        let response = await forumnMysql.selectPostComment(forumPostId)
+        let row = req.query.row
+        let body = {
+            [BODY.FORUMPOSTID]: forumPostId,
+            [BODY.ROW]: row
+        }
+        let response = await forumnMysql.selectPostComment(body)
         res.status(200).json(response)
     }catch(e){
         console.log(e)

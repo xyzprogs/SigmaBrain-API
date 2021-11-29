@@ -50,9 +50,14 @@ selectForumnPost = ({uid, row}) => {
     })
 }
 
-selectPostComment = (forumPostId) => {
+selectPostComment = ({forumPostId, row}) => {
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM ForumPostComment WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT 10`, (err, result)=>{
+        let myquery = `SELECT * FROM ForumPostComment WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime ASC LIMIT 10`
+        if(row!=null && row!==undefined && row!=='undefined'){
+            myquery = `SELECT * FROM ForumPostComment WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime ASC LIMIT ${row},10`
+        }
+        console.log(myquery)
+        db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
             }
