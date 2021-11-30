@@ -630,7 +630,44 @@ getUserQuizAuthenticated = ({uid, row}) => {
 
 publishQuiz = ({uid, quizId, isPublished})=>{
     return new Promise((resolve, reject)=>{
-        let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)}`
+        let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)} AND isPublished < 2`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+adminBlockQuiz = ({uid, quizId, isPublished})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE (SELECT isAdmin FROM Users WHERE userId = ${mysql.escape(uid)})=1 AND quizId=${mysql.escape(quizId)}`
+        console.log(myquery)
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getUserQuizAdmin = ({uid, quizId})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT * FROM Quiz WHERE quizId=${mysql.escape(quizId)} AND (SELECT isAdmin FROM Users WHERE userId = ${mysql.escape(uid)})=1`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+adminRemoveQuiz = ({uid, quizId})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `DELETE FROM Quiz WHERE quizId=${mysql.escape(quizId)} AND (SELECT isAdmin FROM Users WHERE userId = ${mysql.escape(uid)})=1`
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -684,5 +721,8 @@ module.exports = {
     getQuizHistory,
     getQuizWithUser,
     getUserQuizAuthenticated,
-    publishQuiz
+    publishQuiz,
+    adminBlockQuiz,
+    getUserQuizAdmin,
+    adminRemoveQuiz
 }

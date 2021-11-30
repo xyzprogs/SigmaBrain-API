@@ -95,6 +95,12 @@ router.post('/history/get', firebase_auth, QuizController.getQuizHistory)
 router.get('/authenticated/quiz', firebase_auth, QuizController.getUserQuizAuthenticated)
 
 router.post('/publish/quiz', firebase_auth, QuizController.publishQuiz)
+
+router.post('/admin/publishquiz', firebase_auth, QuizController.adminBlockQuiz)
+
+router.get('/admin/userquiz/:quizId', firebase_auth, QuizController.getUserQuizAdmin)
+
+router.delete('/admin/userquiz/:quizId', firebase_auth, QuizController.adminRemoveQuiz)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 
