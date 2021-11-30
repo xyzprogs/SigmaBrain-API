@@ -529,7 +529,8 @@ createLikedQuiz = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
         let quizId = req.body[BODY.QUIZID]
-        let response = await quizMysql.createLikedQuiz(userId, quizId)
+        let likedStatus = req.body[BODY.LIKEDSTATUS]
+        let response = await quizMysql.createLikedQuiz(userId, quizId, likedStatus)
         res.status(201).json(response)
     }catch(e){
         console.log(e)
@@ -722,6 +723,35 @@ adminRemoveQuiz = async(req, res)=>{
     }
 }
 
+getLikedStatusOnQuiz = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.body[BODY.QUIZID],
+            [BODY.LIKEDSTATUS]: req.body[BODY.LIKEDSTATUS]
+        }
+        let response = await quizMysql.getLikedStatusOnQuiz(body)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+checkTakeLaterStatus = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.params.quizId
+        }
+        let response = await quizMysql.checkTakeLaterStatus(body)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -770,5 +800,7 @@ module.exports = {
     publishQuiz,
     adminBlockQuiz,
     getUserQuizAdmin,
-    adminRemoveQuiz
+    adminRemoveQuiz,
+    getLikedStatusOnQuiz,
+    checkTakeLaterStatus
 }

@@ -494,9 +494,14 @@ createTakeLater = (userId, quizId)=>{
     })
 }
 
-createLikedQuiz = (userId, quizId)=>{
+createLikedQuiz = (userId, quizId, likedStatus)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`INSERT IGNORE INTO LikedQuiz(userId, quizId) VALUES (${mysql.escape(userId)}, ${mysql.escape(quizId)})`, (err, result)=>{
+        db_pool.query(`INSERT INTO LikedQuiz (userId, quizId, likedStatus)
+        VALUES(${mysql.escape(userId)}, ${mysql.escape(quizId)}, ${mysql.escape(likedStatus)}) AS new_liked
+        ON DUPLICATE KEY UPDATE
+            userId = new_liked.userId,
+            quizId = new_liked.quizId,
+            likedStatus = new_liked.likedStatus`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -677,6 +682,30 @@ adminRemoveQuiz = ({uid, quizId})=>{
     })
 }
 
+getLikedStatusOnQuiz = ({uid, quizId}) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT likedStatus FROM LikedQuiz WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+checkTakeLaterStatus = ({uid, quizId})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT takeLaterId FROM TakeLater WHERE userId=${mysql.escape(uid)} AND quizId=${mysql.escape(quizId)};`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -724,5 +753,8 @@ module.exports = {
     publishQuiz,
     adminBlockQuiz,
     getUserQuizAdmin,
-    adminRemoveQuiz
+    adminRemoveQuiz,
+    getLikedStatusOnQuiz,
+    createLikedQuiz,
+    checkTakeLaterStatus
 }

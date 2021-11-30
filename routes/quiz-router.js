@@ -101,6 +101,10 @@ router.post('/admin/publishquiz', firebase_auth, QuizController.adminBlockQuiz)
 router.get('/admin/userquiz/:quizId', firebase_auth, QuizController.getUserQuizAdmin)
 
 router.delete('/admin/userquiz/:quizId', firebase_auth, QuizController.adminRemoveQuiz)
+
+router.get('/quiz/likedStatus/:quizId', firebase_auth, QuizController.getLikedStatusOnQuiz)
+
+router.get('/quiz/takelaterStatus/:quizId', firebase_auth, QuizController.checkTakeLaterStatus)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 
