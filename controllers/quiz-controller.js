@@ -663,12 +663,58 @@ getUserQuizAuthenticated = async(req, res)=>{
 
 publishQuiz = async(req,res)=>{
     try{
+        if(req.body[BODY.ISPUBLISHED]!==1 && req.body[BODY.ISPUBLISHED]!==0){
+            return res.sendStatus(400)
+        }
         let body = {
             [BODY.UID]: res.locals.decodedToken[BODY.UID],
             [BODY.QUIZID]: req.body[BODY.QUIZID],
             [BODY.ISPUBLISHED]: req.body[BODY.ISPUBLISHED]
         }
         await quizMysql.publishQuiz(body)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+adminBlockQuiz = async(req, res)=>{
+    try{
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.body[BODY.QUIZID],
+            [BODY.ISPUBLISHED]: req.body[BODY.ISPUBLISHED]
+        }
+        await quizMysql.adminBlockQuiz(body)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+getUserQuizAdmin = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.params.quizId
+        } 
+        let response = await quizMysql.getUserQuizAdmin(body)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+adminRemoveQuiz = async(req, res)=>{
+    try{
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.params.quizId
+        }
+        await quizMysql.adminRemoveQuiz(body)
         res.sendStatus(200)
     }catch(e){
         console.log(e)
@@ -721,5 +767,8 @@ module.exports = {
     getQuizHistory,
     getQuizWithUser,
     getUserQuizAuthenticated,
-    publishQuiz
+    publishQuiz,
+    adminBlockQuiz,
+    getUserQuizAdmin,
+    adminRemoveQuiz
 }
