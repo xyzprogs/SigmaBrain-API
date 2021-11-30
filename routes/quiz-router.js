@@ -91,6 +91,10 @@ router.get('/searchMore/getMoreSearchResult', QuizController.getMoreSearchQuiz)
 router.post('/history/create', firebase_auth, QuizController.createQuizHistory)
 
 router.post('/history/get', firebase_auth, QuizController.getQuizHistory)
+
+router.get('/authenticated/quiz', firebase_auth, QuizController.getUserQuizAuthenticated)
+
+router.post('/publish/quiz', firebase_auth, QuizController.publishQuiz)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 
