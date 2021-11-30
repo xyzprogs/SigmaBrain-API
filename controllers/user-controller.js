@@ -335,7 +335,6 @@ getFollowers = async (req, res)=>{
             [BODY.UID]: userId,
             [BODY.ROW]: row
         }
-        console.log(body)
         let resposne = await userMysql.getFollowers(body)
         res.status(200).json(resposne)
     }catch(e){

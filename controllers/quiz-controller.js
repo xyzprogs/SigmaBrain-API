@@ -647,6 +647,34 @@ getQuizWithUser = async(req, res)=>{
     }
 }
 
+getUserQuizAuthenticated = async(req, res)=>{
+    try{
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.ROW]: req.query.row
+        }
+        let response = await quizMysql.getUserQuizAuthenticated(body)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+publishQuiz = async(req,res)=>{
+    try{
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.body[BODY.QUIZID],
+            [BODY.ISPUBLISHED]: req.body[BODY.ISPUBLISHED]
+        }
+        await quizMysql.publishQuiz(body)
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 module.exports = {
     getQuiz,
@@ -691,5 +719,7 @@ module.exports = {
     createQuizHistory,
     getMoreSearchQuiz,
     getQuizHistory,
-    getQuizWithUser
+    getQuizWithUser,
+    getUserQuizAuthenticated,
+    publishQuiz
 }

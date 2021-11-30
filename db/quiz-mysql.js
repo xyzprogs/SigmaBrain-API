@@ -4,7 +4,7 @@ const BODY = require('../constant/body');
 
 getQuiz = (id) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM Quiz WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizId = ${mysql.escape(id)} AND isPublished = 1`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -15,7 +15,7 @@ getQuiz = (id) => {
 
 getQuizWithUser = (id)=>{
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM Quiz INNER JOIN Users ON Quiz.userId = Users.userId WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz INNER JOIN Users ON Quiz.userId = Users.userId WHERE quizId = ${mysql.escape(id)} AND isPublished = 1`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -27,9 +27,9 @@ getQuizWithUser = (id)=>{
 
 getUserQuiz = ({uid, row}) => {
     return new Promise((resolve, reject) => {
-        let myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT 10`
+        let myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} AND isPublished = 1 LIMIT 10`
         if(row!==undefined && row!=null && row!=='undefined'){
-            myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} LIMIT ${row},10`
+            myquery = `SELECT * FROM Quiz WHERE userId=${mysql.escape(uid)} AND isPublished = 1 LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -42,9 +42,9 @@ getUserQuiz = ({uid, row}) => {
 
 getCategoryQuiz = (category) => {
     return new Promise((resolve, reject) => {
-        query = "SELECT * FROM Quiz LIMIT 10"
+        query = "SELECT * FROM Quiz WHERE isPublished = 1 LIMIT 10"
         if(category!=0){
-            query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} LIMIT 10`
+            query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} AND isPublished = 1 LIMIT 10`
         }
         db_pool.query(query, (err, result)=>{
             if(err){
@@ -244,7 +244,7 @@ deleteAllQuestionChoiceInQuiz = (quizId) => {
 
 getTheMostPopularQuiz = (limit) => {
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM Quiz WHERE takeCounts = (SELECT Max(takeCounts) From Quiz) LIMIT ` + limit, 
+        db_pool.query(`SELECT * FROM Quiz WHERE isPublished = 1 AND takeCounts = (SELECT Max(takeCounts) From Quiz) LIMIT ` + limit, 
             (err, result)=>{
                 if(err){
                     return reject(err)
@@ -382,7 +382,7 @@ getTopQuizByCategory = (category) => {
     return new Promise((resolve, reject)=>{
         myquery = `SELECT * FROM Quiz ORDER BY takeCounts DESC LIMIT 10`
         if (category != 0){
-            myquery = `SELECT * FROM Quiz WHERE quizCatgeory = ${mysql.escape(category)} ORDER BY takeCounts DESC LIMIT 10;`
+            myquery = `SELECT * FROM Quiz WHERE quizCatgeory = ${mysql.escape(category)} AND isPublished = 1 ORDER BY takeCounts DESC LIMIT 10;`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -423,7 +423,7 @@ getQuizComment = ({quizId, row})=>{
 getQuizSearchName = (search) => {
     return new Promise((resolve, reject)=>{
         updateSearch = '%' + search + '%'
-        db_pool.query(`SELECT quizName FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 10`, (err, result)=>{
+        db_pool.query(`SELECT quizName FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} AND isPublished = 1 LIMIT 10`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -435,7 +435,7 @@ getQuizSearchName = (search) => {
 getSearchQuiz = (search) => {
     return new Promise((resolve, reject)=>{
         updateSearch = '%' + search + '%'
-        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT 5`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} AND isPublished = 1 LIMIT 5`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -449,11 +449,11 @@ getTakeLater = ({uid, row})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT Quiz.* FROM TakeLater 
         INNER JOIN Quiz ON TakeLater.quizId = Quiz.quizId
-        WHERE TakeLater.userId = ${mysql.escape(uid)} LIMIT 10`
+        WHERE TakeLater.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT 10`
         if(row!==undefined && row!==null && row!=='undefined'){
             myquery = `SELECT Quiz.* FROM TakeLater 
             INNER JOIN Quiz ON TakeLater.quizId = Quiz.quizId
-            WHERE TakeLater.userId = ${mysql.escape(uid)} LIMIT ${row},10`
+            WHERE TakeLater.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -468,11 +468,11 @@ getLikedQuiz = ({uid, row})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT Quiz.* FROM LikedQuiz 
         INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
-        WHERE LikedQuiz.userId = ${mysql.escape(uid)} LIMIT 10`
+        WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT 10`
         if(row!==undefined && row!==null && row!=='undefined'){
             myquery = `SELECT Quiz.* FROM LikedQuiz 
                 INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
-                WHERE LikedQuiz.userId = ${mysql.escape(uid)} LIMIT ${row},10`
+                WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -532,14 +532,14 @@ getSubscriptionQuiz = ({uid, row}) => {
         let myquery = `SELECT Quiz.* FROM Users 
         INNER JOIN Subscribe ON Users.userId = Subscribe.userId
         INNER JOIN Quiz ON  Subscribe.subscribeTo = Quiz.userId
-        WHERE Users.userId = ${mysql.escape(uid)}
+        WHERE Users.userId = ${mysql.escape(uid)} AND isPublished = 1
         ORDER BY creationTime DESC LIMIT 10`
 
         if(row!==undefined && row!=null && row!=='undefined'){
             myquery = `SELECT Quiz.* FROM Users 
             INNER JOIN Subscribe ON Users.userId = Subscribe.userId
             INNER JOIN Quiz ON  Subscribe.subscribeTo = Quiz.userId
-            WHERE Users.userId = ${mysql.escape(uid)}
+            WHERE Users.userId = ${mysql.escape(uid)} AND isPublished = 1
             ORDER BY creationTime DESC LIMIT ${row},10`
         }
 
@@ -555,9 +555,9 @@ getSubscriptionQuiz = ({uid, row}) => {
 
 getMoreQuizByCategoryById = (category ,quizId) =>{
     return new Promise((resolve, reject)=>{
-        myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} LIMIT 10`
+        myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} AND isPublished = 1 LIMIT 10`
         if (category != 0){
-            myquery = myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} AND quizCatgeory = ${mysql.escape(category)} LIMIT 10`
+            myquery = myquery = `SELECT * FROM Quiz WHERE quizId > ${mysql.escape(quizId)} AND quizCatgeory = ${mysql.escape(category)} AND isPublished = 1 LIMIT 10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -571,7 +571,7 @@ getMoreQuizByCategoryById = (category ,quizId) =>{
 getMoreSearchQuiz = (search, row) => {
     return new Promise((resolve, reject)=>{
         updateSearch = '%' + search + '%'
-        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} LIMIT ${row}, 5`, (err, result)=>{
+        db_pool.query(`SELECT * FROM Quiz WHERE quizName LIKE ${mysql.escape(updateSearch)} AND isPublished = 1 LIMIT ${row}, 5`, (err, result)=>{
             if(err){
                 return reject(err)
             }
@@ -598,12 +598,39 @@ getQuizHistory = ({uid, row}) => {
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
         ON QuizHistory.quizId = Quiz.quizId
-        WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT 10`
+        WHERE QuizHistory.userId = ${mysql.escape(uid)} AND isPublished = 1 ORDER BY historyTime DESC LIMIT 10`
         if(row!=null && row!==undefined){
             myquery = `SELECT Quiz.* FROM QuizHistory INNER JOIN Quiz 
             ON QuizHistory.quizId = Quiz.quizId
-            WHERE QuizHistory.userId = ${mysql.escape(uid)} ORDER BY historyTime DESC LIMIT ${row},10`
+            WHERE QuizHistory.userId = ${mysql.escape(uid)} AND isPublished = 1 ORDER BY historyTime DESC LIMIT ${row},10`
         }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+getUserQuizAuthenticated = ({uid, row}) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT * FROM Quiz WHERE userId = ${mysql.escape(uid)} LIMIT 10`
+        if(row!==undefined && row!=null && row!=='undefined'){
+            myquery = `SELECT * FROM Quiz WHERE userId = ${mysql.escape(uid)} LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+publishQuiz = ({uid, quizId, isPublished})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)}`
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -655,5 +682,7 @@ module.exports = {
     getMoreSearchQuiz,
     createQuizHistory,
     getQuizHistory,
-    getQuizWithUser
+    getQuizWithUser,
+    getUserQuizAuthenticated,
+    publishQuiz
 }
