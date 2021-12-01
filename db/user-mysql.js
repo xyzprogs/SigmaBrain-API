@@ -284,6 +284,19 @@ obtainUserCategoryPreference = (userId)=>{
     })
 }
 
+checkSubscribeStatus = ({uid, subscribeTo})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT subscribeId FROM Subscribe WHERE userId=${mysql.escape(uid)} AND subscribeTo=${mysql.escape(subscribeTo)}`
+        console.log(myquery)
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     createUser,
     getTopUsers,
@@ -306,5 +319,6 @@ module.exports = {
     getMoreSubscriptionsById,
     obtainUserCategoryPreference,
     createUserCategoryPreference,
-    removeUserCategoryPreference
+    removeUserCategoryPreference,
+    checkSubscribeStatus
 }

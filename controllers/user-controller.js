@@ -405,6 +405,22 @@ obtainUserCategoryPreference = async(req, res)=>{
         res.sendStatus(500)
     }
 }
+
+
+checkSubscribeStatus = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.SUBSCRIBETO]: req.query.subscribeTo
+        }
+        let response = await userMysql.checkSubscribeStatus(body)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     verifyUser,
     createUser,
@@ -430,5 +446,6 @@ module.exports = {
     updateUserDisplayName,
     getMoreSubscriptionsById,
     createUserCategoryPreference,
-    obtainUserCategoryPreference
+    obtainUserCategoryPreference,
+    checkSubscribeStatus
 }

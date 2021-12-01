@@ -35,4 +35,5 @@ router.post('/unsubscribe', firebase_auth, UserController.cancelSubscribe)
 router.get('/subscriptions', firebase_auth, UserController.getSubscriptions)
 router.get('/followers', firebase_auth, UserController.getFollowers)
 router.post('/getMoreSubscriptionsById', firebase_auth, UserController.getMoreSubscriptionsById)
+router.get('/checkSubscribeStatus', firebase_auth, UserController.checkSubscribeStatus)
 module.exports = router
