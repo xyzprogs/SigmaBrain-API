@@ -67,7 +67,7 @@ createQuizWithQuestions = async (req, res) => {
         let quiz_result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
         const quizId = quiz_result[MYSQL_CONSTANT.INSERTID]
         const questions = req.body[BODY.QUESTIONS]
-        for(var i = 0; i < questions.length; i++){
+        for(let i = 0; i < questions.length; i++){
             const questionType = questions[i][BODY.QUESTIONTYPE]
             const numberOfChoice = questions[i][BODY.NUMBEROFCHOICE]
             const question = questions[i][BODY.QUESTION];
@@ -76,8 +76,8 @@ createQuizWithQuestions = async (req, res) => {
                 return res.status(400).json({msg: "Can't have more than 6 answer choices"});
             }
             let check = false;
-            for (var i = 0; i < choices.length; i++){
-                if (choices[i][BODY.ISRIGHTCHOICE] === 1){
+            for (let k = 0; k < choices.length; k++){
+                if (choices[k][BODY.ISRIGHTCHOICE] === 1){
                     check = true;
                     break;
                 }
@@ -88,7 +88,8 @@ createQuizWithQuestions = async (req, res) => {
             console.log("question", questionType, numberOfChoice, question)
             let result = await quizMysql.createQuestion(quizId, questionType, numberOfChoice, question)
             const questionId = result[MYSQL_CONSTANT.INSERTID]
-            for(var j = 0; j < choices.length; j++){
+            
+            for(let j = 0; j < choices.length; j++){
                 const is_right_choice = choices[j][BODY.ISRIGHTCHOICE]
                 const choice = choices[j][BODY.CHOICE]
                 console.log("choice", choice, is_right_choice)
