@@ -38,11 +38,12 @@ createQuiz = async (req, res) => {
         const quizCatgeory = req.body[BODY.QUIZCATEGORY]
         const quizDescription = req.body[BODY.QUIZDESCRIPTION]
         const isPublished = req.body[BODY.ISPUBLISHED]
+        const timeLimit = req.body[BODY.TIMELIMIT]
         /* if any of the required paramters is empty, return error */
         if(userId==null || quizName==null || quizCatgeory==null || quizDescription==null || isPublished==null){
             return res.status(400).json({msg: "required field can't be empty"})
         }
-        let result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
+        let result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished, timeLimit)
         res.status(201).json(result)
 
     }catch(e){
@@ -60,11 +61,13 @@ createQuizWithQuestions = async (req, res) => {
         const quizCatgeory = req.body[BODY.QUIZCATEGORY]
         const quizDescription = req.body[BODY.QUIZDESCRIPTION]
         const isPublished = req.body[BODY.ISPUBLISHED]
+        const timeLimit = req.body[BODY.TIMELIMIT]
+
         if(userId==null || quizName==null || quizCatgeory==null || quizDescription==null || isPublished==null){
             return res.status(400).json({msg: "required field can't be empty"})
         }
-        console.log("quiz", quizName, quizCatgeory,quizDescription, isPublished)
-        let quiz_result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
+        console.log("quiz", quizName, quizCatgeory,quizDescription, isPublished, timeLimit)
+        let quiz_result = await quizMysql.createQuiz(userId, quizName, quizCatgeory, quizDescription, isPublished, timeLimit)
         const quizId = quiz_result[MYSQL_CONSTANT.INSERTID]
         const questions = req.body[BODY.QUESTIONS]
         for(let i = 0; i < questions.length; i++){
