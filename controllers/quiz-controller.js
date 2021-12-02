@@ -414,6 +414,17 @@ getChoicesInAQuestionWithAnswer = async (req, res)=>{
     }
 }
 
+getQuestionChoicesByQuizId = async (req, res)=>{
+    try {
+        let quizId = req.params.quizId;
+        let result = await quizMysql.getQuestionChoicesByQuizId(quizId);
+        res.status(200).json(result);
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 updateQuestionChoices = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
@@ -785,6 +796,7 @@ module.exports = {
     getQuiz,
     getQuestion,
     getQuestionChoice,
+    getQuestionChoicesByQuizId,
     getCategoryQuiz,
     getUserQuiz,
     createQuiz,

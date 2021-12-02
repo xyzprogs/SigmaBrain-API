@@ -337,6 +337,17 @@ getChoicesInAQuestionWithAnswer = (questionId, userId) => {
     })
 }
 
+getQuestionChoicesByQuizId = (quizId) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT * FROM QuestionChoice WHERE quizId=${mysql.escape(quizId)}`, (err, result) =>{
+            if (err){
+                return reject(err);
+            }
+            return resolve(result);
+        })
+    })
+}
+
 removeChoicesInAQuestion = (userId, questionId) => {
     return new Promise((resolve, reject)=>{
         db_pool.query(`DELETE q3
@@ -724,6 +735,7 @@ module.exports = {
     getUserQuiz,
     getQuestion,
     getQuestionChoice,
+    getQuestionChoicesByQuizId,
     getCategoryQuiz,
     createQuiz,
     createQuizGrade,

@@ -137,6 +137,8 @@ router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.del
 
 /*quiz question choice route */
 router.get('/quizQuestionChoice/:questionId', QuizController.getQuestionChoice)
+router.get('/getQuestionChoicesByQuizId/:quizId', QuizController.getQuestionChoicesByQuizId)
+
 router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)
 router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)
 router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.deleteQuestionChoice)
