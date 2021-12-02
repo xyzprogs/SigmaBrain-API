@@ -288,9 +288,8 @@ deleteAllQuestionChoiceInQuiz = async (req, res)=>{
 
 
 getTheMostPopularQuiz = async (req, res)=>{
-    console.log("calling popular quiz")
     try{
-        let result = await quizMysql.getTheMostPopularQuiz(1)
+        let result = await quizMysql.getTheMostPopularQuiz(5)
         res.status(200).json(result)
     }catch(e){
         console.log(e)
