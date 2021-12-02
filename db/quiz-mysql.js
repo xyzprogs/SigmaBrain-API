@@ -55,16 +55,17 @@ getCategoryQuiz = (category) => {
     })
 }
 
-createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished) => {
+createQuiz = (userId, quizName, quizCatgeory, quizDescription, isPublished, timeLimit) => {
 
     return new Promise((resolve, reject) => {
-        db_pool.query(`INSERT INTO Quiz(userId, quizName, quizCatgeory, quizDescription, isPublished)
+        db_pool.query(`INSERT INTO Quiz(userId, quizName, quizCatgeory, quizDescription, isPublished, timeLimit)
                         VALUES(` 
                         + mysql.escape(userId) + ','
                         + mysql.escape(quizName) + ','
                         + mysql.escape(quizCatgeory) + ','
                         + mysql.escape(quizDescription) + ','
-                        + mysql.escape(isPublished) + ')', 
+                        + mysql.escape(isPublished) + ','
+                        + mysql.escape(timeLimit) + ')', 
                         (err, result)=>{
             if(err){
                 return reject(err)
