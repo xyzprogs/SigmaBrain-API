@@ -160,4 +160,6 @@ router.post('/updateQuestionChoices', firebase_auth, QuizController.updateQuesti
 router.post('/quizComment', firebase_auth, QuizController.createQuizComment)
 
 router.get('/quizComment/:quizId', QuizController.getQuizComment)
+
+router.get('/quizCommenyById/:quizCommentId', QuizController.getQuizCommentByCommentId)
 module.exports = router;

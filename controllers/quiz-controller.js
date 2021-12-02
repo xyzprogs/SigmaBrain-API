@@ -766,6 +766,18 @@ checkTakeLaterStatus = async(req, res)=>{
     }
 }
 
+getQuizCommentByCommentId = async(req, res)=>{
+    try {
+        let id = req.params.quizCommentId
+        let response = await quizMysql.getQuizCommentByCommentId(id)
+        res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+        
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuestion,
@@ -816,5 +828,6 @@ module.exports = {
     getUserQuizAdmin,
     adminRemoveQuiz,
     getLikedStatusOnQuiz,
-    checkTakeLaterStatus
+    checkTakeLaterStatus,
+    getQuizCommentByCommentId
 }

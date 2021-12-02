@@ -706,6 +706,18 @@ checkTakeLaterStatus = ({uid, quizId})=>{
     })
 }
 
+getQuizCommentByCommentId = (quizCommentId) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT * FROM QuizComment WHERE quizCommentId=${mysql.escape(quizCommentId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getUserQuiz,
@@ -756,5 +768,6 @@ module.exports = {
     adminRemoveQuiz,
     getLikedStatusOnQuiz,
     createLikedQuiz,
-    checkTakeLaterStatus
+    checkTakeLaterStatus,
+    getQuizCommentByCommentId
 }
