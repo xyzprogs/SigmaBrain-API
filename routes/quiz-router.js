@@ -5,7 +5,8 @@ const firebase_auth = require("../firebase/firebase_auth")
 const image_storage = require("../middleware/image-storage-middleware")
 
  /************************* quiz route **************************/
-router.get('/:quizId', QuizController.getQuiz) //get quiz by quizid
+router.get('/:quizId', QuizController.getQuiz) //get quiz that is equal to the quizId and is Published
+router.get('/quiz/:quizId', QuizController.getQuizByQuizId) // get quiz by quizId
 
 router.get('/user/:userId', QuizController.getUserQuiz) //get user quizzes
 

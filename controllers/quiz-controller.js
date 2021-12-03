@@ -15,6 +15,17 @@ getQuiz = async (req, res)=>{
     }
 }
 
+getQuizByQuizId = async (req, res)=>{
+    try{
+        let id = req.params.quizId;
+        let result = await quizMysql.getQuizByQuizId(id);
+        res.status(200).json(result);
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 getUserQuiz = async (req, res)=>{
     try{
         let userId = req.params.userId
@@ -793,6 +804,7 @@ getQuizCommentByCommentId = async(req, res)=>{
 
 module.exports = {
     getQuiz,
+    getQuizByQuizId,
     getQuestion,
     getQuestionChoice,
     getQuestionChoicesByQuizId,

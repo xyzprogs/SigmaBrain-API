@@ -13,6 +13,17 @@ getQuiz = (id) => {
     })
 }
 
+getQuizByQuizId = (id) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`SELECT * FROM Quiz WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 getQuizWithUser = (id)=>{
     return new Promise((resolve, reject) => {
         db_pool.query(`SELECT * FROM Quiz INNER JOIN Users ON Quiz.userId = Users.userId WHERE quizId = ${mysql.escape(id)} AND isPublished = 1`, (err, result)=>{
@@ -732,6 +743,7 @@ getQuizCommentByCommentId = (quizCommentId) => {
 
 module.exports = {
     getQuiz,
+    getQuizByQuizId,
     getUserQuiz,
     getQuestion,
     getQuestionChoice,
