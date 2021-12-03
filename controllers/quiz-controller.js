@@ -435,13 +435,17 @@ getQuestionChoicesByQuizId = async (req, res)=>{
     }
 }
 
+
+
 updateQuestionChoices = async(req, res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
         let choices = req.body[BODY.CHOICES]
         let quizId = req.body[BODY.QUIZID]
         let questionId = req.body[BODY.QUESTIONID]
+        let questionName = req.body[BODY.QUESTION]
         await quizMysql.removeChoicesInAQuestion(userId, questionId)
+        await quizMysql.updateQuestionName(questionId, questionName)
         let result = await quizMysql.updateQuestionChoices(choices, userId, quizId, questionId)
         res.status(200).json(result)
     }catch(e){

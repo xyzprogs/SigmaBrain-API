@@ -376,6 +376,19 @@ removeChoicesInAQuestion = (userId, questionId) => {
     })
 }
 
+updateQuestionName = (questionId, questionName) => {
+    return new Promise((resolve, reject) => {
+        db_pool.query(`UPDATE Question
+        SET question = ${mysql.escape(questionName)}
+        WHERE questionId = ${mysql.escape(questionId)}`, (err, result) =>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 updateQuestionChoices = (questionSet, userId, quizId, questionId) => {
     return new Promise((resolve, reject)=>{
         myquery = "INSERT INTO QuestionChoice(questionId, quizId, is_right_choice, choice)"
@@ -768,6 +781,7 @@ module.exports = {
     getChoicesInAQuestion,
     getChoicesInAQuestionWithAnswer,
     removeChoicesInAQuestion,
+    updateQuestionName,
     updateQuestionChoices,
     getTopQuizByCategory,
     createQuizComment,
