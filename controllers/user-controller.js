@@ -380,7 +380,9 @@ updateUserLevel = async(req, res)=>{
             //Level up
             //calculate the new exp Needed
             let newExpNeeded = expNeeded - expGained;
-            let levelObj = LEVELCUTOFF.LEVELS[newLevel - 1];
+            //Gets the data needed for the new level
+            let levelObj = LEVELCUTOFF.LEVELS[newLevel + 1];   //level constant has a level 0 object. So level 1 corresponds to ARRAY[1]
+            console.log("this level neeeded this amount of exp" + levelObj.experience);
             newExpNeeded = levelObj.experience + newExpNeeded; //new Exp Needed is a negative number
 
             //set the new values
