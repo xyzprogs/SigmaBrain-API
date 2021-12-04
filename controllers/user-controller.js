@@ -367,6 +367,22 @@ updateUserDisplayName = async(req, res)=>{
     }
 }
 
+updateUserLevel = async(req, res)=>{
+    try {
+        const userId = res.locals.decodedToken[BODY.UID];
+        const newLevel = res.body[BODY.USERLEVEL];          //Current Level
+        const expNeeded = res.body[BODY.EXPNEEDED];         //new needed experience points
+
+        
+
+
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
 getMoreSubscriptionsById = async(req,res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
@@ -444,6 +460,7 @@ module.exports = {
     getFollowers,
     updateUserExperience,
     updateUserDisplayName,
+    updateUserLevel,
     getMoreSubscriptionsById,
     createUserCategoryPreference,
     obtainUserCategoryPreference,

@@ -27,6 +27,7 @@ router.get('/info/:userId', UserController.getUserInfo)
 router.get('/displayname/:userId', UserController.getUserDisplayName)
 router.put('/updateUserExperience', UserController.updateUserExperience)
 router.put('/updateUserDisplayName', firebase_auth, UserController.updateUserDisplayName)
+router.put('/updateUserLevel', firebase_auth, UserController.updateUserLevel)
 router.post('/createPreferenceCateory', firebase_auth, UserController.createUserCategoryPreference)
 router.get('/obtainUserCategoryPreference', firebase_auth, UserController.obtainUserCategoryPreference)
 //Subscribe
