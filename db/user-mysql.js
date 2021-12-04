@@ -235,9 +235,9 @@ updateUserDisplayName = (userId, displayName)=>{
     })
 }
 
-updateUserLevel = (userId, level)=>{
+updateUserLevel = (userId, level, expNeeded)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`UPDATE Users SET userLevel = (?) WHERE userId = ${mysql.escape(userId)}`, level, (err, result) =>{
+        db_pool.query(`UPDATE Users SET userLevel = ${mysql.escape(level)}, expForLevelUp = ${mysql.escape(expNeeded)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
             if(err){
                 return reject(err);
             }

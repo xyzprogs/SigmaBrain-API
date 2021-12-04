@@ -368,14 +368,28 @@ updateUserDisplayName = async(req, res)=>{
 }
 
 updateUserLevel = async(req, res)=>{
+    const LEVELCUTOFF = require("../constant/levelPointsCutoff")
     try {
         const userId = res.locals.decodedToken[BODY.UID];
         const newLevel = req.body[BODY.USERLEVEL];          //Current Level
         const expNeeded = req.body[BODY.EXPNEEDED];         //new needed experience points
+        const expGained = req.body[BODY.EXPGAINED];
 
-        await userMysql.updateUserLevel(userId, newLevel)
+        //if the user gains more experience than what is required to level up
+        if(expNeeded - expGained <= 0){
+            //Level up
+            //calculate the new exp Needed
+            let newExpNeeded = expNeeded - expGained;
+            let levelObj = LEVELCUTOFF.LEVELS[newLevel - 1];
+            newExpNeeded = levelObj.experience + newExpNeeded; //new Exp Needed is a negative number
 
-
+            //set the new values
+            await userMysql.updateUserLevel(userId, newLevel + 1, newExpNeeded)
+        }else{
+            //same level
+            //just new value for the exp needed
+            await userMysql.updateUserLevel(userId, newLevel, expNeeded - expGained)
+        }
         res.sendStatus(200)
     } catch (e) {
         console.log(e);
