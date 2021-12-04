@@ -235,6 +235,17 @@ updateUserDisplayName = (userId, displayName)=>{
     })
 }
 
+updateUserLevel = (userId, level, expNeeded)=>{
+    return new Promise((resolve, reject)=>{
+        db_pool.query(`UPDATE Users SET userLevel = ${mysql.escape(level)}, expForLevelUp = ${mysql.escape(expNeeded)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
+            if(err){
+                return reject(err);
+            }
+            return resolve(result);
+        })
+    })
+}
+
 getMoreSubscriptionsById = (userId, subscribeId) => {
     return new Promise((resolve, reject)=>{
         db_pool.query(`SELECT * FROM Subscribe WHERE userId = ${mysql.escape(userId)} AND subscribeId >= ${mysql.escape(subscribeId)} ORDER BY subscribeId ASC LIMIT 11`, (err, result)=>{
@@ -316,6 +327,7 @@ module.exports = {
     getFollowers,
     updateUserExperience,
     updateUserDisplayName,
+    updateUserLevel,
     getMoreSubscriptionsById,
     obtainUserCategoryPreference,
     createUserCategoryPreference,

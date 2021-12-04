@@ -21,6 +21,9 @@ const USERDESCRIPTION = "userDescription"
 const TOPFEATUREQUIZ = "topFeatureQuiz"
 const USERPROFILE = "userProfile"
 const USERPROFILE_IMAGE_TYPE = "imageType"
+const USERLEVEL = "userLevel"
+const EXPNEEDED = "expForLevelUp"
+const EXPGAINED = "expGained"
 
 //Quiz Body
 const QUIZID = "quizId"
@@ -127,6 +130,9 @@ module.exports = {
     USERDESCRIPTION,
     TOPFEATUREQUIZ,
     USERPROFILE_IMAGE_TYPE,
+    USERLEVEL,
+    EXPNEEDED,
+    EXPGAINED,
 
     //Quiz
     QUIZID,

@@ -367,6 +367,38 @@ updateUserDisplayName = async(req, res)=>{
     }
 }
 
+updateUserLevel = async(req, res)=>{
+    const LEVELCUTOFF = require("../constant/levelPointsCutoff")
+    try {
+        const userId = res.locals.decodedToken[BODY.UID];
+        const newLevel = req.body[BODY.USERLEVEL];          //Current Level
+        const expNeeded = req.body[BODY.EXPNEEDED];         //new needed experience points
+        const expGained = req.body[BODY.EXPGAINED];
+
+        //if the user gains more experience than what is required to level up
+        if(expNeeded - expGained <= 0){
+            //Level up
+            //calculate the new exp Needed
+            let newExpNeeded = expNeeded - expGained;
+            //Gets the data needed for the new level
+            let levelObj = LEVELCUTOFF.LEVELS[newLevel + 1];   //level constant has a level 0 object. So level 1 corresponds to ARRAY[1]
+            console.log("this level neeeded this amount of exp" + levelObj.experience);
+            newExpNeeded = levelObj.experience + newExpNeeded; //new Exp Needed is a negative number
+
+            //set the new values
+            await userMysql.updateUserLevel(userId, newLevel + 1, newExpNeeded)
+        }else{
+            //same level
+            //just new value for the exp needed
+            await userMysql.updateUserLevel(userId, newLevel, expNeeded - expGained)
+        }
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
+
 getMoreSubscriptionsById = async(req,res)=>{
     try{
         const userId = res.locals.decodedToken[BODY.UID]
@@ -444,6 +476,7 @@ module.exports = {
     getFollowers,
     updateUserExperience,
     updateUserDisplayName,
+    updateUserLevel,
     getMoreSubscriptionsById,
     createUserCategoryPreference,
     obtainUserCategoryPreference,
