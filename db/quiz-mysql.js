@@ -669,6 +669,18 @@ getUserQuizAuthenticated = ({uid, row}) => {
     })
 }
 
+getSingleUserQuizAuthenticated = ({uid, quizId}) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT * FROM Quiz WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 publishQuiz = ({uid, quizId, isPublished})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE userId = ${mysql.escape(uid)} AND quizId = ${mysql.escape(quizId)} AND isPublished < 2`
@@ -808,5 +820,6 @@ module.exports = {
     getLikedStatusOnQuiz,
     createLikedQuiz,
     checkTakeLaterStatus,
-    getQuizCommentByCommentId
+    getQuizCommentByCommentId,
+    getSingleUserQuizAuthenticated
 }
