@@ -444,8 +444,12 @@ updateQuestionChoices = async(req, res)=>{
         let quizId = req.body[BODY.QUIZID]
         let questionId = req.body[BODY.QUESTIONID]
         let questionName = req.body[BODY.QUESTION]
-        await quizMysql.removeChoicesInAQuestion(userId, questionId)
-        await quizMysql.updateQuestionName(questionId, questionName)
+        try{
+            await quizMysql.removeChoicesInAQuestion(userId, questionId)
+        }catch{}
+        try{
+            await quizMysql.updateQuestionName(questionId, questionName)
+        }catch{}
         let result = await quizMysql.updateQuestionChoices(choices, userId, quizId, questionId)
         res.status(200).json(result)
     }catch(e){
@@ -806,6 +810,20 @@ getQuizCommentByCommentId = async(req, res)=>{
     }
 }
 
+getSingleUserQuizAuthenticated = async(req, res)=>{
+    try{
+        let body = {
+            [BODY.UID]: res.locals.decodedToken[BODY.UID],
+            [BODY.QUIZID]: req.params.quizId
+        }
+        let response = await quizMysql.getSingleUserQuizAuthenticated(body)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -859,5 +877,6 @@ module.exports = {
     adminRemoveQuiz,
     getLikedStatusOnQuiz,
     checkTakeLaterStatus,
-    getQuizCommentByCommentId
+    getQuizCommentByCommentId,
+    getSingleUserQuizAuthenticated
 }

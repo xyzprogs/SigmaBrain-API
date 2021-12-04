@@ -95,6 +95,8 @@ router.post('/history/get', firebase_auth, QuizController.getQuizHistory)
 
 router.get('/authenticated/quiz', firebase_auth, QuizController.getUserQuizAuthenticated)
 
+router.get('/authenticated/quiz/:quizId', firebase_auth, QuizController.getSingleUserQuizAuthenticated)
+
 router.post('/publish/quiz', firebase_auth, QuizController.publishQuiz)
 
 router.post('/admin/publishquiz', firebase_auth, QuizController.adminBlockQuiz)
