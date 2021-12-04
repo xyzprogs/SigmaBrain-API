@@ -370,10 +370,10 @@ updateUserDisplayName = async(req, res)=>{
 updateUserLevel = async(req, res)=>{
     try {
         const userId = res.locals.decodedToken[BODY.UID];
-        const newLevel = res.body[BODY.USERLEVEL];          //Current Level
-        const expNeeded = res.body[BODY.EXPNEEDED];         //new needed experience points
+        const newLevel = req.body[BODY.USERLEVEL];          //Current Level
+        const expNeeded = req.body[BODY.EXPNEEDED];         //new needed experience points
 
-        
+        await userMysql.updateUserLevel(userId, newLevel)
 
 
         res.sendStatus(200)
