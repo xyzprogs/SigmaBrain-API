@@ -416,7 +416,7 @@ updateQuestionChoices = (questionSet, userId, quizId, questionId) => {
 
 getTopQuizByCategory = (category) => {
     return new Promise((resolve, reject)=>{
-        myquery = `SELECT * FROM Quiz ORDER BY takeCounts DESC LIMIT 10`
+        myquery = `SELECT * FROM Quiz WHERE isPublished = 1 ORDER BY takeCounts DESC LIMIT 10`
         if (category != 0){
             myquery = `SELECT * FROM Quiz WHERE quizCatgeory = ${mysql.escape(category)} AND isPublished = 1 ORDER BY takeCounts DESC LIMIT 10;`
         }
