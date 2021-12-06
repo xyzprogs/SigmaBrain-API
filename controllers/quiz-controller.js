@@ -314,6 +314,9 @@ getQuizThumbnail = async (req, res)=>{
         let result = await quizMysql.getQuizThumbnail(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0]['thumbnail']
+        if(dir==null){
+            return res.send(null)
+        }
         // console.log(result)
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
         // console.log(dir)

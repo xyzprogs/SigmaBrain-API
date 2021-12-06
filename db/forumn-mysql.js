@@ -52,9 +52,13 @@ selectForumnPost = ({uid, row}) => {
 
 selectPostComment = ({forumPostId, row}) => {
     return new Promise((resolve, reject)=>{
-        let myquery = `SELECT * FROM ForumPostComment WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime ASC LIMIT 10`
+        let myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
+        INNER JOIN Users ON ForumPostComment.userId = Users.userId
+        WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime DESC LIMIT 10`
         if(row!=null && row!==undefined && row!=='undefined'){
-            myquery = `SELECT * FROM ForumPostComment WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime ASC LIMIT ${row},10`
+            myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
+            INNER JOIN Users ON ForumPostComment.userId = Users.userId
+            WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime DESC LIMIT ${row},10`
         }
         console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
@@ -112,7 +116,9 @@ deleteForumPostCommentReply = (forumPostCommentReplyId) => {
 
 getForumPostById = (forumPostId)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM ForumPost WHERE forumPostId=${mysql.escape(forumPostId)}`, (err, result)=>{
+        db_pool.query(`SELECT ForumPost.*, Users.displayName FROM ForumPost
+        INNER JOIN Users ON ForumPost.userId = Users.userId
+        WHERE forumPostId = ${mysql.escape(forumPostId)}`, (err, result)=>{
             if(err){
                 return reject(err)
             }
