@@ -825,6 +825,26 @@ getSingleUserQuizAuthenticated = async(req, res)=>{
         console.log(e)
         res.sendStatus(500)
     }
+
+
+}
+
+getRelevantQuiz = async(req, res)=>{        
+    try{
+        if(req.query.userId === 'undefined' || req.query.quizName === 'undefined'){
+            res.sendStatus(400)
+        }
+        let body = {
+            [BODY.UID]: req.query.userId,
+            [BODY.QUIZNAME]: req.query.quizName
+        }
+
+        let response = await quizMysql.getRelevantQuiz(body)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
 }
 
 module.exports = {
@@ -881,5 +901,6 @@ module.exports = {
     getLikedStatusOnQuiz,
     checkTakeLaterStatus,
     getQuizCommentByCommentId,
-    getSingleUserQuizAuthenticated
+    getSingleUserQuizAuthenticated,
+    getRelevantQuiz
 }
