@@ -185,6 +185,9 @@ getUserProfileImage = async (req, res)=>{
         let result = await userMysql.getUserProfileImage(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0][BODY.PROFILEIMAGE]
+        if(dir==null){
+            return res.send(null)
+        }
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
         let extention = path.extname(dir).substring(1)
         fs.readFile(
@@ -206,6 +209,9 @@ getUserBackgroundImage = async (req, res)=>{
         let result = await userMysql.getUserBackgroundImage(id)
         //TODO: CHECK IF DIR IS EMPTY
         let dir = result[0][BODY.BACKGROUNDIMAGE]
+        if(dir==null){
+            return res.send(null)
+        }
         //TODO: CHECK IF EXTENTION IS CORRECT IMAGE FORMAT
         let extention = path.extname(dir).substring(1)
         fs.readFile(
