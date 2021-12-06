@@ -108,6 +108,8 @@ router.delete('/admin/userquiz/:quizId', firebase_auth, QuizController.adminRemo
 router.get('/quiz/likedStatus/:quizId', firebase_auth, QuizController.getLikedStatusOnQuiz)
 
 router.get('/quiz/takelaterStatus/:quizId', firebase_auth, QuizController.checkTakeLaterStatus)
+
+router.get('/quizRecommendation/relevant', QuizController.getRelevantQuiz)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 

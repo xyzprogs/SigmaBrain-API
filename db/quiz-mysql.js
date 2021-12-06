@@ -766,6 +766,24 @@ getQuizCommentByCommentId = (quizCommentId) => {
     })
 }
 
+getRelevantQuiz = ({uid, quizName, row}) => {
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT * FROM Quiz WHERE (userId = ${mysql.escape(uid)}`
+        let words = quizName.split(' ')
+        for(const word of words){
+            let newWord = '%' + word + '%'
+            myquery += ' OR quizName LIKE ' + mysql.escape(newWord)
+        }
+        myquery += ') AND isPublished=1 LIMIT 10'
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -821,5 +839,6 @@ module.exports = {
     createLikedQuiz,
     checkTakeLaterStatus,
     getQuizCommentByCommentId,
-    getSingleUserQuizAuthenticated
+    getSingleUserQuizAuthenticated,
+    getRelevantQuiz
 }

@@ -203,7 +203,6 @@ getFollowers = ({uid, row})=>{
         if(row!==undefined && row!=null && row!=='undefined'){
             myquery = `SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(uid)} LIMIT ${row},10`
         }
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -298,7 +297,6 @@ obtainUserCategoryPreference = (userId)=>{
 checkSubscribeStatus = ({uid, subscribeTo})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT subscribeId FROM Subscribe WHERE userId=${mysql.escape(uid)} AND subscribeTo=${mysql.escape(subscribeTo)}`
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)

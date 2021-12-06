@@ -8,7 +8,7 @@ const CATEGORYLIST = "categoryList"
 const LIKEDSTATUS = "likedStatus"
 
 //User Body
-const USERID = "uid"
+const USERID = "userId"
 const DISPLAYNAME = "displayName"
 const EMAIL = "email"
 const EXPERIENCE = "experience"
