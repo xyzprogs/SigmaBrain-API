@@ -68,6 +68,42 @@ updateChannelLeaderboard = ({userId, channelOwner, score})=>{
     })
 }
 
+getGlobalLeaderboard = ({category, row})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT globalLeaderboardScore.*, Users.userLevel, Users.displayName FROM globalLeaderboardScore
+        INNER JOIN Users ON globalLeaderboardScore.userId = Users.userId
+        WHERE category=${mysql.escape(category)} LIMIT 10`
+        if(row!=null && row!==undefined && row!=='undefined' && Number.isInteger(parseInt(row))){
+            myquery = `SELECT globalLeaderboardScore.*, Users.userLevel, Users.displayName FROM globalLeaderboardScore
+            INNER JOIN Users ON globalLeaderboardScore.userId = Users.userId
+            WHERE category=${mysql.escape(category)} LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+updateGlobalLeaderboard = ({userId,category, score})=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `INSERT INTO globalLeaderboardScore (userId, category, score)
+        VALUES(${mysql.escape(userId)}, ${mysql.escape(category)}, ${mysql.escape(score)}) AS new_score
+        ON DUPLICATE KEY UPDATE
+            userId = new_score.userId,
+            category = new_score.category,
+            score = new_score.score + (SELECT score FROM globalLeaderboardScore AS s WHERE s.userId=${mysql.escape(userId)} AND s.category=${mysql.escape(category)})`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 setUserProfileImage = (userId, url) => {
     return new Promise((resolve, reject) => {
         db_pool.query(`UPDATE Users SET profileImage = ${mysql.escape(url)} WHERE userId = ${mysql.escape(userId)}`, (err, result) => {
@@ -347,5 +383,7 @@ module.exports = {
     createUserCategoryPreference,
     removeUserCategoryPreference,
     checkSubscribeStatus,
-    updateChannelLeaderboard
+    updateChannelLeaderboard,
+    getGlobalLeaderboard,
+    updateGlobalLeaderboard
 }

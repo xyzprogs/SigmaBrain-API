@@ -15,7 +15,9 @@ getQuiz = (id) => {
 
 getQuizByQuizId = (id) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT * FROM Quiz WHERE quizId = ${mysql.escape(id)}`, (err, result)=>{
+        db_pool.query(`SELECT Quiz.*, Users.isAdmin FROM Quiz
+        INNER JOIN Users ON Quiz.userId = Users.userId
+        WHERE quizId = ${mysql.escape(id)} AND isPublished=1`, (err, result)=>{
             if(err){
                 return reject(err)
             }

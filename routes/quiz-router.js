@@ -110,6 +110,8 @@ router.get('/quiz/likedStatus/:quizId', firebase_auth, QuizController.getLikedSt
 router.get('/quiz/takelaterStatus/:quizId', firebase_auth, QuizController.checkTakeLaterStatus)
 
 router.get('/quizRecommendation/relevant', QuizController.getRelevantQuiz)
+
+router.post('/checkQuiz', firebase_auth, QuizController.checkQuizAnswer)
 /**************************** quiz question route ****************************/
 router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions of a quiz
 
@@ -160,7 +162,7 @@ array of {
 }
  */
 
-router.post('/createQuizGrade', firebase_auth, QuizController.createQuizGrade);
+// router.post('/createQuizGrade', firebase_auth, QuizController.createQuizGrade);
 
 router.post('/updateQuestionChoices', firebase_auth, QuizController.updateQuestionChoices)
 

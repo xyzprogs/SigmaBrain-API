@@ -1,4 +1,5 @@
 var quizMysql = require('../db/quiz-mysql');
+var userMysql = require('../db/user-mysql');
 const BODY = require('../constant/body');
 const MYSQL_CONSTANT = require('../constant/mysql')
 const fs = require('fs')
@@ -847,6 +848,87 @@ getRelevantQuiz = async(req, res)=>{
     }
 }
 
+
+checkQuizAnswer = async(req, res)=>{
+    try{
+        let quizId = req.body[BODY.QUIZID]
+        let userId = res.locals.decodedToken[BODY.UID]
+        let answers = req.body["answers"]
+
+        let response = await quizMysql.getQuestionChoicesByQuizId(quizId)
+        let dict = {}
+        for(let i = 0; i < response.length; i++){
+            if(response[i][BODY.ISRIGHTCHOICE]==1){
+                dict[response[i][BODY.QUESTIONID]] = response[i][BODY.CHOICE]
+            }
+        }
+
+        let correct = 0
+        for(var i = 0; i < answers.length; i++){
+            if(answers[i][2] !== -1 && answers[i][1] === dict[answers[i][2]]){
+                correct++;
+            }
+        }
+
+        let grade = (correct/answers.length).toFixed(2)
+        await quizMysql.createQuizGrade(quizId, userId, grade)
+
+        let quiz = await quizMysql.getQuizByQuizId(quizId)
+        let updateCLB = {
+            [BODY.USERID]: userId,
+            [BODY.CHANNELOWNER]: quiz[0][BODY.USERID],
+            [BODY.SCORE]: correct*10
+        }
+        await userMysql.updateChannelLeaderboard(updateCLB)
+
+        console.log(quiz[0][BODY.ISADMIN])
+        if(quiz[0][BODY.ISADMIN]===1){
+            let globalLB = {
+                [BODY.USERID]: userId,
+                [BODY.CATEGORY]: quiz[0][BODY.QUIZCATEGORY],
+                [BODY.SCORE]: correct*10
+            }
+            await userMysql.updateGlobalLeaderboard(globalLB)
+            console.log("admin quiz")
+        }
+
+        let user = await userMysql.getUserInfo(userId)
+
+        calculateUserLevel(userId, user[0][BODY.USERLEVEL], user[0][BODY.EXPNEEDED], calculateQuizPoints())
+
+
+        res.sendStatus(200)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+const calculateUserLevel = async (userId, newLevel, expNeeded, expGained) =>{  
+    const LEVELCUTOFF = require("../constant/levelPointsCutoff")
+    if(expNeeded - expGained <= 0){
+        //Level up
+        //calculate the new exp Needed
+        let newExpNeeded = expNeeded - expGained;
+        //Gets the data needed for the new level
+        let levelObj = LEVELCUTOFF.LEVELS[newLevel + 1];   //level constant has a level 0 object. So level 1 corresponds to ARRAY[1]
+        console.log("this level neeeded this amount of exp" + levelObj.experience);
+        newExpNeeded = levelObj.experience + newExpNeeded; //new Exp Needed is a negative number
+        //set the new values
+        await userMysql.updateUserLevel(userId, newLevel + 1, newExpNeeded)
+    }else{
+        //same level
+        //just new value for the exp needed
+        await userMysql.updateUserLevel(userId, newLevel, expNeeded - expGained)
+    }
+}
+
+const calculateQuizPoints = () => {
+    //the points gained after taking completing the quiz
+    return 900
+}
+
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -902,5 +984,6 @@ module.exports = {
     checkTakeLaterStatus,
     getQuizCommentByCommentId,
     getSingleUserQuizAuthenticated,
-    getRelevantQuiz
+    getRelevantQuiz,
+    checkQuizAnswer
 }
