@@ -13,7 +13,9 @@ router.get('/verify', firebase_auth, UserController.verifyUser)
 router.post('/create', firebase_auth, UserController.createUser) //create new user
 router.get('/leaderboard', UserController.getMainLeaderboard ) //get leaderboard information
 router.get('/leaderboard/:ownerId', UserController.getChannelLeaderboard)// Get leaderboard based on the leaderboard id
-router.post('/leaderboard/updateScore', firebase_auth, UserController.updateChannelLeaderboard) //Update Channel Score
+// router.post('/leaderboard/updateScore', firebase_auth, UserController.updateChannelLeaderboard) //Update Channel Score
+router.get('/leaderboard/global/:category', UserController.getGlobalLeaderboard)
+// router.post('/leaderboard/global/update', firebase_auth, UserController.updateGlobalLeaderboard)
 //router.put('/forgetpassword', )
 //router.put('/changepassword', )
 //router.put('/changedisplayname')
@@ -26,9 +28,9 @@ router.post('/profile/setUserDescription', firebase_auth, UserController.setUser
 router.post('/profile/setTopFeatureQuiz', firebase_auth, UserController.setUserTopFeatureQuiz) //set user top feature quiz
 router.get('/info/:userId', UserController.getUserInfo)
 router.get('/displayname/:userId', UserController.getUserDisplayName)
-router.put('/updateUserExperience', UserController.updateUserExperience)
+// router.put('/updateUserExperience', UserController.updateUserExperience)
 router.put('/updateUserDisplayName', firebase_auth, UserController.updateUserDisplayName)
-router.put('/updateUserLevel', firebase_auth, UserController.updateUserLevel)
+// router.put('/updateUserLevel', firebase_auth, UserController.updateUserLevel)
 router.post('/createPreferenceCateory', firebase_auth, UserController.createUserCategoryPreference)
 router.get('/obtainUserCategoryPreference', firebase_auth, UserController.obtainUserCategoryPreference)
 //Subscribe

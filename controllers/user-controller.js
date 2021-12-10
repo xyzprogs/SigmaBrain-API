@@ -479,6 +479,35 @@ updateChannelLeaderboard = async(req, res)=>{
     }
 }
 
+getGlobalLeaderboard = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.CATEGORY]: req.params.category,
+            [BODY.ROW]: req.query.row
+        }   
+        let response = await userMysql.getGlobalLeaderboard(body)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
+updateGlobalLeaderboard = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.USERID]: res.locals.decodedToken[BODY.UID],
+            [BODY.CATEGORY]: req.body.category,
+            [BODY.SCORE]: req.body.score
+        }   
+        let response = await userMysql.updateGlobalLeaderboard(body)
+        res.sendStatus(200)
+    }catch{
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
 
 module.exports = {
     verifyUser,
@@ -508,5 +537,7 @@ module.exports = {
     createUserCategoryPreference,
     obtainUserCategoryPreference,
     checkSubscribeStatus,
-    updateChannelLeaderboard
+    updateChannelLeaderboard,
+    getGlobalLeaderboard,
+    updateGlobalLeaderboard
 }
