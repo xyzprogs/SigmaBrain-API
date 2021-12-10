@@ -15,9 +15,14 @@ createUser = (user) => {
     })
 }
 
-getTopUsers = () => {
+getTopUsers = ({row}) => {
     return new Promise((resolve, reject) => {
-        db_pool.query('SELECT * FROM Users ORDER BY experience DESC LIMIT 10; ', (err, result) => {
+        let myquery = 'SELECT * FROM Users ORDER BY experience DESC LIMIT 10;'
+        if(row!=null && row!==undefined && row!=='undefined'){
+            myquery = `SELECT * FROM Users ORDER BY experience DESC LIMIT ${mysql.escape(row)},10;`
+        }
+        console.log(myquery)
+        db_pool.query(myquery, (err, result) => {
             if (err) {
                 return reject(err)
             }
@@ -27,23 +32,34 @@ getTopUsers = () => {
 }
 
 
-getChannelLeaderboard = (ownerId) => {
-    //leaderboardId is the channel ID
-    //Gets the top 10 users and scores based on the leaderboardID
-    // return new Promise((resolve, reject) => {
-    //     db_pool.query(`SELECT UserChannelScore.* , Users.displayName FROM UserChannelScore
-    //         inner join Users on UserChannelScore.userId = Users.userId 
-    //         where leaderboardId = ${mysql.escape(leaderboardId)} ORDER BY score desc LIMIT 10`, (err, result) => {
-    //         if (err) {
-    //             return reject(err)
-    //         }
-    //         return resolve(result)
-    //     })
-    // })
+getChannelLeaderboard = ({ownerId, row}) => {
     return new Promise((resolve, reject) => {
-        db_pool.query(`SELECT UserChannelScore.* , Users.displayName FROM UserChannelScore
+        let myquery = `SELECT UserChannelScore.* , Users.displayName, Users.userLevel FROM UserChannelScore
         inner join Users on UserChannelScore.userId = Users.userId 
-        where channelOwner =  ${mysql.escape(ownerId)} ORDER BY score desc LIMIT 10`, (err, result) => {
+        where channelOwner =  ${mysql.escape(ownerId)} ORDER BY score desc LIMIT 10`
+        if(row!=null && row!==undefined && row!=='undefined' && Number.isInteger(parseInt(row))){
+            myquery = `SELECT UserChannelScore.* , Users.displayName, Users.userLevel FROM UserChannelScore
+            inner join Users on UserChannelScore.userId = Users.userId 
+            where channelOwner =  ${mysql.escape(ownerId)} ORDER BY score desc LIMIT ${row},10`
+        }
+        db_pool.query(myquery, (err, result) => {
+            if (err) {
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+updateChannelLeaderboard = ({userId, channelOwner, score})=>{
+    return new Promise((resolve, reject) => {
+        let myquery = `INSERT INTO UserChannelScore (userId, channelOwner, score)
+        VALUES(${mysql.escape(userId)}, ${mysql.escape(channelOwner)}, ${mysql.escape(score)}) AS new_score
+        ON DUPLICATE KEY UPDATE
+            userId = new_score.userId,
+            channelOwner = new_score.channelOwner,
+            score = new_score.score + (SELECT score FROM UserChannelScore AS s WHERE s.userId = ${mysql.escape(userId)} AND s.channelOwner = ${mysql.escape(channelOwner)})`
+        db_pool.query(myquery, (err, result) => {
             if (err) {
                 return reject(err)
             }
@@ -330,5 +346,6 @@ module.exports = {
     obtainUserCategoryPreference,
     createUserCategoryPreference,
     removeUserCategoryPreference,
-    checkSubscribeStatus
+    checkSubscribeStatus,
+    updateChannelLeaderboard
 }
