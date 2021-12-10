@@ -108,6 +108,8 @@ const LIKEDQUIZID = "likedQuizId"
 //QuizHistory
 const HISTORYTIME = "historyTime"
 
+const CHANNELOWNER = "channelOwner"
+
 const ROW = "row"
 module.exports = {
     //Common
@@ -215,5 +217,7 @@ module.exports = {
     LIKEDQUIZID,
 
     HISTORYTIME,
-    ROW
+    ROW,
+
+    CHANNELOWNER
 }

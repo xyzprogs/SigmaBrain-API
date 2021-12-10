@@ -146,7 +146,6 @@ createUser = async (req, res) => {
 
 getUserInfo = async (req, res)=>{
     try{
-        console.log(req.params.userId);
         let id = req.params.userId
         let result = await userMysql.getUserInfo(id)
         res.status(200).json(result)
@@ -159,7 +158,10 @@ getUserInfo = async (req, res)=>{
 
 getMainLeaderboard = async (req,res) =>{
     try{
-        let mainLeaderBoard = await userMysql.getTopUsers();
+        let body = {
+            [BODY.ROW]: req.query.row
+        }
+        let mainLeaderBoard = await userMysql.getTopUsers(body);
         res.status(200).json(mainLeaderBoard)
     }catch(e){
         console.log(e)
@@ -169,8 +171,11 @@ getMainLeaderboard = async (req,res) =>{
 
 getChannelLeaderboard = async (req,res) =>{
     try{
-       let ownerId = req.params.ownerId
-       let channelLeaderboard = await userMysql.getChannelLeaderboard(ownerId);
+       let body = {
+           [BODY.OWNERID]: req.params.ownerId,
+           [BODY.ROW]: req.query.row
+       }
+       let channelLeaderboard = await userMysql.getChannelLeaderboard(body);
        res.status(200).json(channelLeaderboard);
     
     }catch(e){
@@ -459,6 +464,22 @@ checkSubscribeStatus = async(req, res)=>{
     }
 }
 
+updateChannelLeaderboard = async(req, res)=>{
+    try {
+        let body = {
+            [BODY.USERID]: res.locals.decodedToken[BODY.UID],
+            [BODY.CHANNELOWNER]: req.body[BODY.CHANNELOWNER],
+            [BODY.SCORE]: req.body[BODY.SCORE]
+        }
+        let response = await userMysql.updateChannelLeaderboard(body)
+        res.sendStatus(200)
+    } catch (e) {
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
+
 module.exports = {
     verifyUser,
     createUser,
@@ -486,5 +507,6 @@ module.exports = {
     getMoreSubscriptionsById,
     createUserCategoryPreference,
     obtainUserCategoryPreference,
-    checkSubscribeStatus
+    checkSubscribeStatus,
+    updateChannelLeaderboard
 }
