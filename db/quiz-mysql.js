@@ -258,7 +258,7 @@ deleteAllQuestionChoiceInQuiz = (quizId) => {
 
 getTheMostPopularQuiz = (limit) => {
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT * FROM Quiz WHERE isPublished = 1 AND takeCounts = (SELECT Max(takeCounts) From Quiz) LIMIT ` + limit, 
+        db_pool.query(`SELECT * FROM Quiz WHERE isPublished = 1 ORDER BY takeCounts DESC LIMIT ${mysql.escape(limit)}`, 
             (err, result)=>{
                 if(err){
                     return reject(err)
