@@ -767,7 +767,7 @@ getQuizCommentByCommentId = (quizCommentId) => {
 
 getRelevantQuiz = ({uid, quizName, row}) => {
     return new Promise((resolve, reject)=>{
-        let myquery = `SELECT * FROM Quiz WHERE (userId = ${mysql.escape(uid)}`
+        let myquery = `SELECT * FROM Quiz INNER JOIN Users ON Users.userId=Quiz.userId WHERE (Quiz.userId = ${mysql.escape(uid)}`
         let words = quizName.split(' ')
         for(const word of words){
             let newWord = '%' + word + '%'
