@@ -55,7 +55,7 @@ getUserQuiz = ({uid, row}) => {
 
 getCategoryQuiz = (category) => {
     return new Promise((resolve, reject) => {
-        query = "SELECT * FROM Quiz WHERE isPublished = 1 ORDER BY RAND() LIMIT 10"
+        let query = "SELECT * FROM Quiz WHERE isPublished = 1 ORDER BY RAND() LIMIT 10"
         if(category!=0){
             query = `SELECT * FROM Quiz WHERE quizCatgeory=${category} AND isPublished = 1 ORDER BY RAND() LIMIT 10`
         }
@@ -103,6 +103,19 @@ createQuizGrade = (quizId, userId, grade) => {
                     })
     })
 }
+
+getQuizGrade = (quizId, userId) => {
+    return new Promise((resolve, reject) => {
+        let query = `SELECT * FROM QuizGrade WHERE quizId=${mysql.escape(quizId)} AND userId=${mysql.escape(userId)} LIMIT 1`
+        db_pool.query(query, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 
 setQuizThumbnail = (quizId, thumbnail) => {
     return new Promise((resolve, reject) => {
@@ -852,5 +865,6 @@ module.exports = {
     getQuizCommentByCommentId,
     getSingleUserQuizAuthenticated,
     getRelevantQuiz,
-    increaseQuizTakeCounts
+    increaseQuizTakeCounts,
+    getQuizGrade
 }
