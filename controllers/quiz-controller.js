@@ -67,7 +67,7 @@ createQuiz = async (req, res) => {
 
 createQuizWithQuestions = async (req, res) => {
     try{
-        console.log("createQuizWithQuestions")
+        console.log(req.body)
         const userId = res.locals.decodedToken[BODY.UID]
         const quizName = req.body[BODY.QUIZNAME]
         const quizCatgeory = req.body[BODY.QUIZCATEGORY]
@@ -896,7 +896,7 @@ checkQuizAnswer = async(req, res)=>{
 
         calculateUserLevel(userId, user[0][BODY.USERLEVEL], user[0][BODY.EXPNEEDED], calculateQuizPoints())
 
-
+        await quizMysql.increaseQuizTakeCounts(quizId)
         res.sendStatus(200)
     }catch(e){
         console.log(e)

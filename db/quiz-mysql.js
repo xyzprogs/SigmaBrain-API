@@ -585,8 +585,6 @@ getSubscriptionQuiz = ({uid, row}) => {
             WHERE Users.userId = ${mysql.escape(uid)} AND isPublished = 1
             ORDER BY creationTime DESC LIMIT ${row},10`
         }
-
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -698,7 +696,6 @@ publishQuiz = ({uid, quizId, isPublished})=>{
 adminBlockQuiz = ({uid, quizId, isPublished})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `UPDATE Quiz SET isPublished = ${mysql.escape(isPublished)} WHERE (SELECT isAdmin FROM Users WHERE userId = ${mysql.escape(uid)})=1 AND quizId=${mysql.escape(quizId)}`
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
@@ -786,6 +783,18 @@ getRelevantQuiz = ({uid, quizName, row}) => {
     })
 }
 
+increaseQuizTakeCounts = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET takeCounts = takeCounts + 1 WHERE quizId=${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -842,5 +851,6 @@ module.exports = {
     checkTakeLaterStatus,
     getQuizCommentByCommentId,
     getSingleUserQuizAuthenticated,
-    getRelevantQuiz
+    getRelevantQuiz,
+    increaseQuizTakeCounts
 }
