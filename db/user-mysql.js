@@ -3,10 +3,12 @@ const mysql = require('mysql2');
 
 createUser = (user) => {
     return new Promise((resolve, reject) => {
-        db_pool.query('INSERT IGNORE INTO Users(userId, email, displayName) VALUES('
+        db_pool.query('INSERT IGNORE INTO Users(userId, email, displayName, userLevel, expForLevelUp) VALUES('
             + mysql.escape(user.userId) + ','
             + mysql.escape(user.email) + ','
-            + mysql.escape(user.displayName) + ')', (err, result) => {
+            + mysql.escape(user.displayName) + ','
+            + 1 + ','
+            + 1000 + ')', (err, result) => {
                 if (err) {
                     return reject(err)
                 }

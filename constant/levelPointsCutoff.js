@@ -6,46 +6,42 @@ const LEVELS = [
     },
     {
         level: 1,
-        experience: 0,
-    },
-    {
-        level: 2,
         experience: 1000,
     },
     {
-        level: 3,
+        level: 2,
         experience: 2500,
     },
     {
-        level: 4,
+        level: 3,
         experience: 5000,
     },
     {
-        level: 5,
+        level: 4,
         experience: 8000,
     },
     {
-        level: 6,
+        level: 5,
         experience: 12000,
     },
     {
-        level: 7,
+        level: 6,
         experience: 18000,
     },
     {
-        level: 8,
+        level: 7,
         experience: 25000,
     },
     {
-        level: 9,
+        level: 8,
         experience: 32000,
     },
     {
-        level: 10,
+        level: 9,
         experience: 64000,
     },
     {
-        level: 11,
+        level: 10,
         experience: 128000,
     },
 ]
