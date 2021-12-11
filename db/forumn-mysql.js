@@ -60,7 +60,6 @@ selectPostComment = ({forumPostId, row}) => {
             INNER JOIN Users ON ForumPostComment.userId = Users.userId
             WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime DESC LIMIT ${row},10`
         }
-        console.log(myquery)
         db_pool.query(myquery, (err, result)=>{
             if(err){
                 return reject(err)
