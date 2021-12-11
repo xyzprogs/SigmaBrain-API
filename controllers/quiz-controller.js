@@ -850,10 +850,16 @@ getRelevantQuiz = async(req, res)=>{
 
 
 checkQuizAnswer = async(req, res)=>{
-    try{
+    try{    
         let quizId = req.body[BODY.QUIZID]
         let userId = res.locals.decodedToken[BODY.UID]
         let answers = req.body["answers"]
+        let took = false;
+        let quizGrade = await quizMysql.getQuizGrade(quizId, userId)
+
+        if(quizGrade.length>0){
+            took = true
+        }
 
         let response = await quizMysql.getQuestionChoicesByQuizId(quizId)
         let dict = {}
@@ -872,6 +878,11 @@ checkQuizAnswer = async(req, res)=>{
 
         let grade = (correct/answers.length).toFixed(2)
         await quizMysql.createQuizGrade(quizId, userId, grade)
+        await quizMysql.increaseQuizTakeCounts(quizId)
+        if(took){
+            console.log("user took quiz more than once")
+            return res.sendStatus(200)
+        }
 
         let quiz = await quizMysql.getQuizByQuizId(quizId)
         let updateCLB = {
@@ -889,14 +900,12 @@ checkQuizAnswer = async(req, res)=>{
                 [BODY.SCORE]: correct*10
             }
             await userMysql.updateGlobalLeaderboard(globalLB)
-            console.log("admin quiz")
         }
 
         let user = await userMysql.getUserInfo(userId)
 
         calculateUserLevel(userId, user[0][BODY.USERLEVEL], user[0][BODY.EXPNEEDED], calculateQuizPoints())
-
-        await quizMysql.increaseQuizTakeCounts(quizId)
+        console.log("point added for user")
         res.sendStatus(200)
     }catch(e){
         console.log(e)
