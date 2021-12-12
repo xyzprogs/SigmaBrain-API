@@ -20,7 +20,7 @@ createUser = (user) => {
 getTopUsers = ({row}) => {
     return new Promise((resolve, reject) => {
         let myquery = 'SELECT * FROM Users ORDER BY experience DESC LIMIT 10;'
-        if(row!=null && row!==undefined && row!=='undefined'){
+        if(row!=null && row!==undefined && row!=='undefined'  && Number.isInteger(parseInt(row))){
             myquery = `SELECT * FROM Users ORDER BY experience DESC LIMIT ${mysql.escape(row)},10;`
         }
         console.log(myquery)
@@ -254,7 +254,7 @@ getUserDisplayName = (userId)=>{
 getFollowers = ({uid, row})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(uid)} LIMIT 10`
-        if(row!==undefined && row!=null && row!=='undefined'){
+        if(row!==undefined && row!=null && row!=='undefined' && Number.isInteger(parseInt(row))){
             myquery = `SELECT * FROM Subscribe WHERE subscribeTo = ${mysql.escape(uid)} LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{

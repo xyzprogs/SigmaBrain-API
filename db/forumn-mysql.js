@@ -38,7 +38,7 @@ createCommentReply = (forumPostCommentId, userId, reply) => {
 selectForumnPost = ({uid, row}) => {
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT * FROM ForumPost WHERE ownerId=${mysql.escape(uid)} ORDER BY creationTime DESC LIMIT 10`;
-        if(row!=null && row!==undefined && row!=='undefined'){
+        if(row!=null && row!==undefined && row!=='undefined' && Number.isInteger(parseInt(row))){
             myquery = `SELECT * FROM ForumPost WHERE ownerId=${mysql.escape(uid)} ORDER BY creationTime DESC LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
@@ -55,7 +55,7 @@ selectPostComment = ({forumPostId, row}) => {
         let myquery = `SELECT ForumPostComment.*, Users.displayName, Users.userLevel FROM ForumPostComment 
         INNER JOIN Users ON ForumPostComment.userId = Users.userId
         WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT 10`
-        if(row!=null && row!==undefined && row!=='undefined'){
+        if(row!=null && row!==undefined && row!=='undefined' && Number.isInteger(parseInt(row))){
             myquery = `SELECT ForumPostComment.*, Users.displayName, Users.userLevel FROM ForumPostComment 
             INNER JOIN Users ON ForumPostComment.userId = Users.userId
             WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT ${row},10`
