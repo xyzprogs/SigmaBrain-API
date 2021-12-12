@@ -633,7 +633,9 @@ getMoreSearchQuiz = (search, row) => {
                 return resolve(result)
             })
         }
-        return reject("row is in incorrect format")
+        else{
+            return reject("row is not in correct format")
+        }
     })
 }
 
