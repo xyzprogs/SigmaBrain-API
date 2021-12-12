@@ -266,6 +266,18 @@ getFollowers = ({uid, row})=>{
     })
 }
 
+getSubscribersCount = (userId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT COUNT(*) FROM Subscribe WHERE subscribeTo = ${mysql.escape(userId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 updateUserExperience = (userId, experience) =>{
     return new Promise((resolve, reject) => {
         db_pool.query(`UPDATE Users SET experience = ${mysql.escape(experience)} WHERE userId = ${mysql.escape(userId)}`, (err, result) =>{
@@ -377,6 +389,7 @@ module.exports = {
     getUserInfo,
     getUserDisplayName,
     getFollowers,
+    getSubscribersCount,
     updateUserExperience,
     updateUserDisplayName,
     updateUserLevel,
