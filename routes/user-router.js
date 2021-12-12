@@ -22,6 +22,7 @@ router.get('/leaderboard/global/:category', UserController.getGlobalLeaderboard)
 router.get('/profile/profileImage/:userId', UserController.getUserProfileImage) //get user profile image
 router.get('/profile/backgroundImage/:userId', UserController.getUserBackgroundImage) //get user background image
 router.get('/profile/userDescription/:userId', UserController.getUserDescription) //get user description
+router.get('/profile/subscriber/:userId', UserController.getSubscribersCount)// get the number of subscribers
 router.post('/profile/setUserProfileImage', firebase_auth, image_store.uploadUserProfileFile, UserController.setUserProfileImage)//set user profile image
 router.post('/profile/setUserBackgroundImage', firebase_auth, image_store.uploadUserProfileFile, UserController.setUserBackgroundImage)//set user background image
 router.post('/profile/setUserDescription', firebase_auth, UserController.setUserDescription) //set user description

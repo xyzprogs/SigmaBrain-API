@@ -354,6 +354,18 @@ getFollowers = async (req, res)=>{
     }
 }
 
+getSubscribersCount = async (req, res)=>{
+    //console.log("get subscribers")
+    try{
+        let userId = req.params.userId;
+        let response = await userMysql.getSubscribersCount(userId)
+        res.status(200).json(response)
+    }catch(e){
+        console.log(e)
+        res.sendStatus(500)
+    }
+}
+
 updateUserExperience = async (req, res) => {
     try {
         const userId = req.body.userId;
@@ -530,6 +542,7 @@ module.exports = {
     getUserInfo,
     getUserDisplayName,
     getFollowers,
+    getSubscribersCount,
     updateUserExperience,
     updateUserDisplayName,
     updateUserLevel,
