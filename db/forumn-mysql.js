@@ -52,11 +52,11 @@ selectForumnPost = ({uid, row}) => {
 
 selectPostComment = ({forumPostId, row}) => {
     return new Promise((resolve, reject)=>{
-        let myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
+        let myquery = `SELECT ForumPostComment.*, Users.displayName, Users.userLevel FROM ForumPostComment 
         INNER JOIN Users ON ForumPostComment.userId = Users.userId
         WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT 10`
         if(row!=null && row!==undefined && row!=='undefined'){
-            myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
+            myquery = `SELECT ForumPostComment.*, Users.displayName, Users.userLevel FROM ForumPostComment 
             INNER JOIN Users ON ForumPostComment.userId = Users.userId
             WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT ${row},10`
         }
@@ -115,7 +115,7 @@ deleteForumPostCommentReply = (forumPostCommentReplyId) => {
 
 getForumPostById = (forumPostId)=>{
     return new Promise((resolve, reject)=>{
-        db_pool.query(`SELECT ForumPost.*, Users.displayName FROM ForumPost
+        db_pool.query(`SELECT ForumPost.*, Users.displayName, Users.userLevel FROM ForumPost
         INNER JOIN Users ON ForumPost.userId = Users.userId
         WHERE forumPostId = ${mysql.escape(forumPostId)}`, (err, result)=>{
             if(err){
