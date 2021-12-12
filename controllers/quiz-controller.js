@@ -904,7 +904,7 @@ checkQuizAnswer = async(req, res)=>{
 
         let user = await userMysql.getUserInfo(userId)
 
-        calculateUserLevel(userId, user[0][BODY.USERLEVEL], user[0][BODY.EXPNEEDED], calculateQuizPoints())
+        calculateUserLevel(userId, user[0][BODY.USERLEVEL], user[0][BODY.EXPNEEDED], calculateQuizPoints(correct))
         console.log("point added for user")
         res.sendStatus(200)
     }catch(e){
@@ -932,9 +932,9 @@ const calculateUserLevel = async (userId, newLevel, expNeeded, expGained) =>{
     }
 }
 
-const calculateQuizPoints = () => {
+const calculateQuizPoints = (correct) => {
     //the points gained after taking completing the quiz
-    return 900
+    return 100 * correct;
 }
 
 
