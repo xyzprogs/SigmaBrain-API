@@ -54,11 +54,11 @@ selectPostComment = ({forumPostId, row}) => {
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
         INNER JOIN Users ON ForumPostComment.userId = Users.userId
-        WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime DESC LIMIT 10`
+        WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT 10`
         if(row!=null && row!==undefined && row!=='undefined'){
             myquery = `SELECT ForumPostComment.*, Users.displayName FROM ForumPostComment 
             INNER JOIN Users ON ForumPostComment.userId = Users.userId
-            WHERE forumPostId=${mysql.escape(forumPostId)} ORDER BY creationTime DESC LIMIT ${row},10`
+            WHERE forumPostId=${mysql.escape(forumPostId)} LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
