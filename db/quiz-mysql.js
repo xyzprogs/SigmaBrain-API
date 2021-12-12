@@ -519,11 +519,11 @@ getLikedQuiz = ({uid, row})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT Quiz.* FROM LikedQuiz 
         INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
-        WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT 10`
+        WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 AND likedStatus=1 LIMIT 10`
         if(row!==undefined && row!==null && row!=='undefined'){
             myquery = `SELECT Quiz.* FROM LikedQuiz 
                 INNER JOIN Quiz ON LikedQuiz.quizId = Quiz.quizId
-                WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 LIMIT ${row},10`
+                WHERE LikedQuiz.userId = ${mysql.escape(uid)} AND isPublished = 1 AND likedStatus=1 LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
@@ -808,6 +808,54 @@ increaseQuizTakeCounts = (quizId)=>{
     })
 }
 
+increaseLikedCounts = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET likes = likes + 1 WHERE quizId=${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+decreaseLikedCounts = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET likes = likes - 1 WHERE quizId=${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+increaseDislikedCounts = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET dislikes = dislikes + 1 WHERE quizId=${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
+decreaseDislikedCounts = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `UPDATE Quiz SET dislikes = dislikes - 1 WHERE quizId=${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -866,5 +914,9 @@ module.exports = {
     getSingleUserQuizAuthenticated,
     getRelevantQuiz,
     increaseQuizTakeCounts,
-    getQuizGrade
+    getQuizGrade,
+    increaseLikedCounts,
+    decreaseLikedCounts,
+    increaseDislikedCounts,
+    decreaseDislikedCounts
 }

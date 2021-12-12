@@ -580,6 +580,54 @@ createLikedQuiz = async(req, res)=>{
         const userId = res.locals.decodedToken[BODY.UID]
         let quizId = req.body[BODY.QUIZID]
         let likedStatus = req.body[BODY.LIKEDSTATUS]
+        let getStatusBody = {
+            [BODY.UID]: userId,
+            [BODY.QUIZID]: quizId
+        }
+        let currentStatus = await quizMysql.getLikedStatusOnQuiz(getStatusBody)
+        if(currentStatus.length>0){
+            if(currentStatus[0][BODY.LIKEDSTATUS]===1 && likedStatus===2){
+                console.log("decrease like")
+                await quizMysql.decreaseLikedCounts(quizId)
+            }
+            else if(currentStatus[0][BODY.LIKEDSTATUS]===0 && likedStatus===2){
+                console.log("decrease dislike")
+                await quizMysql.decreaseDislikedCounts(quizId)
+            }
+            else if(currentStatus[0][BODY.LIKEDSTATUS]===2){
+                if(likedStatus===1){
+                    console.log("increase like")
+                    await quizMysql.increaseLikedCounts(quizId)
+                }
+                else if(likedStatus===0){
+                    console.log("increase dislike")
+                    await quizMysql.increaseDislikedCounts(quizId)
+                }
+            }
+            else if(currentStatus[0][BODY.LIKEDSTATUS] !== likedStatus){
+                if(likedStatus===1){
+                    console.log("increase like")
+                    await quizMysql.increaseLikedCounts(quizId)
+                    console.log("decrease dislike")
+                    await quizMysql.decreaseDislikedCounts(quizId)
+                }
+                else if(likedStatus===0){
+                    console.log("decrease like")
+                    await quizMysql.decreaseLikedCounts(quizId)
+                    console.log("increase dislike")
+                    await quizMysql.increaseDislikedCounts(quizId)
+                }
+            }
+        }else{
+            if(likedStatus===1){
+                console.log("increase like")
+                await quizMysql.increaseLikedCounts(quizId)
+            }
+            else if(likedStatus===0){
+                console.log("increase dislike")
+                await quizMysql.increaseDislikedCounts(quizId)
+            }
+        }
         let response = await quizMysql.createLikedQuiz(userId, quizId, likedStatus)
         res.status(201).json(response)
     }catch(e){
@@ -777,9 +825,9 @@ getLikedStatusOnQuiz = async(req, res)=>{
     try {
         let body = {
             [BODY.UID]: res.locals.decodedToken[BODY.UID],
-            [BODY.QUIZID]: req.body[BODY.QUIZID],
-            [BODY.LIKEDSTATUS]: req.body[BODY.LIKEDSTATUS]
+            [BODY.QUIZID]: req.params[BODY.QUIZID],
         }
+        console.log(body)
         let response = await quizMysql.getLikedStatusOnQuiz(body)
         res.status(200).json(response)
     } catch (e) {
