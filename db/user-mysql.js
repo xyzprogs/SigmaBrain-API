@@ -74,11 +74,11 @@ getGlobalLeaderboard = ({category, row})=>{
     return new Promise((resolve, reject)=>{
         let myquery = `SELECT globalLeaderboardScore.*, Users.userLevel, Users.displayName FROM globalLeaderboardScore
         INNER JOIN Users ON globalLeaderboardScore.userId = Users.userId
-        WHERE category=${mysql.escape(category)} LIMIT 10`
+        WHERE category=${mysql.escape(category)} ORDER BY score DESC LIMIT 10`
         if(row!=null && row!==undefined && row!=='undefined' && Number.isInteger(parseInt(row))){
             myquery = `SELECT globalLeaderboardScore.*, Users.userLevel, Users.displayName FROM globalLeaderboardScore
             INNER JOIN Users ON globalLeaderboardScore.userId = Users.userId
-            WHERE category=${mysql.escape(category)} LIMIT ${row},10`
+            WHERE category=${mysql.escape(category)} ORDER BY score DESC LIMIT ${row},10`
         }
         db_pool.query(myquery, (err, result)=>{
             if(err){
