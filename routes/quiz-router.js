@@ -120,14 +120,14 @@ router.get('/:quizId/quizQuestion', QuizController.getQuestion)//get questions o
     numberOfChoice,
     question
 } */
-router.post('/:quizId/quizQuestion', firebase_auth, QuizController.createQuestion)//create quiz question
+// router.post('/:quizId/quizQuestion', firebase_auth, QuizController.createQuestion)//create quiz question
 
 router.delete('/quizQuestion/:questionId', firebase_auth, QuizController.deleteQuestion)//delete quiz question
 
 /********************* quiz question choice route *********************/
 //router.get('/quizQuestionChoice/:choiceId', QuizController.getQuestionChoice)//get specific quiz question choice
 
-/*planning to remove*/router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)//create specific quiz question choice
+// /*planning to remove*/router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)//create specific quiz question choice
 
 /*payload:{
     array of {
@@ -138,7 +138,7 @@ router.delete('/quizQuestion/:questionId', firebase_auth, QuizController.deleteQ
     }
 }*/
 
-router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)//create multiple quiz question choice
+// router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)//create multiple quiz question choice
 
 router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.deleteQuestionChoice)//delete specific question choice
 
@@ -146,8 +146,8 @@ router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.del
 router.get('/quizQuestionChoice/:questionId', QuizController.getQuestionChoice)
 router.get('/getQuestionChoicesByQuizId/:quizId', QuizController.getQuestionChoicesByQuizId)
 
-router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)
-router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)
+// router.post('/:quizId/question/:questionId/quizQuestionChoice', firebase_auth, QuizController.createQuestionChoice)
+// router.post('/:quizId/multipleQuizQuestionChoice', QuizController.createMutipleQuestionChoice)
 router.delete('/quizQuestionChoice/:choiceId', firebase_auth, QuizController.deleteQuestionChoice)
 router.get('/choicesInAQuestion/:questionId', QuizController.getChoicesInAQuestion) //Get all the choices in a question
 

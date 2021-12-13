@@ -991,6 +991,11 @@ const addNewQuestions = async(req, res)=>{
     let getQuiz = await quizMysql.getQuizInternal(quizId)
     if(getQuiz.length>0 && userId === getQuiz[0][BODY.USERID]){
         //checking later
+        //check number of questions
+        let numOfQuestions = await quizMysql.countQuestions(quizId)
+        if(numOfQuestions[0]['count']>49){
+            return res.sendStatus(400)
+        }
         let questionType = payload[BODY.QUESTIONTYPE]
         let numberOfChoice = payload[BODY.NUMBEROFCHOICE]
         let question = payload[BODY.QUESTION]
