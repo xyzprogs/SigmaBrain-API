@@ -873,6 +873,18 @@ decreaseDislikedCounts = (quizId)=>{
     })
 }
 
+countQuestions = (quizId)=>{
+    return new Promise((resolve, reject)=>{
+        let myquery = `SELECT COUNT(*) AS count FROM Question WHERE quizId = ${mysql.escape(quizId)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 module.exports = {
     getQuiz,
     getQuizByQuizId,
@@ -936,5 +948,6 @@ module.exports = {
     decreaseLikedCounts,
     increaseDislikedCounts,
     decreaseDislikedCounts,
-    getQuizInternal
+    getQuizInternal,
+    countQuestions
 }
