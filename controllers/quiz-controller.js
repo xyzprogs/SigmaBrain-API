@@ -827,7 +827,6 @@ getLikedStatusOnQuiz = async(req, res)=>{
             [BODY.UID]: res.locals.decodedToken[BODY.UID],
             [BODY.QUIZID]: req.params[BODY.QUIZID],
         }
-        console.log(body)
         let response = await quizMysql.getLikedStatusOnQuiz(body)
         res.status(200).json(response)
     } catch (e) {
@@ -985,6 +984,31 @@ const calculateQuizPoints = (correct) => {
     return 100 * correct;
 }
 
+const addNewQuestions = async(req, res)=>{
+    let payload = req.body[BODY.QUESTION]
+    let quizId = req.body[BODY.QUIZID]
+    let userId = res.locals.decodedToken[BODY.UID]
+    let getQuiz = await quizMysql.getQuizInternal(quizId)
+    if(getQuiz.length>0 && userId === getQuiz[0][BODY.USERID]){
+        //checking later
+        let questionType = payload[BODY.QUESTIONTYPE]
+        let numberOfChoice = payload[BODY.NUMBEROFCHOICE]
+        let question = payload[BODY.QUESTION]
+        let result = await quizMysql.createQuestion(quizId, questionType, numberOfChoice, question)
+        let questionId = result[MYSQL_CONSTANT.INSERTID]
+        let choices = payload[BODY.CHOICES]
+        for(let i = 0; i < choices.length; i++){
+            const is_right_choice = choices[i][BODY.ISRIGHTCHOICE]
+            const choice = choices[i][BODY.CHOICE]
+            await quizMysql.createQuestionChoice(questionId, quizId, is_right_choice, choice)
+        }
+    }
+    else{
+        console.log("not valid user")
+        return res.sendStatus(400)
+    }
+    res.sendStatus(200)
+}
 
 module.exports = {
     getQuiz,
@@ -1042,5 +1066,6 @@ module.exports = {
     getQuizCommentByCommentId,
     getSingleUserQuizAuthenticated,
     getRelevantQuiz,
-    checkQuizAnswer
+    checkQuizAnswer,
+    addNewQuestions
 }

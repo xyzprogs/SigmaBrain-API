@@ -171,4 +171,7 @@ router.post('/quizComment', firebase_auth, QuizController.createQuizComment)
 router.get('/quizComment/:quizId', QuizController.getQuizComment)
 
 router.get('/quizCommenyById/:quizCommentId', QuizController.getQuizCommentByCommentId)
+
+router.post('/addNewQuestion', firebase_auth, QuizController.addNewQuestions)
+
 module.exports = router;
