@@ -53,6 +53,18 @@ getUserQuiz = ({uid, row}) => {
     })
 }
 
+getQuizInternal = (id) => {
+    return new Promise((resolve, reject) => {
+        let myquery = `SELECT * FROM Quiz WHERE quizId=${mysql.escape(id)}`
+        db_pool.query(myquery, (err, result)=>{
+            if(err){
+                return reject(err)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 getCategoryQuiz = (category) => {
     return new Promise((resolve, reject) => {
         let query = "SELECT * FROM Quiz WHERE isPublished = 1 ORDER BY RAND() LIMIT 10"
@@ -923,5 +935,6 @@ module.exports = {
     increaseLikedCounts,
     decreaseLikedCounts,
     increaseDislikedCounts,
-    decreaseDislikedCounts
+    decreaseDislikedCounts,
+    getQuizInternal
 }
